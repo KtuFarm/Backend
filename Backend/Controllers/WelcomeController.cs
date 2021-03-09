@@ -9,7 +9,7 @@ namespace Backend.Controllers
     public class WelcomeController : ApiControllerBase
     {
         [HttpGet]
-        public ActionResult<string> GetQuizMessage()
+        public ActionResult<MessageDTO> GetQuizMessage()
         {
             if (!IsValidApiRequest())
             {

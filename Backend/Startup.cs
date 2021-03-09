@@ -1,10 +1,13 @@
 using Backend.Configuration;
+using Backend.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MySql.Data.MySqlClient;
 
 namespace Backend
 {
@@ -15,15 +18,24 @@ namespace Backend
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var builder = new MySqlConnectionStringBuilder(Configuration.GetConnectionString("DefaultConnection"))
+            {
+                Server = Configuration["Server"],
+                Database = Configuration["Database"],
+                UserID = Configuration["Uid"],
+                Password = Configuration["DbPassword"],
+            };
+            services.AddDbContext<ApiContext>(opt => opt.UseMySQL(builder.ConnectionString));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "KTU Farm", Version = "v1" });
                 c.OperationFilter<SwaggerConfig>();
             });
 
