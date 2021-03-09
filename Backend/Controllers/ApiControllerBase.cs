@@ -1,23 +1,25 @@
 ﻿using System.Linq;
 using Backend.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace Backend.Controllers
 {
     public class ApiControllerBase : ControllerBase
     {
-        private const string ApiHeader = "X-Api-Request";
         protected const string ApiContentType = "application/json";
+
+        private const string ApiHeader = "X-Api-Request";
 
         protected bool IsValidApiRequest()
         {
             Request.Headers.TryGetValue(ApiHeader, out var headers);
-            if (headers.Count != 1 || string.IsNullOrWhiteSpace(headers.FirstOrDefault()))
-            {
-                return false;
-            }
+            return IsHeaderLegit(headers) && headers == "true";
+        }
 
-            return headers == "true";
+        private static bool IsHeaderLegit(StringValues headers)
+        {
+            return !(headers.Count != 1 || string.IsNullOrWhiteSpace(headers.FirstOrDefault()));
         }
 
         protected BadRequestObjectResult ApiBadRequest(string message)
