@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Backend.Models;
 using Backend.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -9,7 +10,14 @@ namespace Backend.Controllers
     {
         protected const string ApiContentType = "application/json";
 
+        protected ApiContext Context { get; }
+
         private const string ApiHeader = "X-Api-Request";
+
+        public ApiControllerBase(ApiContext context)
+        {
+            Context = context;
+        }
 
         protected bool IsValidApiRequest()
         {

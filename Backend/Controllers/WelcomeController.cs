@@ -1,4 +1,5 @@
 ﻿using API.Models.DTO;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -8,6 +9,8 @@ namespace Backend.Controllers
     [Produces(ApiContentType)]
     public class WelcomeController : ApiControllerBase
     {
+        public WelcomeController(ApiContext context) : base(context) { }
+
         [HttpGet]
         public ActionResult<MessageDTO> GetQuizMessage()
         {
