@@ -13,12 +13,12 @@ namespace Backend
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -30,16 +30,15 @@ namespace Backend
                 UserID = Configuration["Uid"],
                 Password = Configuration["DbPassword"],
             };
-            services.AddDbContext<ApiContext>(opt => opt.UseMySQL(builder.ConnectionString));
 
-            services.AddControllers();
+            services.AddDbContext<ApiContext>(opt => opt.UseMySQL(builder.ConnectionString));
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KTU Farm", Version = "v1" });
                 c.OperationFilter<SwaggerConfig>();
             });
-
-            services.AddControllers().AddNewtonsoftJson();
 
             services.AddCors(options =>
             {
