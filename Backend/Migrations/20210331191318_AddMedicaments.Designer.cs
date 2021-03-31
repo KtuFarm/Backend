@@ -2,14 +2,16 @@
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20210331191318_AddMedicaments")]
+    partial class AddMedicaments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +56,10 @@ namespace Backend.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("PharmaceuticalFormId")
+                    b.Property<int>("PharmaceuticalForm")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PharmaceuticalFormId")
                         .HasColumnType("int");
 
                     b.Property<int>("ReimbursePercentage")
@@ -172,13 +177,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Database.Medicament", b =>
                 {
-                    b.HasOne("Backend.Models.Database.PharmaceuticalForm", "PharmaceuticalForm")
+                    b.HasOne("Backend.Models.Database.PharmaceuticalForm", null)
                         .WithMany("Medicaments")
-                        .HasForeignKey("PharmaceuticalFormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PharmaceuticalForm");
+                        .HasForeignKey("PharmaceuticalFormId");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.Register", b =>

@@ -11,7 +11,7 @@ namespace Backend.Models.Database
 
         [Required]
         [DefaultValue(0.00)]
-        public decimal Cash { get; set; }
+        public decimal Cash { get; set; } = 0.00M;
 
         [Required]
         public int PharmacyId { get; set; }

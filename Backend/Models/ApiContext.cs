@@ -8,6 +8,8 @@ namespace Backend.Models
     {
         public DbSet<Pharmacy> Pharmacies { get; set; }
         public DbSet<Register> Registers { get; set; }
+        public DbSet<PharmaceuticalForm> PharmaceuticalForms { get; set; }
+        public DbSet<Medicament> Medicaments { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
@@ -17,6 +19,8 @@ namespace Backend.Models
 
             modelBuilder.ApplyConfiguration(new RegisterConfiguration());
             modelBuilder.ApplyConfiguration(new PharmacyConfiguration());
+            modelBuilder.ApplyConfiguration(new PharmaceuticalFormConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicamentConfiguration());
         }
     }
 }
