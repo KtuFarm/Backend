@@ -13,6 +13,7 @@ namespace Backend.Controllers
     {
         public PharmaciesController(ApiContext context) : base(context) { }
 
+        [HttpGet]
         public async Task<ActionResult<GetPharmaciesDTO>> GetPharmacies()
         {
             if (!IsValidApiRequest())
