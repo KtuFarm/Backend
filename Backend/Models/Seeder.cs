@@ -16,9 +16,7 @@ namespace Backend.Models
         {
             _context.Database.EnsureCreated();
 
-            var testObj = _context.Medicaments?.FirstOrDefault(m => m.Id == 1);
-            if (testObj != null) return;
-
+            ManufacturerSeed.EnsureCreated(_context);
             MedicamentSeed.EnsureCreated(_context);
 
             _context.SaveChanges();
