@@ -53,7 +53,6 @@ namespace Backend.Models.Database
         [Required]
         public PharmaceuticalForm PharmaceuticalForm { get; set; }
 
-        [Required]
         public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
     }
 }
