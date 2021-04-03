@@ -60,7 +60,7 @@ namespace Backend.Models.Seed
                     BarCode = "00004",
                     IsPrescriptionRequired = false,
                     IsReimbursed = false,
-                    Country = "Germanu",
+                    Country = "Germany",
                     BasePrice = 69.00M,
                     Surcharge = 20,
                     PharmaceuticalFormId = PharmaceuticalFormId.Ointment,
