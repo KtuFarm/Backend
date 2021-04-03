@@ -191,7 +191,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("PharmacyId");
 
-                    b.ToTable("RequiredMedicamentAmount");
+                    b.ToTable("RequiredMedicamentAmounts");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.Medicament", b =>

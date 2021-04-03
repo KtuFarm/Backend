@@ -13,8 +13,8 @@ namespace Backend.Models.Configurations
                 .WithOne(r => r.Pharmacy);
 
             builder
-                .HasMany(r => r.RequiredMedicamentAmounts)
-                .WithOne(p => p.Pharmacy);
+                .HasMany(p => p.RequiredMedicamentAmounts)
+                .WithOne(rm => rm.Pharmacy);
         }
     }
 }

@@ -13,12 +13,12 @@ namespace Backend.Models.Configurations
         public void Configure(EntityTypeBuilder<RequiredMedicamentAmount> builder)
         {
             builder
-                .HasOne(p => p.Pharmacy)
-                .WithMany(r => r.RequiredMedicamentAmounts);
+                .HasOne(rm => rm.Pharmacy)
+                .WithMany(p => p.RequiredMedicamentAmounts);
 
             builder
-                .HasOne(m => m.Medicament)
-                .WithMany(r => r.RequiredMedicamentAmounts);
+                .HasOne(rm => rm.Medicament)
+                .WithMany(m => m.RequiredMedicamentAmounts);
         }
     }
 }

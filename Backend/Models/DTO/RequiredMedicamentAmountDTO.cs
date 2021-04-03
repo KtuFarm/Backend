@@ -28,7 +28,5 @@ namespace Backend.Models.DTO
             Pharmacy = requiredAmount.Pharmacy;
             Medicament = requiredAmount.Medicament;
         }
-
-
     }
 }

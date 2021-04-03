@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20210401192513_AddRequiredMedicamentAmount")]
+    [Migration("20210403085808_AddRequiredMedicamentAmount")]
     partial class AddRequiredMedicamentAmount
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,7 +193,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("PharmacyId");
 
-                    b.ToTable("RequiredMedicamentAmount");
+                    b.ToTable("RequiredMedicamentAmounts");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.Medicament", b =>
