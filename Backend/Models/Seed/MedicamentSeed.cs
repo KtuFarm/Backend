@@ -10,7 +10,6 @@ namespace Backend.Models.Seed
             var medicament = context.Medicaments.FirstOrDefault(m => m.Id == 1);
             if (medicament != null) return;
 
-
             context.Medicaments.AddRange(
                 new Medicament
                 {
