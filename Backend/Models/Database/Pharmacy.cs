@@ -21,5 +21,7 @@ namespace Backend.Models.Database
 
         [Required]
         public ICollection<Register> Registers { get; set; }
+
+        public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
     }
 }

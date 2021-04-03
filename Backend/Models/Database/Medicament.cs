@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
@@ -51,5 +52,7 @@ namespace Backend.Models.Database
 
         [Required]
         public PharmaceuticalForm PharmaceuticalForm { get; set; }
+
+        public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
     }
 }
