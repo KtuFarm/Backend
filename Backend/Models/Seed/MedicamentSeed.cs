@@ -1,11 +1,15 @@
-﻿using Backend.Models.Database;
+﻿using System.Linq;
+using Backend.Models.Database;
 
 namespace Backend.Models.Seed
 {
-    public class MedicamentSeed
+    public static class MedicamentSeed
     {
         public static void EnsureCreated(ApiContext context)
         {
+            var medicament = context.Medicaments.FirstOrDefault(m => m.Id == 1);
+            if (medicament != null) return;
+
             context.Medicaments.AddRange(
                 new Medicament
                 {
@@ -18,7 +22,8 @@ namespace Backend.Models.Seed
                     Country = "Lithuania",
                     BasePrice = 69.00M,
                     Surcharge = 20,
-                    PharmaceuticalFormId = PharmaceuticalFormId.Spray
+                    PharmaceuticalFormId = PharmaceuticalFormId.Spray,
+                    Manufacturer = context.Manufacturers.FirstOrDefault(m => m.Id == 2)
                 },
                 new Medicament
                 {
@@ -31,7 +36,8 @@ namespace Backend.Models.Seed
                     Country = "Germany",
                     BasePrice = 69.00M,
                     Surcharge = 20,
-                    PharmaceuticalFormId = PharmaceuticalFormId.Tablets
+                    PharmaceuticalFormId = PharmaceuticalFormId.Tablets,
+                    Manufacturer = context.Manufacturers.FirstOrDefault(m => m.Id == 1)
                 },
                 new Medicament
                 {
@@ -44,7 +50,8 @@ namespace Backend.Models.Seed
                     Country = "USA",
                     BasePrice = 68.99M,
                     Surcharge = 20,
-                    PharmaceuticalFormId = PharmaceuticalFormId.Tablets
+                    PharmaceuticalFormId = PharmaceuticalFormId.Tablets,
+                    Manufacturer = context.Manufacturers.FirstOrDefault(m => m.Id == 3)
                 }, new Medicament
                 {
                     Id = 4,
@@ -53,10 +60,11 @@ namespace Backend.Models.Seed
                     BarCode = "00004",
                     IsPrescriptionRequired = false,
                     IsReimbursed = false,
-                    Country = "France",
+                    Country = "Germany",
                     BasePrice = 69.00M,
                     Surcharge = 20,
-                    PharmaceuticalFormId = PharmaceuticalFormId.Ointment
+                    PharmaceuticalFormId = PharmaceuticalFormId.Ointment,
+                    Manufacturer = context.Manufacturers.FirstOrDefault(m => m.Id == 1)
                 }
             );
         }

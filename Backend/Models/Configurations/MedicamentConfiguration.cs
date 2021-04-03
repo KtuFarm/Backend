@@ -14,6 +14,10 @@ namespace Backend.Models.Configurations
                 .WithMany(pf => pf.Medicaments);
 
             builder
+                .HasOne(m => m.Manufacturer)
+                .WithMany(m => m.Medicaments);
+
+            builder
                 .HasMany(m => m.RequiredMedicamentAmounts)
                 .WithOne(rm => rm.Medicament);
         }
