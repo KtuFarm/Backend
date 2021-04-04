@@ -3,14 +3,16 @@ using System;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20210404184205_AddWorkingHours")]
+    partial class AddWorkingHours
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,21 +229,6 @@ namespace Backend.Migrations
                     b.ToTable("Pharmacies");
                 });
 
-            modelBuilder.Entity("Backend.Models.Database.PharmacyWorkingHours", b =>
-                {
-                    b.Property<int>("PharmacyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkingHoursId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PharmacyId", "WorkingHoursId");
-
-                    b.HasIndex("WorkingHoursId");
-
-                    b.ToTable("PharmacyWorkingHours");
-                });
-
             modelBuilder.Entity("Backend.Models.Database.Register", b =>
                 {
                     b.Property<int>("Id")
@@ -324,25 +311,6 @@ namespace Backend.Migrations
                     b.Navigation("PharmaceuticalForm");
                 });
 
-            modelBuilder.Entity("Backend.Models.Database.PharmacyWorkingHours", b =>
-                {
-                    b.HasOne("Backend.Models.Database.Pharmacy", "Pharmacy")
-                        .WithMany("PharmacyWorkingHours")
-                        .HasForeignKey("PharmacyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Models.Database.WorkingHours", "WorkingHours")
-                        .WithMany("PharmacyWorkingHours")
-                        .HasForeignKey("WorkingHoursId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pharmacy");
-
-                    b.Navigation("WorkingHours");
-                });
-
             modelBuilder.Entity("Backend.Models.Database.Register", b =>
                 {
                     b.HasOne("Backend.Models.Database.Pharmacy", "Pharmacy")
@@ -406,16 +374,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Database.Pharmacy", b =>
                 {
-                    b.Navigation("PharmacyWorkingHours");
-
                     b.Navigation("Registers");
 
                     b.Navigation("RequiredMedicamentAmounts");
-                });
-
-            modelBuilder.Entity("Backend.Models.Database.WorkingHours", b =>
-                {
-                    b.Navigation("PharmacyWorkingHours");
                 });
 #pragma warning restore 612, 618
         }

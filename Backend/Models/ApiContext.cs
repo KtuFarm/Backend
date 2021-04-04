@@ -12,6 +12,8 @@ namespace Backend.Models
         public DbSet<Medicament> Medicaments { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
+        public DbSet<DayOfWeek> DaysOfWeek { get; set; }
+        public DbSet<WorkingHours> WorkingHours { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
@@ -25,6 +27,12 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new MedicamentConfiguration());
             modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
             modelBuilder.ApplyConfiguration(new RequiredMedicamentAmountConfiguration());
+            modelBuilder.ApplyConfiguration(new DayOfWeekConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkingHoursConfiguration());
+            modelBuilder.ApplyConfiguration(new PharmacyWorkingHoursConfiguration());
+
+            modelBuilder.Entity<PharmacyWorkingHours>()
+                .HasKey(pwh => new {pwh.PharmacyId, pwh.WorkingHoursId});
         }
     }
 }

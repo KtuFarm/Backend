@@ -23,5 +23,7 @@ namespace Backend.Models.Database
         public ICollection<Register> Registers { get; set; }
 
         public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
+        
+        public ICollection<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
     }
 }

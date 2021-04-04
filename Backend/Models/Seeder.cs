@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Backend.Models.Database;
 using Backend.Models.Seed;
 
 namespace Backend.Models
@@ -18,6 +19,7 @@ namespace Backend.Models
 
             ManufacturerSeed.EnsureCreated(_context);
             MedicamentSeed.EnsureCreated(_context);
+            WorkingHoursSeed.EnsureCreated(_context);
 
             _context.SaveChanges();
         }
