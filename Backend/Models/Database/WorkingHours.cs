@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
@@ -20,5 +21,7 @@ namespace Backend.Models.Database
 
         [Required]
         public DayOfWeek DayOfWeek { get; set; }
+        
+        public ICollection<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
     }
 }

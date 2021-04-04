@@ -13,6 +13,10 @@ namespace Backend.Models.Configurations
             builder
                 .HasOne(wh => wh.DayOfWeek)
                 .WithMany(dw => dw.WorkingHours);
+
+            builder
+                .HasMany(wh => wh.PharmacyWorkingHours)
+                .WithOne(pwh => pwh.WorkingHours);
         }
     }
 }
