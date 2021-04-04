@@ -21,6 +21,10 @@ namespace Backend.Models.Configurations
                         Name = dw.ToString()
                     })
             );
+
+            builder
+                .HasMany(dw => dw.WorkingHours)
+                .WithOne(wh => wh.DayOfWeek);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
@@ -21,5 +22,7 @@ namespace Backend.Models.Database
         
         [Required]
         public string Name { get; set; }
+        
+        public ICollection<WorkingHours> WorkingHours { get; set; }
     }
 }
