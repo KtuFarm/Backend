@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Backend.Models.DTO;
 
 namespace Backend.Models.Database
 {
@@ -23,5 +24,14 @@ namespace Backend.Models.Database
         public DayOfWeek DayOfWeek { get; set; }
         
         public ICollection<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
+
+        public WorkingHours() { }
+        
+        public WorkingHours(CreateWorkingHoursDTO data)
+        {
+            OpenTime = TimeSpan.Parse(data.OpenTime);
+            CloseTime = TimeSpan.Parse(data.CloseTime);
+            DayOfWeekId = (DayOfWeekId)data.DayOfWeek;
+        }
     }
 }
