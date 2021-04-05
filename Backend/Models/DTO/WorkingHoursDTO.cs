@@ -18,8 +18,8 @@ namespace Backend.Models.DTO
 
         public WorkingHoursDTO(WorkingHours hours)
         {
-            OpenTime = $"{hours.OpenTime.Hours}:{hours.OpenTime.Minutes}";
-            CloseTime = $"{hours.CloseTime.Hours}:{hours.CloseTime.Minutes}";
+            OpenTime = $"{hours.OpenTime.Hours:00}:{hours.OpenTime.Minutes:00}";
+            CloseTime = $"{hours.CloseTime.Hours:00}:{hours.CloseTime.Minutes:00}";
             DayOfWeek = (int) hours.DayOfWeekId;
         }
     }
