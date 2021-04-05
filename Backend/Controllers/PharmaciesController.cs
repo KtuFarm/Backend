@@ -25,26 +25,34 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<GetPharmaciesDTO>> GetPharmacies()
         {
-            if (!IsValidApiRequest()) return ApiBadRequest("Invalid Headers!");
+            if (!IsValidApiRequest()) return InvalidHeaders();
 
             var pharmacies = await Context.Pharmacies
-                .Include(p => p.Registers)
                 .Select(p => new PharmacyDTO(p))
                 .ToListAsync();
-            var dto = new GetPharmaciesDTO(pharmacies);
-
-            return Ok(dto);
+            
+            return Ok(new GetPharmaciesDTO(pharmacies));
         }
 
         [HttpPost]
-        public ActionResult CreatePharmacy(CreatePharmacyDTO dataFromBody)
+        public async Task<ActionResult> CreatePharmacy([FromBody] CreatePharmacyDTO dataFromBody)
         {
-            if (!IsValidApiRequest()) return ApiBadRequest("Invalid Headers!");
+            if (!IsValidApiRequest()) return InvalidHeaders();
 
-            var workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dataFromBody.WorkingHours);
-  
-            return StatusCode(500);
-            // return Created();
+            List<WorkingHours> workingHours;
+            try
+            {
+                workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dataFromBody.WorkingHours);
+            }
+            catch (ArgumentException ex)
+            {
+                return ApiBadRequest("Invalid request body!", ex.Message);
+            }
+
+            Context.Add(new Pharmacy(dataFromBody, workingHours));
+            await Context.SaveChangesAsync();
+            
+            return Created();
         }
     }
 }

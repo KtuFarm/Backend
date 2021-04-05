@@ -45,5 +45,10 @@ namespace Backend.Controllers
             };
             return BadRequest(error);
         }
+
+        protected ActionResult InvalidHeaders()
+        {
+            return ApiBadRequest("Invalid Headers!");
+        }
     }
 }
