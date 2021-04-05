@@ -30,14 +30,25 @@ namespace Backend.Controllers
             return !(headers.Count != 1 || string.IsNullOrWhiteSpace(headers.FirstOrDefault()));
         }
 
-        protected BadRequestObjectResult ApiBadRequest(string message)
+        protected ActionResult Created()
+        {
+            return StatusCode(201);
+        }
+
+        protected BadRequestObjectResult ApiBadRequest(string message, string details = null)
         {
             var error = new ErrorDTO
             {
                 Type = 400,
-                Title = message
+                Title = message,
+                Details = details
             };
             return BadRequest(error);
+        }
+
+        protected ActionResult InvalidHeaders()
+        {
+            return ApiBadRequest("Invalid Headers!");
         }
     }
 }

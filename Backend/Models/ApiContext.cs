@@ -14,6 +14,7 @@ namespace Backend.Models
         public DbSet<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
         public DbSet<DayOfWeek> DaysOfWeek { get; set; }
         public DbSet<WorkingHours> WorkingHours { get; set; }
+        public DbSet<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 

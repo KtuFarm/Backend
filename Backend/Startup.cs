@@ -1,5 +1,7 @@
 using Backend.Configuration;
 using Backend.Models;
+using Backend.Services;
+using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -49,8 +51,15 @@ namespace Backend
                         .AllowAnyMethod();
                 });
             });
+            
+            RegisterCustomServices(services);
         }
 
+        private static void RegisterCustomServices(IServiceCollection services)
+        {
+            services.AddScoped<IWorkingHoursManager, WorkingHoursManager>();
+        }
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApiContext context)
         {

@@ -1,11 +1,14 @@
 using System;
 using System.Linq;
+using Backend.Models;
 using Backend.Models.Database;
 
-namespace Backend.Models.Seed
+namespace BackendTests.Mocks
 {
-    public static class WorkingHoursSeed
+    public static class WorkingHoursSeedMock
     {
+        public static int Count => 5;
+
         public static void EnsureCreated(ApiContext context)
         {
             var workingHours = context.WorkingHours.FirstOrDefault(wh => wh.Id == 1);
@@ -22,6 +25,8 @@ namespace Backend.Models.Seed
                     }
                 );
             }
+
+            context.SaveChanges();
         }
     }
 }

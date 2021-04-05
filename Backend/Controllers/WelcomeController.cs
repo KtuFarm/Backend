@@ -1,5 +1,5 @@
-﻿using API.Models.DTO;
-using Backend.Models;
+﻿using Backend.Models;
+using Backend.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers

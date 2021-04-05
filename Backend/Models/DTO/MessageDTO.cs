@@ -1,7 +1,6 @@
-﻿using Backend.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace API.Models.DTO
+namespace Backend.Models.DTO
 {
     public class MessageDTO
     {
