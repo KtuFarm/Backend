@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Backend.Models;
 using Backend.Models.Database;
 using Backend.Models.DTO;
+using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,12 @@ namespace Backend.Controllers
     [ApiController]
     public class PharmaciesController : ApiControllerBase
     {
-        public PharmaciesController(ApiContext context) : base(context) { }
+        private readonly IWorkingHoursManager _workingHoursManager;
+
+        public PharmaciesController(ApiContext context, IWorkingHoursManager workingHoursManager) : base(context)
+        {
+            _workingHoursManager = workingHoursManager;
+        }
 
         [HttpGet]
         public async Task<ActionResult<GetPharmaciesDTO>> GetPharmacies()
@@ -35,30 +41,10 @@ namespace Backend.Controllers
         {
             if (!IsValidApiRequest()) return ApiBadRequest("Invalid Headers!");
 
-            List<WorkingHours> workingHours;
-            try
-            { 
-                workingHours = CreateWorkingHours(dataFromBody.WorkingHours);
-            }
-            catch (Exception ex)
-            {
-                return ApiBadRequest("Invalid body!", ex.Message);
-            }
-
-            throw new NotImplementedException();
+            var workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dataFromBody.WorkingHours);
+  
+            return StatusCode(500);
             // return Created();
-        }
-
-        private List<WorkingHours> CreateWorkingHours(IEnumerable<CreateWorkingHoursDTO> workingHoursData)
-        {
-            var workingHoursList = new List<WorkingHours>();
-            foreach (var workingHoursDTO in workingHoursData)
-            {
-                var workingHours = new WorkingHours(workingHoursDTO);
-                workingHoursList.Add(workingHours);
-            }
-
-            return workingHoursList;
         }
     }
 }
