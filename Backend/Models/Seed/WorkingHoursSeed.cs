@@ -14,12 +14,13 @@ namespace Backend.Models.Seed
             for (var day = DayOfWeekId.Monday; day < DayOfWeekId.Saturday; day++)
             {
                 context.Add(
-                    new WorkingHours()
+                    new WorkingHours
                     {
                         OpenTime = new TimeSpan(9, 0, 0),
                         CloseTime = new TimeSpan(18, 0, 0),
                         DayOfWeekId = day
-                    });
+                    }
+                );
             }
         }
     }

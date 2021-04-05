@@ -6,6 +6,6 @@ namespace Backend.Services.Interfaces
 {
     public interface IWorkingHoursManager
     {
-        public List<WorkingHours> GetWorkingHoursFromDTO(IEnumerable<CreateWorkingHoursDTO> workingHoursData);
+        public List<WorkingHours> GetWorkingHoursFromDTO(List<CreateWorkingHoursDTO> workingHoursData);
     }
 }

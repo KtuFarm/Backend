@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Backend.Models.DTO;
 
 namespace Backend.Models.Database
@@ -12,13 +13,13 @@ namespace Backend.Models.Database
         public int Id { get; set; }
         
         [Required]
-        public TimeSpan OpenTime { get; set; }
+        public TimeSpan OpenTime { get; init; }
         
         [Required]
-        public TimeSpan CloseTime { get; set; }
+        public TimeSpan CloseTime { get; init; }
         
         [Required]
-        public DayOfWeekId DayOfWeekId { get; set; }
+        public DayOfWeekId DayOfWeekId { get; init; }
 
         [Required]
         public DayOfWeek DayOfWeek { get; set; }
@@ -27,13 +28,39 @@ namespace Backend.Models.Database
 
         public WorkingHours() { }
         
-        public WorkingHours(CreateWorkingHoursDTO data)
+        public WorkingHours(CreateWorkingHoursDTO dto)
         {
-            OpenTime = TimeSpan.Parse(data.OpenTime);
-            CloseTime = TimeSpan.Parse(data.CloseTime);
-            DayOfWeekId = (DayOfWeekId)data.DayOfWeek;
+            var (openTime, closeTime) = ValidateTime(dto);
+            OpenTime = openTime;
+            CloseTime = closeTime;
+
+            DayOfWeekId = ValidateDay(dto);
         }
         
+        private static DayOfWeekId ValidateDay(CreateWorkingHoursDTO dto)
+        {
+            var days = Enum.GetValues(typeof(DayOfWeekId)).Cast<DayOfWeekId>().ToList();
+            if (!days.Contains((DayOfWeekId) dto.DayOfWeek))
+            {
+                throw new ArgumentException("Invalid day of the week!");
+            }
+
+            return (DayOfWeekId) dto.DayOfWeek;
+        }
+
+        private static (TimeSpan openTime, TimeSpan closeTime) ValidateTime(CreateWorkingHoursDTO dto)
+        {
+            bool isInvalid = !TimeSpan.TryParse(dto.OpenTime, out var openTime);
+            isInvalid |= !TimeSpan.TryParse(dto.CloseTime, out var closeTime);
+
+            if (isInvalid || (closeTime <= openTime))
+            {
+                throw new ArgumentException("Invalid working hours!");
+            }
+
+            return (openTime, closeTime);
+        }
+
         public bool Equals(WorkingHours other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -53,7 +80,7 @@ namespace Backend.Models.Database
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             
-            return obj.GetType() == this.GetType() && Equals((WorkingHours) obj);
+            return obj.GetType() == GetType() && Equals((WorkingHours) obj);
         }
 
         public override int GetHashCode()

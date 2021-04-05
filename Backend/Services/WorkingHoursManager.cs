@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Backend.Models;
@@ -16,23 +17,41 @@ namespace Backend.Services
             _context = context;
         }
 
-        public List<WorkingHours> GetWorkingHoursFromDTO(IEnumerable<CreateWorkingHoursDTO> workingHoursData)
+        public List<WorkingHours> GetWorkingHoursFromDTO(List<CreateWorkingHoursDTO> workingHoursData)
         {
-            return CreateWorkingHours(workingHoursData);
-        }
-        
-        private List<WorkingHours> CreateWorkingHours(IEnumerable<CreateWorkingHoursDTO> workingHoursData)
-        {
-            var allWorkingHours = _context.WorkingHours.ToList();
-            
+            ValidateDistinctDays(workingHoursData);
+
             var list = new List<WorkingHours>();
             foreach (var workingHoursDTO in workingHoursData)
             {
-                var wh = new WorkingHours(workingHoursDTO);
-                list.Add(wh);
+                var newHours = new WorkingHours(workingHoursDTO);
+                var existingHours = _context.WorkingHours
+                    .AsEnumerable()
+                    .FirstOrDefault(hours => hours.Equals(newHours));
+
+                list.Add(SelectHours(existingHours, newHours));
             }
 
             return list;
+        }
+
+        private static void ValidateDistinctDays(IEnumerable<CreateWorkingHoursDTO> workingHoursData)
+        {
+            var days = workingHoursData.Select(dto => dto.DayOfWeek).ToList();
+            if (days.Distinct().Count() != days.Count)
+            {
+                throw new ArgumentException("Days of week should be unique!");
+            }
+        }
+
+        private WorkingHours SelectHours(WorkingHours existingHours, WorkingHours newHours)
+        {
+            if (existingHours != null) return existingHours;
+            
+            _context.Add(newHours);
+            _context.SaveChanges();
+
+            return newHours;
         }
     }
 }
