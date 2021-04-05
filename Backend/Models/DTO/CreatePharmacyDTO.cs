@@ -12,6 +12,6 @@ namespace Backend.Models.DTO
         public string City { get; set; }
         
         [JsonProperty("workingHours")]
-        public List<CreateWorkingHoursDTO> WorkingHours { get; set; }
+        public List<WorkingHoursDTO> WorkingHours { get; set; }
     }
 }

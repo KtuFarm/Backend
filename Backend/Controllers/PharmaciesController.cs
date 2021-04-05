@@ -34,6 +34,20 @@ namespace Backend.Controllers
             return Ok(new GetPharmaciesDTO(pharmacies));
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetPharmacyDTO>> GetPharmacy(int id)
+        {
+            if (!IsValidApiRequest()) return InvalidHeaders();
+
+            var pharmacy = await Context.Pharmacies
+                .Include(p => p.PharmacyWorkingHours)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            var workingHours = await _workingHoursManager.GetPharmacyWorkingHours(pharmacy.Id);
+            
+            return Ok(new GetPharmacyDTO(pharmacy, workingHours));
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreatePharmacy([FromBody] CreatePharmacyDTO dataFromBody)
         {

@@ -5,7 +5,7 @@ namespace Backend.Models.DTO
 {
     public class PharmacyDTO
     {
-        [JsonProperty("pharmacy_no")]
+        [JsonProperty("pharmacyNo")]
         public int Id { get; set; }
 
         [JsonProperty("address")]

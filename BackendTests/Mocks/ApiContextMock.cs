@@ -17,8 +17,7 @@ namespace BackendTests.Mocks
         private void SeedDb()
         {
             WorkingHoursSeedMock.EnsureCreated(this);
- 
-            SaveChanges();
+            PharmacySeedMock.EnsureCreated(this);
         }
     }
 }

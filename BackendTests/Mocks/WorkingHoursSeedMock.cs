@@ -25,6 +25,8 @@ namespace BackendTests.Mocks
                     }
                 );
             }
+
+            context.SaveChanges();
         }
     }
 }

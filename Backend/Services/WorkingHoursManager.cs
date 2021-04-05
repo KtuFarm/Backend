@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Backend.Models;
 using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services
 {
-    public class WorkingHoursManager: IWorkingHoursManager
+    public class WorkingHoursManager : IWorkingHoursManager
     {
         private readonly ApiContext _context;
 
@@ -17,7 +19,7 @@ namespace Backend.Services
             _context = context;
         }
 
-        public List<WorkingHours> GetWorkingHoursFromDTO(List<CreateWorkingHoursDTO> workingHoursData)
+        public List<WorkingHours> GetWorkingHoursFromDTO(List<WorkingHoursDTO> workingHoursData)
         {
             ValidateDistinctDays(workingHoursData);
 
@@ -35,7 +37,7 @@ namespace Backend.Services
             return list;
         }
 
-        private static void ValidateDistinctDays(IEnumerable<CreateWorkingHoursDTO> workingHoursData)
+        private static void ValidateDistinctDays(IEnumerable<WorkingHoursDTO> workingHoursData)
         {
             var days = workingHoursData.Select(dto => dto.DayOfWeek).ToList();
             if (days.Distinct().Count() != days.Count)
@@ -47,11 +49,19 @@ namespace Backend.Services
         private WorkingHours SelectHours(WorkingHours existingHours, WorkingHours newHours)
         {
             if (existingHours != null) return existingHours;
-            
+
             _context.Add(newHours);
             _context.SaveChanges();
 
             return newHours;
+        }
+
+        public async Task<IEnumerable<WorkingHours>> GetPharmacyWorkingHours(int pharmacyId)
+        {
+            return await _context.PharmacyWorkingHours
+                .Where(pwh => pwh.PharmacyId == pharmacyId)
+                .Select(pwh => pwh.WorkingHours)
+                .ToListAsync();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Backend.Models.Database
 
         public WorkingHours() { }
         
-        public WorkingHours(CreateWorkingHoursDTO dto)
+        public WorkingHours(WorkingHoursDTO dto)
         {
             var (openTime, closeTime) = ValidateTime(dto);
             OpenTime = openTime;
@@ -37,7 +37,7 @@ namespace Backend.Models.Database
             DayOfWeekId = ValidateDay(dto);
         }
         
-        private static DayOfWeekId ValidateDay(CreateWorkingHoursDTO dto)
+        private static DayOfWeekId ValidateDay(WorkingHoursDTO dto)
         {
             var days = Enum.GetValues(typeof(DayOfWeekId)).Cast<DayOfWeekId>().ToList();
             if (!days.Contains((DayOfWeekId) dto.DayOfWeek))
@@ -48,7 +48,7 @@ namespace Backend.Models.Database
             return (DayOfWeekId) dto.DayOfWeek;
         }
 
-        private static (TimeSpan openTime, TimeSpan closeTime) ValidateTime(CreateWorkingHoursDTO dto)
+        private static (TimeSpan openTime, TimeSpan closeTime) ValidateTime(WorkingHoursDTO dto)
         {
             bool isInvalid = !TimeSpan.TryParse(dto.OpenTime, out var openTime);
             isInvalid |= !TimeSpan.TryParse(dto.CloseTime, out var closeTime);
