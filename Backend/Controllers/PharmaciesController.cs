@@ -56,6 +56,7 @@ namespace Backend.Controllers
             List<WorkingHours> workingHours;
             try
             {
+                ValidateCreatePharmacyDTO(dataFromBody);
                 workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dataFromBody.WorkingHours);
             }
             catch (ArgumentException ex)
@@ -67,6 +68,12 @@ namespace Backend.Controllers
             await Context.SaveChangesAsync();
 
             return Created();
+        }
+
+        private static void ValidateCreatePharmacyDTO(CreatePharmacyDTO dto)
+        {
+            if (string.IsNullOrEmpty(dto.Address)) throw new ArgumentException("Address is empty!");
+            if (string.IsNullOrEmpty(dto.City)) throw new ArgumentException("City is empty!");
         }
     }
 }
