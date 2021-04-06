@@ -84,7 +84,7 @@ namespace BackendTests
             var dto = new List<WorkingHoursDTO>
             {
                 new() {OpenTime = "09:00", CloseTime = "18:00", DayOfWeek = 1},
-                new() {OpenTime = "09:00", CloseTime = "18:00", DayOfWeek = 2},
+                new() {OpenTime = "09:00", CloseTime = "18:00", DayOfWeek = 2}
             };
 
             var wh = _manager.GetWorkingHoursFromDTO(dto);
@@ -99,7 +99,7 @@ namespace BackendTests
             var dto = new List<WorkingHoursDTO>
             {
                 new() {OpenTime = "09:00", CloseTime = "15:00", DayOfWeek = 6},
-                new() {OpenTime = "09:00", CloseTime = "13:00", DayOfWeek = 7},
+                new() {OpenTime = "09:00", CloseTime = "13:00", DayOfWeek = 7}
             };
             
             var wh = _manager.GetWorkingHoursFromDTO(dto);

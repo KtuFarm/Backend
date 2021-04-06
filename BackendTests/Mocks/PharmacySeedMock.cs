@@ -19,7 +19,7 @@ namespace BackendTests.Mocks
                 Id = 1,
                 Address = "Test str.",
                 City = "City",
-                Registers = new List<Register>(),
+                Registers = new List<Register>()
             };
 
             context.Pharmacies.Add(pharmacy);
