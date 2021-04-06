@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Backend.Controllers
 {
@@ -56,6 +57,7 @@ namespace Backend.Controllers
             List<WorkingHours> workingHours;
             try
             {
+                ValidateCreatePharmacyDTO(dataFromBody);
                 workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dataFromBody.WorkingHours);
             }
             catch (ArgumentException ex)
@@ -63,10 +65,30 @@ namespace Backend.Controllers
                 return ApiBadRequest("Invalid request body!", ex.Message);
             }
 
-            Context.Add(new Pharmacy(dataFromBody, workingHours));
+            var pharmacy = new Pharmacy(dataFromBody, workingHours);
+            
+            CreateRegisters(dataFromBody.RegistersCount, pharmacy);
+            Context.Add(pharmacy);
+            
             await Context.SaveChangesAsync();
 
             return Created();
+        }
+
+        [AssertionMethod]
+        private static void ValidateCreatePharmacyDTO(CreatePharmacyDTO dto)
+        {
+            if (string.IsNullOrEmpty(dto.Address)) throw new ArgumentException("Address is empty!");
+            if (string.IsNullOrEmpty(dto.City)) throw new ArgumentException("City is empty!");
+            if (dto.RegistersCount < 1) throw new ArgumentException("There should be at least 1 register!");
+        }
+
+        private void CreateRegisters(int count, Pharmacy pharmacy)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Context.Add(new Register(pharmacy));
+            }
         }
     }
 }

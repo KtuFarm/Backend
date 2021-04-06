@@ -10,6 +10,9 @@ namespace Backend.Models.DTO
 
         [JsonProperty("city")]
         public string City { get; set; }
+        
+        [JsonProperty("registersCount")]
+        public int RegistersCount { get; set; }
 
         [JsonProperty("workingHours")]
         public List<WorkingHoursDTO> WorkingHours { get; set; }
