@@ -41,6 +41,7 @@ namespace Backend
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KTU Farm", Version = "v1" });
                 c.OperationFilter<SwaggerConfig>();
             });
+            services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddCors(options =>
             {
