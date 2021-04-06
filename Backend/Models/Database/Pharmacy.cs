@@ -13,11 +13,11 @@ namespace Backend.Models.Database
 
         [Required]
         [StringLength(255)]
-        public string Address { get; init; }
+        public string Address { get; set; }
 
         [Required]
         [StringLength(255)]
-        public string City { get; init; }
+        public string City { get; set; }
 
         [Required]
         public ICollection<Register> Registers { get; set; }
