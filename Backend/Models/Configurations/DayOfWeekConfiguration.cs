@@ -15,7 +15,7 @@ namespace Backend.Models.Configurations
             builder.HasData(
                 Enum.GetValues(typeof(DayOfWeekId))
                     .Cast<DayOfWeekId>()
-                    .Select(dw => new DayOfWeek()
+                    .Select(dw => new DayOfWeek
                     {
                         Id = dw,
                         Name = dw.ToString()

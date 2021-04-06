@@ -30,7 +30,7 @@ namespace Backend
                 Server = Configuration["Server"],
                 Database = Configuration["Database"],
                 UserID = Configuration["Uid"],
-                Password = Configuration["DbPassword"],
+                Password = Configuration["DbPassword"]
             };
 
             services.AddDbContext<ApiContext>(opt => opt.UseMySQL(builder.ConnectionString));

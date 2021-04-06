@@ -16,7 +16,7 @@ namespace Backend.Models.Seed
                 Id = 1,
                 Address = "Studentu g. 69",
                 City = "Kaunas",
-                Registers = new List<Register>(),
+                Registers = new List<Register>()
             };
             
             context.Pharmacies.Add(pharmacy);
