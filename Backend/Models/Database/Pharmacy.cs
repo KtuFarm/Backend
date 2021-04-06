@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Backend.Models.DTO;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Backend.Models.DTO;
 
 namespace Backend.Models.Database
 {
@@ -14,20 +14,20 @@ namespace Backend.Models.Database
         [Required]
         [StringLength(255)]
         public string Address { get; init; }
-        
+
         [Required]
         [StringLength(255)]
         public string City { get; init; }
-        
+
         [Required]
         public ICollection<Register> Registers { get; set; }
 
         public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
-        
+
         public ICollection<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
 
         public Pharmacy() { }
-        
+
         public Pharmacy(CreatePharmacyDTO dto, IEnumerable<WorkingHours> workingHours)
         {
             Address = dto.Address;

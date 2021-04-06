@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Backend.Models;
+﻿using Backend.Models;
 using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Backend.Controllers
 {
@@ -30,7 +30,7 @@ namespace Backend.Controllers
             var pharmacies = await Context.Pharmacies
                 .Select(p => new PharmacyDTO(p))
                 .ToListAsync();
-            
+
             return Ok(new GetPharmaciesDTO(pharmacies));
         }
 
@@ -44,7 +44,7 @@ namespace Backend.Controllers
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             var workingHours = await _workingHoursManager.GetPharmacyWorkingHours(pharmacy.Id);
-            
+
             return Ok(new GetPharmacyDTO(pharmacy, workingHours));
         }
 
@@ -65,7 +65,7 @@ namespace Backend.Controllers
 
             Context.Add(new Pharmacy(dataFromBody, workingHours));
             await Context.SaveChangesAsync();
-            
+
             return Created();
         }
     }

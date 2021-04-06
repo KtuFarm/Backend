@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backend.Models.Configurations
 {
-    public class PharmacyWorkingHoursConfiguration: IEntityTypeConfiguration<PharmacyWorkingHours>
+    public class PharmacyWorkingHoursConfiguration : IEntityTypeConfiguration<PharmacyWorkingHours>
     {
         public void Configure(EntityTypeBuilder<PharmacyWorkingHours> builder)
         {

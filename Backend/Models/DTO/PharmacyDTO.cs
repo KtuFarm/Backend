@@ -13,7 +13,7 @@ namespace Backend.Models.DTO
 
         [JsonProperty("city")]
         public string City { get; set; }
-        
+
         public PharmacyDTO(Pharmacy pharmacy)
         {
             Id = pharmacy.Id;

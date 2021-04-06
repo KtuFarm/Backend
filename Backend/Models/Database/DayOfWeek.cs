@@ -13,16 +13,16 @@ namespace Backend.Models.Database
         Saturday,
         Sunday
     }
-    
+
     public class DayOfWeek
     {
         [Key]
         [Required]
         public DayOfWeekId Id { get; set; }
-        
+
         [Required]
         public string Name { get; set; }
-        
+
         public ICollection<WorkingHours> WorkingHours { get; set; }
     }
 }

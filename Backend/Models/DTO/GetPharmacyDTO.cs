@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Backend.Models.Database;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Backend.Models.DTO
 {

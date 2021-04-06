@@ -1,6 +1,6 @@
-﻿using System;
-using Backend.Models.Database;
+﻿using Backend.Models.Database;
 using Newtonsoft.Json;
+using System;
 
 namespace Backend.Models.DTO
 {

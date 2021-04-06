@@ -1,6 +1,6 @@
+using Backend.Models.Database;
 using System;
 using System.Linq;
-using Backend.Models.Database;
 
 namespace Backend.Models.Seed
 {

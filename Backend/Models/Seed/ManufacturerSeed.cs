@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Backend.Models.Database;
+﻿using Backend.Models.Database;
+using System.Linq;
 
 namespace Backend.Models.Seed
 {

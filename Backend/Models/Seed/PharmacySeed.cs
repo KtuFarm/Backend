@@ -1,6 +1,6 @@
+using Backend.Models.Database;
 using System.Collections.Generic;
 using System.Linq;
-using Backend.Models.Database;
 
 namespace Backend.Models.Seed
 {
@@ -16,9 +16,9 @@ namespace Backend.Models.Seed
                 Id = 1,
                 Address = "Studentu g. 69",
                 City = "Kaunas",
-                Registers = new List<Register>(),
+                Registers = new List<Register>()
             };
-            
+
             context.Pharmacies.Add(pharmacy);
 
             var workingHours = context.WorkingHours.Where(wh => wh.Id >= 1 && wh.Id <= 5).ToList();
@@ -28,7 +28,7 @@ namespace Backend.Models.Seed
                     new PharmacyWorkingHours(pharmacy, hours)
                 );
             }
-            
+
             context.SaveChanges();
         }
     }

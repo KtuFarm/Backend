@@ -1,33 +1,33 @@
+using Backend.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Backend.Models.DTO;
 
 namespace Backend.Models.Database
 {
-    public class WorkingHours: IEquatable<WorkingHours>
+    public class WorkingHours : IEquatable<WorkingHours>
     {
         [Key]
         [Required]
         public int Id { get; set; }
-        
+
         [Required]
         public TimeSpan OpenTime { get; init; }
-        
+
         [Required]
         public TimeSpan CloseTime { get; init; }
-        
+
         [Required]
         public DayOfWeekId DayOfWeekId { get; init; }
 
         [Required]
         public DayOfWeek DayOfWeek { get; set; }
-        
+
         public ICollection<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
 
         public WorkingHours() { }
-        
+
         public WorkingHours(WorkingHoursDTO dto)
         {
             var (openTime, closeTime) = ValidateTime(dto);
@@ -36,16 +36,16 @@ namespace Backend.Models.Database
 
             DayOfWeekId = ValidateDay(dto);
         }
-        
+
         private static DayOfWeekId ValidateDay(WorkingHoursDTO dto)
         {
             var days = Enum.GetValues(typeof(DayOfWeekId)).Cast<DayOfWeekId>().ToList();
-            if (!days.Contains((DayOfWeekId) dto.DayOfWeek))
+            if (!days.Contains((DayOfWeekId)dto.DayOfWeek))
             {
                 throw new ArgumentException("Invalid day of the week!");
             }
 
-            return (DayOfWeekId) dto.DayOfWeek;
+            return (DayOfWeekId)dto.DayOfWeek;
         }
 
         private static (TimeSpan openTime, TimeSpan closeTime) ValidateTime(WorkingHoursDTO dto)
@@ -64,14 +64,14 @@ namespace Backend.Models.Database
         public bool Equals(WorkingHours other)
         {
             if (ReferenceEquals(null, other)) return false;
-            
+
             return ReferenceEquals(this, other) || IsEqual(other);
         }
 
         private bool IsEqual(WorkingHours other)
         {
-            return OpenTime.Equals(other.OpenTime) && 
-                   CloseTime.Equals(other.CloseTime) && 
+            return OpenTime.Equals(other.OpenTime) &&
+                   CloseTime.Equals(other.CloseTime) &&
                    DayOfWeekId == other.DayOfWeekId;
         }
 
@@ -79,13 +79,13 @@ namespace Backend.Models.Database
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            
-            return obj.GetType() == GetType() && Equals((WorkingHours) obj);
+
+            return obj.GetType() == GetType() && Equals((WorkingHours)obj);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(OpenTime, CloseTime, (int) DayOfWeekId);
+            return HashCode.Combine(OpenTime, CloseTime, (int)DayOfWeekId);
         }
     }
 }

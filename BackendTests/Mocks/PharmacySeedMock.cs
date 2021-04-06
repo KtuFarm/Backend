@@ -1,14 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
 using Backend.Models;
 using Backend.Models.Database;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BackendTests.Mocks
 {
     public static class PharmacySeedMock
     {
         public static int PharmacyWorkingHoursCount => 5;
-        
+
         public static void EnsureCreated(ApiContext context)
         {
             var testPharmacy = context.Pharmacies.FirstOrDefault(p => p.Id == 1);
@@ -19,7 +19,7 @@ namespace BackendTests.Mocks
                 Id = 1,
                 Address = "Test str.",
                 City = "City",
-                Registers = new List<Register>(),
+                Registers = new List<Register>()
             };
 
             context.Pharmacies.Add(pharmacy);

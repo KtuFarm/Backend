@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using Backend.Models;
+﻿using Backend.Models;
 using Backend.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using System.Linq;
 
 namespace Backend.Controllers
 {

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-using Backend.Models.Database;
+﻿using Backend.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Linq;
 
 namespace Backend.Models.Configurations
 {
