@@ -41,5 +41,16 @@ namespace Backend.Controllers
 
             return Ok(new GetMedicamentsDTO(medicaments));
         }
+
+        //[HttpPost]
+        //public async Task<ActionResult> AddMedicament([FromBody] CreateMedicamentDTO dataFromBody)
+        //{
+        //    if (!IsValidApiRequest()) return InvalidHeaders();
+
+        //    var pharmaceuticalForm = Context.PharmaceuticalForms
+        //        .FirstOrDefaultAsync(p => (int) p.Id == dataFromBody.PharmaceuticalFormId);
+
+
+        //}
     }
 }
