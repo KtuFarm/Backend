@@ -14,11 +14,6 @@ namespace Backend.Controllers
         [HttpGet]
         public ActionResult<MessageDTO> GetQuizMessage()
         {
-            if (!IsValidApiRequest())
-            {
-                return ApiBadRequest("Invalid Headers!");
-            }
-
             var message = new MessageDTO("Hello World!");
             return Ok(message);
         }
