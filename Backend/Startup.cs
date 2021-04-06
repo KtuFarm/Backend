@@ -73,13 +73,13 @@ namespace Backend
                 new Seeder(context).Seed();
             }
 
+            app.UseCors("AllowAll");
+            
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-            
-            app.UseCors("AllowAll");
         }
     }
 }
