@@ -1,4 +1,5 @@
 using Backend.Configuration;
+using Backend.Middleware;
 using Backend.Models;
 using Backend.Services;
 using Backend.Services.Interfaces;
@@ -67,6 +68,7 @@ namespace Backend
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseRequestMiddleware();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend v1"));
 
