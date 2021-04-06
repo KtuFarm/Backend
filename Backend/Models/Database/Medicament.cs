@@ -60,6 +60,7 @@ namespace Backend.Models.Database
 
         public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
 
+        public Medicament() {}
 
         public Medicament(CreateMedicamentDTO dto, PharmaceuticalForm pharmaceuticalForm)
         {
