@@ -10,7 +10,7 @@ namespace Backend.Models.DTO
 
         [JsonProperty("closeTime")]
         public string CloseTime { get; set; }
-        
+
         [JsonProperty("dayOfWeek")]
         public int DayOfWeek { get; set; }
 
@@ -20,7 +20,7 @@ namespace Backend.Models.DTO
         {
             OpenTime = $"{hours.OpenTime.Hours:00}:{hours.OpenTime.Minutes:00}";
             CloseTime = $"{hours.CloseTime.Hours:00}:{hours.CloseTime.Minutes:00}";
-            DayOfWeek = (int) hours.DayOfWeekId;
+            DayOfWeek = (int)hours.DayOfWeekId;
         }
     }
 }

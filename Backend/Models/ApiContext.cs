@@ -33,7 +33,7 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new PharmacyWorkingHoursConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
-                .HasKey(pwh => new {pwh.PharmacyId, pwh.WorkingHoursId});
+                .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
         }
     }
 }

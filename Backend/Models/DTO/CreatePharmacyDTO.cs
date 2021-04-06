@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Backend.Models.DTO
 {
@@ -10,7 +10,7 @@ namespace Backend.Models.DTO
 
         [JsonProperty("city")]
         public string City { get; set; }
-        
+
         [JsonProperty("workingHours")]
         public List<WorkingHoursDTO> WorkingHours { get; set; }
     }

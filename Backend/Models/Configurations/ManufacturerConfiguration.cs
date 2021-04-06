@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backend.Models.Configurations
 {
-    public class ManufacturerConfiguration :IEntityTypeConfiguration<Manufacturer>
+    public class ManufacturerConfiguration : IEntityTypeConfiguration<Manufacturer>
     {
         public void Configure(EntityTypeBuilder<Manufacturer> builder)
         {
