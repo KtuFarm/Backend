@@ -43,7 +43,7 @@ namespace Backend.Models.DTO
         public int ReimbursePercentage { get; set; }
 
         [JsonProperty("pharmaceuticalForm")] 
-        public PharmaceuticalFormDTO PharmaceuticalForm { get; set; }
+        public string PharmaceuticalForm { get; set; }
 
         public MedicamentDTO(Medicament medicament)
         {
@@ -58,7 +58,7 @@ namespace Backend.Models.DTO
             Surcharge = medicament.Surcharge;
             IsSellable = medicament.IsSellable;
             ReimbursePercentage = medicament.ReimbursePercentage;
-            PharmaceuticalForm = new PharmaceuticalFormDTO(medicament.PharmaceuticalForm);
+            PharmaceuticalForm = medicament.PharmaceuticalForm.Name;
         }
     }
 }
