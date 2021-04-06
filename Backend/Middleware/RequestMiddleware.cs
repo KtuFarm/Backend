@@ -20,12 +20,15 @@ namespace Backend.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
-            httpContext.Request.Headers.TryGetValue(ApiHeader, out var headers);
-            if (!IsHeaderLegit(headers) || headers != "true")
+            if(httpContext.Request.Path.StartsWithSegments("/api"))
             {
-                string json = GetErrorJson(httpContext);
-                await httpContext.Response.WriteAsync(json);
-                return;
+                httpContext.Request.Headers.TryGetValue(ApiHeader, out var headers);
+                if (!IsHeaderLegit(headers) || headers != "true")
+                {
+                    string json = GetErrorJson(httpContext);
+                    await httpContext.Response.WriteAsync(json);
+                    return;
+                }
             }
             await _next(httpContext);
         }

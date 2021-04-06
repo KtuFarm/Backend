@@ -68,12 +68,13 @@ namespace Backend
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseRequestMiddleware();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend v1"));
 
                 new Seeder(context).Seed();
             }
+
+            app.UseRequestMiddleware();
 
             app.UseCors("AllowAll");
 
