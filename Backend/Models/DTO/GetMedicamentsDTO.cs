@@ -8,10 +8,10 @@ namespace Backend.Models.DTO
 {
     public class GetMedicamentsDTO
     {
-        [JsonProperty("Meta")]
+        [JsonProperty("meta")]
         public Meta Meta { get; set; }
 
-        [JsonProperty("Data")]
+        [JsonProperty("data")]
         public IEnumerable<MedicamentDTO> Data { get; set; }
 
         public GetMedicamentsDTO(IEnumerable<MedicamentDTO> medicaments)
