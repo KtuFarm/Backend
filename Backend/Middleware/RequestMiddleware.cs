@@ -23,18 +23,23 @@ namespace Backend.Middleware
             httpContext.Request.Headers.TryGetValue(ApiHeader, out var headers);
             if (!IsHeaderLegit(headers) || headers != "true")
             {
-                var error = new ErrorDTO
-                {
-                    Type = 400,
-                    Title = "Invalid Headers!",
-                    Details = null
-                };
-                httpContext.Response.StatusCode = 400;
-                var jsonString = JsonConvert.SerializeObject(error, Formatting.Indented);
-                await httpContext.Response.WriteAsync(jsonString);
+                string json = GetErrorJson(httpContext);
+                await httpContext.Response.WriteAsync(json);
                 return;
             }
             await _next(httpContext);
+        }
+
+        private static string GetErrorJson(HttpContext httpContext)
+        {
+            var error = new ErrorDTO
+            {
+                Type = 400,
+                Title = "Invalid Headers!",
+                Details = null
+            };
+            httpContext.Response.StatusCode = 400;
+            return JsonConvert.SerializeObject(error, Formatting.Indented);
         }
 
         private static bool IsHeaderLegit(StringValues headers)
