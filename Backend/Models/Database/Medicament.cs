@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Backend.Models.DTO;
 
 namespace Backend.Models.Database
 {
@@ -58,5 +59,24 @@ namespace Backend.Models.Database
         public Manufacturer Manufacturer { get; set; }
 
         public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
+
+        public Medicament() {}
+
+        public Medicament(CreateMedicamentDTO dto, PharmaceuticalForm pharmaceuticalForm)
+        {
+            Name = dto.Name;
+            ActiveSubstance = dto.ActiveSubstance;
+            BarCode = dto.BarCode;
+            IsPrescriptionRequired = dto.IsPrescriptionRequired;
+            IsReimbursed = dto.IsReimbursed;
+            Country = dto.Country;
+            BasePrice = dto.BasePrice;
+            Surcharge = dto.Surcharge;
+            IsSellable = dto.IsSellable;
+            ReimbursePercentage = dto.ReimbursePercentage;
+            PharmaceuticalForm = pharmaceuticalForm;
+            PharmaceuticalFormId = pharmaceuticalForm.Id;
+
+        }
     }
 }
