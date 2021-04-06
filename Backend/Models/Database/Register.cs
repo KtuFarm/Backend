@@ -18,5 +18,12 @@ namespace Backend.Models.Database
 
         [Required]
         public Pharmacy Pharmacy { get; set; }
+
+        public Register() { }
+
+        public Register(Pharmacy pharmacy)
+        {
+            Pharmacy = pharmacy;
+        }
     }
 }
