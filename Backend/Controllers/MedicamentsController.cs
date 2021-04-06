@@ -28,5 +28,18 @@ namespace Backend.Controllers
 
             return Ok(new GetMedicamentDTO(medicament));
         }
+
+        [HttpGet]
+        public async Task<ActionResult<GetMedicamentsDTO>> GetMedicaments()
+        {
+            if (!IsValidApiRequest()) return InvalidHeaders();
+
+            var medicaments = await Context.Medicaments
+                .Include(m => m.PharmaceuticalForm)
+                .Select(m => new MedicamentDTO(m))
+                .ToListAsync();
+
+            return Ok(new GetMedicamentsDTO(medicaments));
+        }
     }
 }
