@@ -77,6 +77,8 @@ namespace Backend
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
+            app.UseCors("AllowAll");
         }
     }
 }
