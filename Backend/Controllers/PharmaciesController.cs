@@ -25,8 +25,6 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<GetPharmaciesDTO>> GetPharmacies()
         {
-            if (!IsValidApiRequest()) return InvalidHeaders();
-
             var pharmacies = await Context.Pharmacies
                 .Select(p => new PharmacyDTO(p))
                 .ToListAsync();
@@ -37,8 +35,6 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPharmacyDTO>> GetPharmacy(int id)
         {
-            if (!IsValidApiRequest()) return InvalidHeaders();
-
             var pharmacy = await Context.Pharmacies
                 .Include(p => p.PharmacyWorkingHours)
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -51,8 +47,6 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult> CreatePharmacy([FromBody] CreatePharmacyDTO dataFromBody)
         {
-            if (!IsValidApiRequest()) return InvalidHeaders();
-
             List<WorkingHours> workingHours;
             try
             {
