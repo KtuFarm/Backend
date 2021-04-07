@@ -79,7 +79,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkerState");
+                    b.ToTable("EmployeeState");
 
                     b.HasData(
                         new

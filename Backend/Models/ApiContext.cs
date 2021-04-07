@@ -15,7 +15,7 @@ namespace Backend.Models
         public DbSet<DayOfWeek> DaysOfWeek { get; set; }
         public DbSet<WorkingHours> WorkingHours { get; set; }
         public DbSet<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
-        public DbSet<EmployeeState> WorkerState { get; set; }
+        public DbSet<EmployeeState> EmployeeState { get; set; }
         public DbSet<User> Users { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
@@ -33,7 +33,7 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new DayOfWeekConfiguration());
             modelBuilder.ApplyConfiguration(new WorkingHoursConfiguration());
             modelBuilder.ApplyConfiguration(new PharmacyWorkingHoursConfiguration());
-            modelBuilder.ApplyConfiguration(new WorkerStateConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployeeStateConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()

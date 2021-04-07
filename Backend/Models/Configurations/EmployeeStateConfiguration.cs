@@ -6,7 +6,7 @@ using Backend.Models.Database;
 
 namespace Backend.Models.Configurations
 {
-    public class WorkerStateConfiguration : IEntityTypeConfiguration<EmployeeState>
+    public class EmployeeStateConfiguration : IEntityTypeConfiguration<EmployeeState>
     {
         public void Configure(EntityTypeBuilder<EmployeeState> builder)
         {

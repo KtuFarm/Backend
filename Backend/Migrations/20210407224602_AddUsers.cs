@@ -15,7 +15,7 @@ namespace Backend.Migrations
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "WorkerState",
+                name: "EmployeeState",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -23,7 +23,7 @@ namespace Backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkerState", x => x.Id);
+                    table.PrimaryKey("PK_EmployeeState", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,31 +44,31 @@ namespace Backend.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Users_EmployeeState_EmployeeStateId",
+                        column: x => x.EmployeeStateId,
+                        principalTable: "EmployeeState",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Users_Pharmacies_PharmacyId",
                         column: x => x.PharmacyId,
                         principalTable: "Pharmacies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Users_WorkerState_EmployeeStateId",
-                        column: x => x.EmployeeStateId,
-                        principalTable: "WorkerState",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "WorkerState",
+                table: "EmployeeState",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 1, "Working" });
 
             migrationBuilder.InsertData(
-                table: "WorkerState",
+                table: "EmployeeState",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 2, "OnVacation" });
 
             migrationBuilder.InsertData(
-                table: "WorkerState",
+                table: "EmployeeState",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 3, "Fired" });
 
@@ -106,7 +106,7 @@ namespace Backend.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "WorkerState");
+                name: "EmployeeState");
 
             migrationBuilder.DropIndex(
                 name: "IX_Manufacturers_SupplierId",
