@@ -19,6 +19,10 @@ namespace Backend.Models.Configurations
             builder
                 .HasMany(p => p.PharmacyWorkingHours)
                 .WithOne(pwh => pwh.Pharmacy);
+
+            builder
+                .HasMany(p => p.Pharmacists)
+                .WithOne(u => u.Pharmacy);
         }
     }
 }
