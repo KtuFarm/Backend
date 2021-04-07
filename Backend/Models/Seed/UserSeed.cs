@@ -18,8 +18,6 @@ namespace Backend.Models.Seed
                     Name = "Karolis",
                     Surname = "Balciunas",
                     RegistrationDate = new DateTime(2020, 12, 21),
-                    EmployeeStateId = EmployeeStateId.Working,
-                    DismissalDate = null,
                     Position = "Jr. Pharmacist",
                     PharmacyId = 1
                 }
