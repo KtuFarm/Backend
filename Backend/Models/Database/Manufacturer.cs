@@ -16,5 +16,9 @@ namespace Backend.Models.Database
         public string Country { get; set; }
 
         public ICollection<Medicament> Medicaments { get; set; }
+
+        public User Supplier { get; set; }
+
+        public int? SupplierId { get; set; }
     }
 }
