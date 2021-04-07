@@ -20,6 +20,8 @@ namespace Backend.Models.Configurations
             builder
                 .HasMany(m => m.RequiredMedicamentAmounts)
                 .WithOne(rm => rm.Medicament);
+
+            builder.HasQueryFilter(m => !m.IsSoftDeleted);
         }
     }
 }

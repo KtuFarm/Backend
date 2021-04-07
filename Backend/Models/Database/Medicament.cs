@@ -5,7 +5,7 @@ using Backend.Models.DTO;
 
 namespace Backend.Models.Database
 {
-    public class Medicament
+    public class Medicament: ISoftDeletable
     {
         [Key]
         [Required]
@@ -32,8 +32,7 @@ namespace Backend.Models.Database
         [Required]
         [StringLength(255)]
         public string Country { get; set; }
-
-
+        
         [Required]
         public decimal BasePrice { get; set; }
 
@@ -47,6 +46,9 @@ namespace Backend.Models.Database
         [Required]
         [DefaultValue(0)]
         public int ReimbursePercentage { get; set; } = 0;
+        
+        [Required] 
+        public bool IsSoftDeleted { get; set; } = false;
 
         [Required]
         public PharmaceuticalFormId PharmaceuticalFormId { get; set; }

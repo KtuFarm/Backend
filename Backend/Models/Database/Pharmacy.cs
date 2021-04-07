@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Backend.Models.Database
 {
-    public class Pharmacy
+    public class Pharmacy: ISoftDeletable
     {
         [Key]
         [Required]
@@ -18,6 +18,9 @@ namespace Backend.Models.Database
         [Required]
         [StringLength(255)]
         public string City { get; set; }
+
+        [Required] 
+        public bool IsSoftDeleted { get; set; } = false;
 
         [Required]
         public ICollection<Register> Registers { get; set; }
