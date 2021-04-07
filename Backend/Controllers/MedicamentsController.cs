@@ -50,7 +50,11 @@ namespace Backend.Controllers
         //    var pharmaceuticalForm = Context.PharmaceuticalForms
         //        .FirstOrDefaultAsync(p => (int) p.Id == dataFromBody.PharmaceuticalFormId);
 
+<<<<<<< Updated upstream
 
         //}
+=======
+        }
+>>>>>>> Stashed changes
     }
 }
