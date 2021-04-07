@@ -9,7 +9,7 @@ namespace Backend.Models.Database
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required]
         [StringLength(255)]
@@ -33,12 +33,13 @@ namespace Backend.Models.Database
             Address = dto.Address;
             City = dto.City;
 
-            PharmacyWorkingHours = CreateWorkingHours(workingHours);
+            UpdateWorkingHours(workingHours);
         }
 
-        private List<PharmacyWorkingHours> CreateWorkingHours(IEnumerable<WorkingHours> workingHours)
+        public void UpdateWorkingHours(IEnumerable<WorkingHours> workingHours)
         {
-            return workingHours.Select(hours => new PharmacyWorkingHours(this, hours)).ToList();
+            PharmacyWorkingHours.Clear();
+            PharmacyWorkingHours = workingHours.Select(hours => new PharmacyWorkingHours(this, hours)).ToList();
         }
     }
 }

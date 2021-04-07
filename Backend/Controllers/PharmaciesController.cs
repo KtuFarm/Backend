@@ -90,28 +90,31 @@ namespace Backend.Controllers
         {
             if (!IsValidApiRequest()) return InvalidHeaders();
 
-            var pharmacy = await Context.Pharmacies.FirstOrDefaultAsync(p => p.Id == id);
+            var pharmacy = await Context.Pharmacies
+                .Include(p => p.PharmacyWorkingHours)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (pharmacy == null) return ApiNotFound("Pharmacy does not exist!");
             
             pharmacy.Address = dto.Address ?? pharmacy.Address;
             pharmacy.City = dto.City ?? pharmacy.City;
 
-            // if (dto.WorkingHours != null)
-            // {
-            //     try
-            //     {
-            //         var workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dto.WorkingHours);
-            //     }
-            //     catch (ArgumentException ex)
-            //     {
-            //         return ApiBadRequest("Invalid request body!", ex.Message);
-            //     }
-            // }
+            if (dto.WorkingHours != null)
+            {
+                try
+                {
+                    var workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dto.WorkingHours);
+                    pharmacy.UpdateWorkingHours(workingHours);
+                }
+                catch (ArgumentException ex)
+                {
+                    return ApiBadRequest("Invalid request body!", ex.Message);
+                }
+            }
             
             await Context.SaveChangesAsync();
             
-            return Ok(dto);
+            return Ok();
         }
     }
 }
