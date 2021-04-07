@@ -18,28 +18,28 @@ namespace Backend.Models.DTO
         public string BarCode { get; set; }
 
         [JsonProperty("isPrescriptionRequired")]
-        public bool IsPrescriptionRequired { get; set; }
+        public bool? IsPrescriptionRequired { get; set; }
 
         [JsonProperty("isReimbursed")]
-        public bool IsReimbursed { get; set; }
+        public bool? IsReimbursed { get; set; }
 
         [JsonProperty("country")]
         public string Country { get; set; }
 
         [JsonProperty("basePrice")]
-        public decimal BasePrice { get; set; }
+        public decimal? BasePrice { get; set; }
 
         [JsonProperty("surcharge")]
-        public double Surcharge { get; set; }
+        public double? Surcharge { get; set; }
 
         [JsonProperty("isSellable")]
-        public bool IsSellable { get; set; }
+        public bool? IsSellable { get; set; }
 
         [JsonProperty("reimbursePercentage")]
-        public int ReimbursePercentage { get; set; }
+        public int? ReimbursePercentage { get; set; }
 
         [JsonProperty("pharmaceuticalFormId")]
-        public int PharmaceuticalFormId { get; set; }
+        public int? PharmaceuticalFormId { get; set; }
     }
 
 }
