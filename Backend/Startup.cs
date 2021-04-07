@@ -74,9 +74,9 @@ namespace Backend
                 new Seeder(context).Seed();
             }
 
-            app.UseRequestMiddleware();
-
             app.UseCors("AllowAll");
+
+            app.UseRequestMiddleware();
 
             app.UseRouting();
 
