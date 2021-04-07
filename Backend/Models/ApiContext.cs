@@ -15,6 +15,8 @@ namespace Backend.Models
         public DbSet<DayOfWeek> DaysOfWeek { get; set; }
         public DbSet<WorkingHours> WorkingHours { get; set; }
         public DbSet<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
+        public DbSet<WorkerState> WorkerState { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
