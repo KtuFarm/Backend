@@ -29,5 +29,8 @@ namespace Backend.Models.Database
         [Required]
         [StringLength(255)]
         public string Position { get; set; }
+
+        [Required]
+        public Pharmacy Pharmacy { get; set; }
     }
 }
