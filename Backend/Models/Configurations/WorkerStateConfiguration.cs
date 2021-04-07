@@ -6,15 +6,15 @@ using Backend.Models.Database;
 
 namespace Backend.Models.Configurations
 {
-    public class WorkerStateConfiguration : IEntityTypeConfiguration<WorkerState>
+    public class WorkerStateConfiguration : IEntityTypeConfiguration<EmployeeState>
     {
-        public void Configure(EntityTypeBuilder<WorkerState> builder)
+        public void Configure(EntityTypeBuilder<EmployeeState> builder)
         {
             builder.Property(ws => ws.Id).HasConversion<int>();
             builder.HasData(
-                Enum.GetValues(typeof(WorkerStateId))
-                    .Cast<WorkerStateId>()
-                    .Select(ws => new WorkerState
+                Enum.GetValues(typeof(EmployeeStateId))
+                    .Cast<EmployeeStateId>()
+                    .Select(ws => new EmployeeState
                     {
                         Id = ws,
                         Name = ws.ToString()
@@ -23,7 +23,7 @@ namespace Backend.Models.Configurations
 
             builder
                 .HasMany(ws => ws.Workers)
-                .WithOne(u => u.WorkerState);
+                .WithOne(u => u.EmployeeState);
         }
     }
 }

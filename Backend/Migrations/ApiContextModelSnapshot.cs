@@ -68,6 +68,37 @@ namespace Backend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Backend.Models.Database.EmployeeState", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkerState");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Working"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "OnVacation"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Fired"
+                        });
+                });
+
             modelBuilder.Entity("Backend.Models.Database.Manufacturer", b =>
                 {
                     b.Property<int>("Id")
@@ -299,6 +330,9 @@ namespace Backend.Migrations
                     b.Property<DateTime?>("DismissalDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("EmployeeStateId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -320,47 +354,13 @@ namespace Backend.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("WorkerStateId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeStateId");
 
                     b.HasIndex("PharmacyId");
 
-                    b.HasIndex("WorkerStateId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Backend.Models.Database.WorkerState", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WorkerState");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Working"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "OnVacation"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Fired"
-                        });
                 });
 
             modelBuilder.Entity("Backend.Models.Database.WorkingHours", b =>
@@ -462,21 +462,21 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Database.User", b =>
                 {
+                    b.HasOne("Backend.Models.Database.EmployeeState", "EmployeeState")
+                        .WithMany("Workers")
+                        .HasForeignKey("EmployeeStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Backend.Models.Database.Pharmacy", "Pharmacy")
                         .WithMany("Pharmacists")
                         .HasForeignKey("PharmacyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Models.Database.WorkerState", "WorkerState")
-                        .WithMany("Workers")
-                        .HasForeignKey("WorkerStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("EmployeeState");
 
                     b.Navigation("Pharmacy");
-
-                    b.Navigation("WorkerState");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.WorkingHours", b =>
@@ -493,6 +493,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Database.DayOfWeek", b =>
                 {
                     b.Navigation("WorkingHours");
+                });
+
+            modelBuilder.Entity("Backend.Models.Database.EmployeeState", b =>
+                {
+                    b.Navigation("Workers");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.Manufacturer", b =>
@@ -524,11 +529,6 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Database.User", b =>
                 {
                     b.Navigation("Manufacturers");
-                });
-
-            modelBuilder.Entity("Backend.Models.Database.WorkerState", b =>
-                {
-                    b.Navigation("Workers");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.WorkingHours", b =>

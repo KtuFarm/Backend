@@ -22,10 +22,10 @@ namespace Backend.Models.Database
         public DateTime RegistrationDate { get; set; }
 
         [Required]
-        public WorkerStateId WorkerStateId { get; set; }
+        public EmployeeStateId EmployeeStateId { get; set; }
 
         [Required]
-        public WorkerState WorkerState { get; set; }
+        public EmployeeState EmployeeState { get; set; }
 
         public DateTime? DismissalDate { get; set; }
 

@@ -6,8 +6,8 @@ namespace Backend.Models.DTO
 {
     public class UserDTO
     {
-        [JsonProperty("uid")]
-        public int Uid { get; set; }
+        [JsonProperty("id")]
+        public int Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -24,18 +24,18 @@ namespace Backend.Models.DTO
         [JsonProperty("position")]
         public string Position { get; set; }
 
-        [JsonProperty("state")]
-        public string State { get; set; }
+        [JsonProperty("employeeState")]
+        public string EmployeeState { get; set; }
 
         public UserDTO(User user)
         {
-            Uid = user.Id;
+            Id = user.Id;
             Name = user.Name;
             Surname = user.Surname;
             RegistrationDate = user.RegistrationDate;
             DismissalDate = user.DismissalDate;
             Position = user.Position;
-            State = user.WorkerState.Name;
+            EmployeeState = user.EmployeeState.Name;
         }
     }
 }

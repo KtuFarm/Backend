@@ -35,7 +35,7 @@ namespace Backend.Migrations
                     Name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false),
                     Surname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    WorkerStateId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeStateId = table.Column<int>(type: "int", nullable: false),
                     DismissalDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     Position = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false),
                     PharmacyId = table.Column<int>(type: "int", nullable: false)
@@ -50,8 +50,8 @@ namespace Backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Users_WorkerState_WorkerStateId",
-                        column: x => x.WorkerStateId,
+                        name: "FK_Users_WorkerState_EmployeeStateId",
+                        column: x => x.EmployeeStateId,
                         principalTable: "WorkerState",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -78,14 +78,14 @@ namespace Backend.Migrations
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_EmployeeStateId",
+                table: "Users",
+                column: "EmployeeStateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_PharmacyId",
                 table: "Users",
                 column: "PharmacyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_WorkerStateId",
-                table: "Users",
-                column: "WorkerStateId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Manufacturers_Users_SupplierId",

@@ -3,18 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
 {
-    public enum WorkerStateId
+    public enum EmployeeStateId
     {
         Working = 1,
         OnVacation,
         Fired
     }
 
-    public class WorkerState
+    public class EmployeeState
     {
         [Key]
         [Required]
-        public WorkerStateId Id { get; set; }
+        public EmployeeStateId Id { get; set; }
 
         [Required]
         public string Name { get; set; }

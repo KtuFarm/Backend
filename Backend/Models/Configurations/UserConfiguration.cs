@@ -8,7 +8,7 @@ namespace Backend.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(u => u.WorkerStateId).HasConversion<int>();
+            builder.Property(u => u.EmployeeStateId).HasConversion<int>();
 
             builder
                 .HasOne(u => u.Pharmacy)
@@ -19,7 +19,7 @@ namespace Backend.Models.Configurations
                 .WithOne(m => m.Supplier);
 
             builder
-                .HasOne(u => u.WorkerState)
+                .HasOne(u => u.EmployeeState)
                 .WithMany(ws => ws.Workers);
         }
     }
