@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
 using Backend.Models.DTO;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
@@ -54,6 +55,16 @@ namespace Backend.Controllers
 
         //}
 =======
+            return Created();
+        }
+
+        [AssertionMethod]
+        private static void ValidateCreateMEdicamentDTO(CreateMedicamentDTO dto)
+        {
+            if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException("Name is empty!");
+            if (string.IsNullOrEmpty(dto.ActiveSubstance)) throw new ArgumentException("Active substance is empty!");
+            if (string.IsNullOrEmpty(dto.BarCode)) throw new ArgumentException("Bar code is empty!");
+            if (dto.IsPrescriptionRequired) throw new ArgumentException("Is prescription required is empty!");
         }
 >>>>>>> Stashed changes
     }
