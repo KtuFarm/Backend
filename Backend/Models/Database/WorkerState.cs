@@ -5,7 +5,7 @@ namespace Backend.Models.Database
 {
     public enum WorkerStateId
     {
-        Working,
+        Working = 1,
         OnVacation,
         Fired
     }
