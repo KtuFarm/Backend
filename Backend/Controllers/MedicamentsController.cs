@@ -22,8 +22,6 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetMedicamentDTO>> GetMedicament(int id)
         {
-            if (!IsValidApiRequest()) return InvalidHeaders();
-
             var medicament = await Context.Medicaments
                 .Include(m => m.PharmaceuticalForm)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -34,8 +32,6 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<GetMedicamentsDTO>> GetMedicaments()
         {
-            if (!IsValidApiRequest()) return InvalidHeaders();
-
             var medicaments = await Context.Medicaments
                 .Include(m => m.PharmaceuticalForm)
                 .Select(m => new MedicamentDTO(m))
