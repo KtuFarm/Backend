@@ -19,6 +19,7 @@ namespace Backend.Models
             MedicamentSeed.EnsureCreated(_context);
             WorkingHoursSeed.EnsureCreated(_context);
             PharmacySeed.EnsureCreated(_context);
+            UserSeed.EnsureCreated(_context);
 
             _context.SaveChanges();
         }

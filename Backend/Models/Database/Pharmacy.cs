@@ -26,6 +26,8 @@ namespace Backend.Models.Database
 
         public ICollection<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
 
+        public ICollection<User> Pharmacists { get; set; }
+
         public Pharmacy() { }
 
         public Pharmacy(CreatePharmacyDTO dto, IEnumerable<WorkingHours> workingHours)
