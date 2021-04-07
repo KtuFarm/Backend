@@ -59,8 +59,8 @@ namespace Backend.Controllers
         private static void ValidateCreateMedicamentDTO(CreateMedicamentDTO dto)
         {
             if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException("Name is empty!");
-            if (string.IsNullOrEmpty(dto.ActiveSubstance)) throw new ArgumentException("Active substance is empty!");
-            if (string.IsNullOrEmpty(dto.BarCode)) throw new ArgumentException("Bar code is empty!");
+            if (string.IsNullOrEmpty(dto.ActiveSubstance)) throw new ArgumentException("ActiveSubstance is empty!");
+            if (string.IsNullOrEmpty(dto.BarCode)) throw new ArgumentException("BarCode is empty!");
             if (!dto.IsPrescriptionRequired.HasValue) throw new ArgumentException("IsPrescriptionRequired is empty!");
             if (!dto.IsReimbursed.HasValue) throw new ArgumentException("IsReimbursed is empty!");
             if (string.IsNullOrEmpty(dto.Country)) throw new ArgumentException("Country is empty!");
