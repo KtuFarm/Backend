@@ -31,6 +31,8 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new DayOfWeekConfiguration());
             modelBuilder.ApplyConfiguration(new WorkingHoursConfiguration());
             modelBuilder.ApplyConfiguration(new PharmacyWorkingHoursConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkerStateConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
