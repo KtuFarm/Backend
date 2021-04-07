@@ -67,13 +67,13 @@ namespace Backend.Models.Database
             Name = dto.Name;
             ActiveSubstance = dto.ActiveSubstance;
             BarCode = dto.BarCode;
-            IsPrescriptionRequired = dto.IsPrescriptionRequired;
-            IsReimbursed = dto.IsReimbursed;
+            IsPrescriptionRequired = (bool) dto.IsPrescriptionRequired;
+            IsReimbursed = (bool) dto.IsReimbursed;
             Country = dto.Country;
-            BasePrice = dto.BasePrice;
-            Surcharge = dto.Surcharge;
-            IsSellable = dto.IsSellable;
-            ReimbursePercentage = dto.ReimbursePercentage;
+            BasePrice = (decimal) dto.BasePrice;
+            Surcharge = (double) dto.Surcharge;
+            IsSellable = (bool) dto.IsSellable;
+            ReimbursePercentage = (int) dto.ReimbursePercentage;
             PharmaceuticalForm = pharmaceuticalForm;
             PharmaceuticalFormId = pharmaceuticalForm.Id;
 

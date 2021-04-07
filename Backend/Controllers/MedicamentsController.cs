@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
+using Backend.Models.Database;
 using Backend.Models.DTO;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
@@ -20,8 +22,6 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetMedicamentDTO>> GetMedicament(int id)
         {
-            if (!IsValidApiRequest()) return InvalidHeaders();
-
             var medicament = await Context.Medicaments
                 .Include(m => m.PharmaceuticalForm)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -32,7 +32,6 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<GetMedicamentsDTO>> GetMedicaments()
         {
-            if (!IsValidApiRequest()) return InvalidHeaders();
 
             var medicaments = await Context.Medicaments
                 .Include(m => m.PharmaceuticalForm)
@@ -42,15 +41,33 @@ namespace Backend.Controllers
             return Ok(new GetMedicamentsDTO(medicaments));
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> AddMedicament([FromBody] CreateMedicamentDTO dataFromBody)
-        //{
-        //    if (!IsValidApiRequest()) return InvalidHeaders();
+        [HttpPost]
+        public async Task<ActionResult> AddMedicament([FromBody] CreateMedicamentDTO dataFromBody)
+        {
+            ValidateCreateMedicamentDTO(dataFromBody);
 
-        //    var pharmaceuticalForm = Context.PharmaceuticalForms
-        //        .FirstOrDefaultAsync(p => (int) p.Id == dataFromBody.PharmaceuticalFormId);
+            var pharmaceuticalForm = Context.PharmaceuticalForms
+                .FirstOrDefaultAsync(p => (int)p.Id == dataFromBody.PharmaceuticalFormId);
 
+            Context.Medicaments.Add(new Medicament(dataFromBody, await pharmaceuticalForm));
+            await Context.SaveChangesAsync();
 
-        //}
+            return Created();
+        }
+
+        [AssertionMethod]
+        private static void ValidateCreateMedicamentDTO(CreateMedicamentDTO dto)
+        {
+            if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException("Name is empty!");
+            if (string.IsNullOrEmpty(dto.ActiveSubstance)) throw new ArgumentException("ActiveSubstance is empty!");
+            if (string.IsNullOrEmpty(dto.BarCode)) throw new ArgumentException("BarCode is empty!");
+            if (!dto.IsPrescriptionRequired.HasValue) throw new ArgumentException("IsPrescriptionRequired is empty!");
+            if (!dto.IsReimbursed.HasValue) throw new ArgumentException("IsReimbursed is empty!");
+            if (string.IsNullOrEmpty(dto.Country)) throw new ArgumentException("Country is empty!");
+            if (dto.BasePrice == null) throw new ArgumentException("BasePrice is empty!");
+            if (dto.Surcharge == null) throw new ArgumentException("Surcharge is empty!");
+            if (!dto.IsSellable.HasValue) throw new ArgumentException("IsSellable is empty!");
+            if (dto.ReimbursePercentage == null) throw new ArgumentException("ReimbursePercentage is empty!");
+        }
     }
 }
