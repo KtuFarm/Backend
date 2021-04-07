@@ -19,7 +19,7 @@ namespace Backend.Models.DTO
         public DateTime RegistrationDate { get; set; }
 
         [JsonProperty("dismissalDate")]
-        public DateTime DismissalDate { get; set; }
+        public DateTime? DismissalDate { get; set; }
 
         [JsonProperty("position")]
         public string Position { get; set; }
@@ -29,13 +29,13 @@ namespace Backend.Models.DTO
 
         public UserDTO(User user)
         {
-            Uid = user.Uid;
+            Uid = user.Id;
             Name = user.Name;
             Surname = user.Surname;
             RegistrationDate = user.RegistrationDate;
             DismissalDate = user.DismissalDate;
             Position = user.Position;
-            State = user.State.Name;
+            State = user.WorkerState.Name;
         }
     }
 }

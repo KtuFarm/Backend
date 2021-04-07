@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
@@ -7,7 +8,7 @@ namespace Backend.Models.Database
     {
         [Key]
         [Required]
-        public int Uid { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(255)]
@@ -21,16 +22,23 @@ namespace Backend.Models.Database
         public DateTime RegistrationDate { get; set; }
 
         [Required]
-        public WorkerState State { get; set; }
+        public WorkerStateId WorkerStateId { get; set; }
 
         [Required]
-        public DateTime DismissalDate { get; set; }
+        public WorkerState WorkerState { get; set; }
+
+        public DateTime? DismissalDate { get; set; }
 
         [Required]
         [StringLength(255)]
         public string Position { get; set; }
 
         [Required]
+        public int PharmacyId { get; set; }
+
+        [Required]
         public Pharmacy Pharmacy { get; set; }
+
+        public ICollection<Manufacturer> Manufacturers { get; set; }
     }
 }
