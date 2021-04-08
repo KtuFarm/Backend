@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
 {
-    public class Register
+    public class Register: ISoftDeletable
     {
         [Key]
         [Required]
@@ -12,6 +12,10 @@ namespace Backend.Models.Database
         [Required]
         [DefaultValue(0.00)]
         public decimal Cash { get; set; } = 0.00M;
+        
+        [Required] 
+        [DefaultValue(false)]
+        public bool IsSoftDeleted { get; set; } = false;
 
         [Required]
         public int PharmacyId { get; set; }
