@@ -48,6 +48,7 @@ namespace Backend.Models.Database
         public int ReimbursePercentage { get; set; } = 0;
         
         [Required] 
+        [DefaultValue(false)]
         public bool IsSoftDeleted { get; set; } = false;
 
         [Required]

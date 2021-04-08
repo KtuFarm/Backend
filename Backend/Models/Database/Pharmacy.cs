@@ -1,5 +1,6 @@
 ﻿using Backend.Models.DTO;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -20,6 +21,7 @@ namespace Backend.Models.Database
         public string City { get; set; }
 
         [Required] 
+        [DefaultValue(false)]
         public bool IsSoftDeleted { get; set; } = false;
 
         [Required]
