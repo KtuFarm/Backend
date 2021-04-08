@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace Backend.Models.DTO
 {
@@ -11,13 +10,10 @@ namespace Backend.Models.DTO
         [JsonProperty("surname")]
         public string Surname { get; set; }
 
-        [JsonProperty("registrationDate")]
-        public DateTime RegistrationDate { get; set; }
-
         [JsonProperty("position")]
         public string Position { get; set; }
 
-        [JsonProperty("employeeState")]
-        public int? EmployeeState { get; set; }
+        [JsonProperty("pharmacyId")]
+        public int? PharmacyId { get; set; }
     }
 }

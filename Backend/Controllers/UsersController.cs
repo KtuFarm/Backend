@@ -1,7 +1,10 @@
 ﻿using Backend.Models;
+using Backend.Models.Database;
 using Backend.Models.DTO;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,6 +35,25 @@ namespace Backend.Controllers
             if (user == null) return ApiNotFound("User does not exist!");
 
             return Ok(new GetUserDTO(user));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddUser([FromBody] CreateUserDTO dataFromBody)
+        {
+            ValidateCreateUserDTO(dataFromBody);
+
+            Context.Users.Add(new User(dataFromBody));
+            await Context.SaveChangesAsync();
+
+            return Created();
+        }
+
+        [AssertionMethod]
+        private static void ValidateCreateUserDTO(CreateUserDTO dto)
+        {
+            if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException("Name is empty!");
+            if (string.IsNullOrEmpty(dto.Surname)) throw new ArgumentException("Surname is empty!");
+            if (string.IsNullOrEmpty(dto.Position)) throw new ArgumentException("Position is empty!");
         }
     }
 }
