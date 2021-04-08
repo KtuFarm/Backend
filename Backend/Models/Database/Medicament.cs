@@ -81,5 +81,15 @@ namespace Backend.Models.Database
             PharmaceuticalFormId = pharmaceuticalForm.Id;
 
         }
+
+        public void UpdateMedicamentFromDTO(EditMedicamentDTO dto)
+        {
+            IsPrescriptionRequired = (bool)dto.IsPrescriptionRequired;
+            IsReimbursed = (bool)dto.IsReimbursed;
+            BasePrice = (decimal)dto.BasePrice;
+            Surcharge = (double)dto.Surcharge;
+            IsSellable = (bool)dto.IsSellable;
+            ReimbursePercentage = (int)dto.ReimbursePercentage;
+        }
     }
 }
