@@ -48,6 +48,31 @@ namespace Backend.Controllers
             return Created();
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult> EditUser(int id, [FromBody] EditUserDTO dto)
+        {
+            var user = await Context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null) return ApiNotFound("User does not exist!");
+
+            user.Name = dto.Name ?? user.Name;
+            user.Surname = dto.Surname ?? user.Surname;
+            user.Position = dto.Position ?? user.Position;
+            user.PharmacyId = dto.PharmacyId ?? user.PharmacyId;
+            user.DismissalDate = dto.DismissalDate ?? user.DismissalDate;
+
+            if (!string.IsNullOrEmpty(dto.EmployeeState))
+            {
+                var employeeState = await Context.EmployeeState
+                    .FirstOrDefaultAsync(es => es.Name == dto.EmployeeState);
+                if (employeeState != null) user.EmployeeStateId = employeeState.Id;
+            }
+
+            await Context.SaveChangesAsync();
+            return Ok();
+        }
+
         [AssertionMethod]
         private static void ValidateCreateUserDTO(CreateUserDTO dto)
         {
