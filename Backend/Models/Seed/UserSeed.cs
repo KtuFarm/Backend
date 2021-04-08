@@ -1,14 +1,15 @@
 ﻿using Backend.Models.Database;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
-    public class UserSeed
+    public static class UserSeed
     {
         public static void EnsureCreated(ApiContext context)
         {
-            var user = context.Users.FirstOrDefault(p => p.Id == 1);
+            var user = context.Users.IgnoreQueryFilters().FirstOrDefault(p => p.Id == 1);
             if (user != null) return;
 
             context.Users.AddRange(

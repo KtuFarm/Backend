@@ -1,6 +1,7 @@
 using Backend.Models.Database;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
@@ -8,7 +9,7 @@ namespace Backend.Models.Seed
     {
         public static void EnsureCreated(ApiContext context)
         {
-            var testPharmacy = context.Pharmacies.FirstOrDefault(p => p.Id == 1);
+            var testPharmacy = context.Pharmacies.IgnoreQueryFilters().FirstOrDefault(p => p.Id == 1);
             if (testPharmacy != null) return;
 
             var pharmacy = new Pharmacy
