@@ -61,6 +61,7 @@ namespace Backend
         private static void RegisterCustomServices(IServiceCollection services)
         {
             services.AddScoped<IWorkingHoursManager, WorkingHoursManager>();
+            services.AddScoped<IMedicamentDTOValidator, MedicamentDTOValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
