@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Backend.Models.DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -45,5 +46,25 @@ namespace Backend.Models.Database
         public Pharmacy Pharmacy { get; set; }
 
         public ICollection<Manufacturer> Manufacturers { get; set; }
+
+        public User() { }
+
+        public User(CreateUserDTO dto)
+        {
+            Name = dto.Name;
+            Surname = dto.Surname;
+            Position = dto.Position;
+            RegistrationDate = DateTime.Now;
+            PharmacyId = dto.PharmacyId ?? 1;
+        }
+
+        public void UpdateFromDTO(EditUserDTO dto)
+        {
+            Name = dto.Name ?? Name;
+            Surname = dto.Surname ?? Surname;
+            Position = dto.Position ?? Position;
+            PharmacyId = dto.PharmacyId ?? PharmacyId;
+            DismissalDate = dto.DismissalDate ?? DismissalDate;
+        }
     }
 }

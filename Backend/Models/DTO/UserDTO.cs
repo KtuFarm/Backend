@@ -35,7 +35,7 @@ namespace Backend.Models.DTO
             RegistrationDate = user.RegistrationDate;
             DismissalDate = user.DismissalDate;
             Position = user.Position;
-            EmployeeState = user.EmployeeState.Name;
+            EmployeeState = user.EmployeeStateId.ToString();
         }
     }
 }
