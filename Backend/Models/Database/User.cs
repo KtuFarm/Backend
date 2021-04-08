@@ -57,5 +57,14 @@ namespace Backend.Models.Database
             RegistrationDate = DateTime.Now;
             PharmacyId = dto.PharmacyId ?? 1;
         }
+
+        public void UpdateFromDTO(EditUserDTO dto)
+        {
+            Name = dto.Name ?? Name;
+            Surname = dto.Surname ?? Surname;
+            Position = dto.Position ?? Position;
+            PharmacyId = dto.PharmacyId ?? PharmacyId;
+            DismissalDate = dto.DismissalDate ?? DismissalDate;
+        }
     }
 }

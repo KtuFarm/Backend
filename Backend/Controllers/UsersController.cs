@@ -56,11 +56,7 @@ namespace Backend.Controllers
 
             if (user == null) return ApiNotFound("User does not exist!");
 
-            user.Name = dto.Name ?? user.Name;
-            user.Surname = dto.Surname ?? user.Surname;
-            user.Position = dto.Position ?? user.Position;
-            user.PharmacyId = dto.PharmacyId ?? user.PharmacyId;
-            user.DismissalDate = dto.DismissalDate ?? user.DismissalDate;
+            user.UpdateFromDTO(dto);
 
             if (!string.IsNullOrEmpty(dto.EmployeeState))
             {
