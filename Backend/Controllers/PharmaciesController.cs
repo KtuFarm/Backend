@@ -32,6 +32,17 @@ namespace Backend.Controllers
 
             return Ok(new GetPharmaciesDTO(pharmacies));
         }
+        
+        [HttpGet("all")]
+        public async Task<ActionResult<GetPharmaciesDTO>> GetAllPharmacies()
+        {
+            var pharmacies = await Context.Pharmacies
+                .IgnoreQueryFilters()
+                .Select(p => new PharmacyDTO(p))
+                .ToListAsync();
+
+            return Ok(new GetPharmaciesDTO(pharmacies));
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPharmacyDTO>> GetPharmacy(int id)
@@ -114,6 +125,21 @@ namespace Backend.Controllers
                 }
             }
             
+            await Context.SaveChangesAsync();
+            
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePharmacy(int id)
+        {   
+            var pharmacy = await Context.Pharmacies
+                .Include(p => p.PharmacyWorkingHours)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (pharmacy == null) return ApiNotFound("Pharmacy does not exist!");
+
+            pharmacy.IsSoftDeleted = true;
             await Context.SaveChangesAsync();
             
             return Ok();

@@ -1,5 +1,6 @@
 ﻿using Backend.Models.Database;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
@@ -7,7 +8,7 @@ namespace Backend.Models.Seed
     {
         public static void EnsureCreated(ApiContext context)
         {
-            var medicament = context.Medicaments.FirstOrDefault(m => m.Id == 1);
+            var medicament = context.Medicaments.IgnoreQueryFilters().FirstOrDefault(m => m.Id == 1);
             if (medicament != null) return;
 
             context.Medicaments.AddRange(

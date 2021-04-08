@@ -1,6 +1,7 @@
 using Backend.Models.Database;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
@@ -8,7 +9,7 @@ namespace Backend.Models.Seed
     {
         public static void EnsureCreated(ApiContext context)
         {
-            var workingHours = context.WorkingHours.FirstOrDefault(wh => wh.Id == 1);
+            var workingHours = context.WorkingHours.IgnoreQueryFilters().FirstOrDefault(wh => wh.Id == 1);
             if (workingHours != null) return;
 
             for (var day = DayOfWeekId.Monday; day < DayOfWeekId.Saturday; day++)
