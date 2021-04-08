@@ -22,5 +22,16 @@ namespace Backend.Controllers
 
             return Ok(new GetUsersDTO(users));
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetPharmacyDTO>> GetUser(int id)
+        {
+            var user = await Context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null) return ApiNotFound("User does not exist!");
+
+            return Ok(new GetUserDTO(user));
+        }
     }
 }
