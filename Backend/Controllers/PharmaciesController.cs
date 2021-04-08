@@ -46,22 +46,22 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreatePharmacy([FromBody] CreatePharmacyDTO dataFromBody)
+        public async Task<ActionResult> CreatePharmacy([FromBody] CreatePharmacyDTO dto)
         {
             List<WorkingHours> workingHours;
             try
             {
-                ValidateCreatePharmacyDTO(dataFromBody);
-                workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dataFromBody.WorkingHours);
+                ValidateCreatePharmacyDTO(dto);
+                workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dto.WorkingHours);
             }
             catch (ArgumentException ex)
             {
                 return ApiBadRequest("Invalid request body!", ex.Message);
             }
 
-            var pharmacy = new Pharmacy(dataFromBody, workingHours);
+            var pharmacy = new Pharmacy(dto, workingHours);
             
-            CreateRegisters(dataFromBody.RegistersCount, pharmacy);
+            CreateRegisters(dto.RegistersCount, pharmacy);
             Context.Add(pharmacy);
             
             await Context.SaveChangesAsync();
@@ -83,6 +83,38 @@ namespace Backend.Controllers
             {
                 Context.Add(new Register(pharmacy));
             }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> EditPharmacy(int id, [FromBody] EditPharmacyDTO dto)
+        {
+            if (!IsValidApiRequest()) return InvalidHeaders();
+
+            var pharmacy = await Context.Pharmacies
+                .Include(p => p.PharmacyWorkingHours)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (pharmacy == null) return ApiNotFound("Pharmacy does not exist!");
+            
+            pharmacy.Address = dto.Address ?? pharmacy.Address;
+            pharmacy.City = dto.City ?? pharmacy.City;
+
+            if (dto.WorkingHours != null)
+            {
+                try
+                {
+                    var workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dto.WorkingHours);
+                    pharmacy.UpdateWorkingHours(workingHours);
+                }
+                catch (ArgumentException ex)
+                {
+                    return ApiBadRequest("Invalid request body!", ex.Message);
+                }
+            }
+            
+            await Context.SaveChangesAsync();
+            
+            return Ok();
         }
     }
 }
