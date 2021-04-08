@@ -1,7 +1,7 @@
 ﻿using Backend.Models;
+using Backend.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,5 +13,14 @@ namespace Backend.Controllers
     {
         public UsersController(ApiContext context) : base(context) {}
 
+        [HttpGet]
+        public async Task<ActionResult<UserDTO>> GetUsers()
+        {
+            var users = await Context.Users
+                .Select(u => new GetUserDTO(u))
+                .ToListAsync();
+
+            return Ok(new GetUsersDTO(users));
+        }
     }
 }
