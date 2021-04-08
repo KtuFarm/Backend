@@ -21,6 +21,8 @@ namespace Backend.Models.Configurations
             builder
                 .HasOne(u => u.EmployeeState)
                 .WithMany(ws => ws.Workers);
+
+            builder.HasQueryFilter(u => !u.IsSoftDeleted);
         }
     }
 }

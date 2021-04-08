@@ -11,6 +11,8 @@ namespace Backend.Models.Configurations
             builder
                 .HasOne(r => r.Pharmacy)
                 .WithMany(p => p.Registers);
+            
+            builder.HasQueryFilter(r => !r.IsSoftDeleted);
         }
     }
 }

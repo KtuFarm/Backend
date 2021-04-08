@@ -15,6 +15,8 @@ namespace Backend.Models.Configurations
             builder
                 .HasOne(pwh => pwh.WorkingHours)
                 .WithMany(wh => wh.PharmacyWorkingHours);
+            
+            builder.HasQueryFilter(pwh => !pwh.IsSoftDeleted);
         }
     }
 }

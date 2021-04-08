@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
 {
-    public class User
+    public class User: ISoftDeletable
     {
         [Key]
         [Required]
@@ -32,6 +33,10 @@ namespace Backend.Models.Database
         [Required]
         [StringLength(255)]
         public string Position { get; set; }
+
+        [Required] 
+        [DefaultValue(false)]
+        public bool IsSoftDeleted { get; set; } = false;
 
         [Required]
         public int PharmacyId { get; set; }

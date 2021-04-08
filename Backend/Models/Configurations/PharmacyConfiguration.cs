@@ -23,6 +23,8 @@ namespace Backend.Models.Configurations
             builder
                 .HasMany(p => p.Pharmacists)
                 .WithOne(u => u.Pharmacy);
+
+            builder.HasQueryFilter(p => !p.IsSoftDeleted);
         }
     }
 }

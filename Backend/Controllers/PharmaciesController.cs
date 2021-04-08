@@ -40,6 +40,8 @@ namespace Backend.Controllers
                 .Include(p => p.PharmacyWorkingHours)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
+            if (pharmacy == null) return ApiNotFound("Pharmacy does not exist!");
+            
             var workingHours = await _workingHoursManager.GetPharmacyWorkingHours(pharmacy.Id);
 
             return Ok(new GetPharmacyDTO(pharmacy, workingHours));
