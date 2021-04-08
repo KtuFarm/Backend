@@ -40,7 +40,7 @@ namespace Backend.Models.Database
 
         public void UpdateWorkingHours(IEnumerable<WorkingHours> workingHours)
         {
-            PharmacyWorkingHours.Clear();
+            PharmacyWorkingHours?.Clear();
             PharmacyWorkingHours = workingHours.Select(hours => new PharmacyWorkingHours(this, hours)).ToList();
         }
     }
