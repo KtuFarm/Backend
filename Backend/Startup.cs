@@ -1,3 +1,4 @@
+using System;
 using Backend.Configuration;
 using Backend.Middleware;
 using Backend.Models;
@@ -28,10 +29,10 @@ namespace Backend
         {
             var builder = new MySqlConnectionStringBuilder(Configuration.GetConnectionString("DefaultConnection"))
             {
-                Server = Configuration["Server"],
-                Database = Configuration["Database"],
-                UserID = Configuration["Uid"],
-                Password = Configuration["DbPassword"]
+                Server = Configuration["Server"] ?? Environment.GetEnvironmentVariable("Server"),
+                Database = Configuration["Database"] ?? Environment.GetEnvironmentVariable("Database"),
+                UserID = Configuration["Uid"] ?? Environment.GetEnvironmentVariable("Uid"),
+                Password = Configuration["DbPassword"] ?? Environment.GetEnvironmentVariable("DbPassword")
             };
 
             services.AddDbContext<ApiContext>(opt => opt.UseMySQL(builder.ConnectionString));
