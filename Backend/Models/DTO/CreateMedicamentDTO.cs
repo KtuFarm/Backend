@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Backend.Models.DTO
 {
-    public class CreateMedicamentDTO
+    public class CreateMedicamentDTO : EditMedicamentDTO
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -17,29 +17,11 @@ namespace Backend.Models.DTO
         [JsonProperty("barCode")]
         public string BarCode { get; set; }
 
-        [JsonProperty("isPrescriptionRequired")]
-        public bool? IsPrescriptionRequired { get; set; }
-
-        [JsonProperty("isReimbursed")]
-        public bool? IsReimbursed { get; set; }
+        [JsonProperty("pharmaceuticalFormId")]
+        public int? PharmaceuticalFormId { get; set; }
 
         [JsonProperty("country")]
         public string Country { get; set; }
-
-        [JsonProperty("basePrice")]
-        public decimal? BasePrice { get; set; }
-
-        [JsonProperty("surcharge")]
-        public double? Surcharge { get; set; }
-
-        [JsonProperty("isSellable")]
-        public bool? IsSellable { get; set; }
-
-        [JsonProperty("reimbursePercentage")]
-        public int? ReimbursePercentage { get; set; }
-
-        [JsonProperty("pharmaceuticalFormId")]
-        public int? PharmaceuticalFormId { get; set; }
     }
 
 }
