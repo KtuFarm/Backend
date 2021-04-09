@@ -30,7 +30,7 @@ namespace Backend.Models.DTO
             ActiveSubstance = medicament.ActiveSubstance;
             BarCode = medicament.BarCode;
             IsPrescriptionRequired = medicament.IsPrescriptionRequired;
-            Price = medicament.CalculateFullPrice();
+            Price = medicament.CalculatePriceReimbursed();
         }
     }
 }

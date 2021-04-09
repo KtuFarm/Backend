@@ -34,6 +34,8 @@ namespace Backend.Controllers
                 .Include(m => m.PharmaceuticalForm)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
+            if (medicament == null) return ApiNotFound("Medicament does not exist!");
+
             return Ok(new GetMedicamentDTO(medicament));
         }
 

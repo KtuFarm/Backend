@@ -39,10 +39,10 @@ namespace Backend.Models.Database
 
         [Required]
         public double Surcharge { get; set; }
-        
+
         [Required]
         [DefaultValue(0)]
-        public int ReimbursePercentage { get; set; } = 0;
+        public double ReimbursePercentage { get; set; }
         
         [Required] 
         [DefaultValue(false)]
@@ -90,7 +90,13 @@ namespace Backend.Models.Database
         public decimal CalculateFullPrice()
         {
             decimal price = BasePrice * (100M + (decimal) Surcharge) / 100M;
-            price *= (100 - ReimbursePercentage) / 100M;
+            return Math.Round(price, 2);
+        }
+
+        public decimal CalculatePriceReimbursed()
+        {
+            decimal price = CalculateFullPrice();
+            price *= (100M - (decimal) ReimbursePercentage) / 100M;
             
             return Math.Round(price, 2);
         }

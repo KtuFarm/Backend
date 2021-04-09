@@ -14,7 +14,7 @@ namespace BackendTests
                 Surcharge = 10
             };
             
-            Assert.AreEqual(m.CalculateFullPrice(), 22);
+            Assert.AreEqual(m.CalculatePriceReimbursed(), 22);
         }
         
         [Test]
@@ -26,7 +26,7 @@ namespace BackendTests
                 ReimbursePercentage = 10
             };
             
-            Assert.AreEqual(m.CalculateFullPrice(), 18);
+            Assert.AreEqual(m.CalculatePriceReimbursed(), 18);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace BackendTests
                 ReimbursePercentage = 10
             };
             
-            Assert.AreEqual(m.CalculateFullPrice(), 27);
+            Assert.AreEqual(m.CalculatePriceReimbursed(), 27);
         }
     }
 }
