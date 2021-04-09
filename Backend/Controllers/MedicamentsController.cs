@@ -15,10 +15,18 @@ namespace Backend.Controllers
     [ApiController]
     public class MedicamentsController : ApiControllerBase
     {
-        public MedicamentsController(ApiContext context) : base(context)
-        {
-        }
+        public MedicamentsController(ApiContext context) : base(context) { }
 
+        [HttpGet]
+        public async Task<ActionResult<GetMedicamentsDTO>> GetMedicaments()
+        {
+            var medicaments = await Context.Medicaments
+                .Select(m => new MedicamentDTO(m))
+                .ToListAsync();
+
+            return Ok(new GetMedicamentsDTO(medicaments));
+        }
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<GetMedicamentDTO>> GetMedicament(int id)
         {
@@ -27,18 +35,6 @@ namespace Backend.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             return Ok(new GetMedicamentDTO(medicament));
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<GetMedicamentsDTO>> GetMedicaments()
-        {
-
-            var medicaments = await Context.Medicaments
-                .Include(m => m.PharmaceuticalForm)
-                .Select(m => new MedicamentDTO(m))
-                .ToListAsync();
-
-            return Ok(new GetMedicamentsDTO(medicaments));
         }
 
         [HttpPost]
@@ -63,12 +59,12 @@ namespace Backend.Controllers
 
             if (medicament == null) return ApiNotFound("Medicament not found!");
 
-            medicament.IsPrescriptionRequired = (bool) dto.IsPrescriptionRequired;
-            medicament.IsReimbursed = (bool) dto.IsReimbursed;
-            medicament.BasePrice = (decimal) dto.BasePrice;
-            medicament.Surcharge = (double) dto.Surcharge;
-            medicament.IsSellable = (bool) dto.IsSellable;
-            medicament.ReimbursePercentage = (int) dto.ReimbursePercentage;
+            // medicament.IsPrescriptionRequired = (bool) dto.IsPrescriptionRequired;
+            // medicament.IsReimbursed = (bool) dto.IsReimbursed;
+            // medicament.BasePrice = (decimal) dto.BasePrice;
+            // medicament.Surcharge = (double) dto.Surcharge;
+            // medicament.IsSellable = (bool) dto.IsSellable;
+            // medicament.ReimbursePercentage = (int) dto.ReimbursePercentage;
 
             await Context.SaveChangesAsync();
 

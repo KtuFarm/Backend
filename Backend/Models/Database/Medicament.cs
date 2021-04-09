@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.DTO;
@@ -9,7 +10,7 @@ namespace Backend.Models.Database
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required]
         [StringLength(255)]
@@ -38,11 +39,7 @@ namespace Backend.Models.Database
 
         [Required]
         public double Surcharge { get; set; }
-
-        [Required]
-        [DefaultValue(true)]
-        public bool IsSellable { get; set; } = true;
-
+        
         [Required]
         [DefaultValue(0)]
         public int ReimbursePercentage { get; set; } = 0;
@@ -75,7 +72,6 @@ namespace Backend.Models.Database
             Country = dto.Country;
             BasePrice = (decimal) dto.BasePrice;
             Surcharge = (double) dto.Surcharge;
-            IsSellable = (bool) dto.IsSellable;
             ReimbursePercentage = (int) dto.ReimbursePercentage;
             PharmaceuticalForm = pharmaceuticalForm;
             PharmaceuticalFormId = pharmaceuticalForm.Id;
@@ -88,8 +84,15 @@ namespace Backend.Models.Database
             IsReimbursed = (bool)dto.IsReimbursed;
             BasePrice = (decimal)dto.BasePrice;
             Surcharge = (double)dto.Surcharge;
-            IsSellable = (bool)dto.IsSellable;
             ReimbursePercentage = (int)dto.ReimbursePercentage;
+        }
+
+        public decimal CalculateFullPrice()
+        {
+            decimal price = BasePrice * (100M + (decimal) Surcharge) / 100M;
+            price *= (100 - ReimbursePercentage) / 100M;
+            
+            return Math.Round(price, 2);
         }
     }
 }
