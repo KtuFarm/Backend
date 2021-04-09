@@ -71,9 +71,14 @@ namespace Backend
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend v1"));
-
-                new Seeder(context).Seed();
             }
+
+            if (env.IsProduction())
+            {
+                context.Database.Migrate();
+            }
+
+            new Seeder(context).Seed();
 
             app.UseCors("AllowAll");
 
