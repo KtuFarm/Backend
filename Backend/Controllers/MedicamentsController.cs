@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
@@ -40,16 +39,19 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddMedicament([FromBody] CreateMedicamentDTO dataFromBody)
+        public async Task<ActionResult> AddMedicament([FromBody] CreateMedicamentDTO dto)
         {
-            ValidateCreateMedicamentDTO(dataFromBody);
-
-            var pharmaceuticalForm = Context.PharmaceuticalForms
-                .FirstOrDefaultAsync(p => (int)p.Id == dataFromBody.PharmaceuticalFormId);
-
-            Context.Medicaments.Add(new Medicament(dataFromBody, await pharmaceuticalForm));
-            await Context.SaveChangesAsync();
-
+            try
+            {
+                ValidateCreateMedicamentDTO(dto);
+                await Context.Medicaments.AddAsync(new Medicament(dto));
+                await Context.SaveChangesAsync();
+            }
+            catch (ArgumentException ex)
+            {
+                return ApiBadRequest("Invalid request body!", ex.Message);
+            }
+            
             return Created();
         }
 
@@ -76,16 +78,16 @@ namespace Backend.Controllers
         [AssertionMethod]
         private static void ValidateCreateMedicamentDTO(CreateMedicamentDTO dto)
         {
-            if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException("Name is empty!");
-            if (string.IsNullOrEmpty(dto.ActiveSubstance)) throw new ArgumentException("ActiveSubstance is empty!");
-            if (string.IsNullOrEmpty(dto.BarCode)) throw new ArgumentException("BarCode is empty!");
-            if (!dto.IsPrescriptionRequired.HasValue) throw new ArgumentException("IsPrescriptionRequired is empty!");
-            if (!dto.IsReimbursed.HasValue) throw new ArgumentException("IsReimbursed is empty!");
-            if (string.IsNullOrEmpty(dto.Country)) throw new ArgumentException("Country is empty!");
-            if (dto.BasePrice == null) throw new ArgumentException("BasePrice is empty!");
-            if (dto.Surcharge == null) throw new ArgumentException("Surcharge is empty!");
-            if (!dto.IsSellable.HasValue) throw new ArgumentException("IsSellable is empty!");
-            if (dto.ReimbursePercentage == null) throw new ArgumentException("ReimbursePercentage is empty!");
+            // if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException("Name is empty!");
+            // if (string.IsNullOrEmpty(dto.ActiveSubstance)) throw new ArgumentException("ActiveSubstance is empty!");
+            // if (string.IsNullOrEmpty(dto.BarCode)) throw new ArgumentException("BarCode is empty!");
+            // if (!dto.IsPrescriptionRequired.HasValue) throw new ArgumentException("IsPrescriptionRequired is empty!");
+            // if (!dto.IsReimbursed.HasValue) throw new ArgumentException("IsReimbursed is empty!");
+            // if (string.IsNullOrEmpty(dto.Country)) throw new ArgumentException("Country is empty!");
+            // if (dto.BasePrice == null) throw new ArgumentException("BasePrice is empty!");
+            // if (dto.Surcharge == null) throw new ArgumentException("Surcharge is empty!");
+            // if (!dto.IsSellable.HasValue) throw new ArgumentException("IsSellable is empty!");
+            // if (dto.ReimbursePercentage == null) throw new ArgumentException("ReimbursePercentage is empty!");
         }
 
         [AssertionMethod]

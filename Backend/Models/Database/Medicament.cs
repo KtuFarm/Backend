@@ -61,21 +61,19 @@ namespace Backend.Models.Database
         public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
 
         public Medicament() {}
-
-        public Medicament(CreateMedicamentDTO dto, PharmaceuticalForm pharmaceuticalForm)
+        
+        public Medicament(CreateMedicamentDTO dto)
         {
             Name = dto.Name;
             ActiveSubstance = dto.ActiveSubstance;
             BarCode = dto.BarCode;
-            IsPrescriptionRequired = (bool) dto.IsPrescriptionRequired;
-            IsReimbursed = (bool) dto.IsReimbursed;
+            IsPrescriptionRequired = dto.IsPrescriptionRequired;
+            IsReimbursed = dto.IsReimbursed;
             Country = dto.Country;
-            BasePrice = (decimal) dto.BasePrice;
-            Surcharge = (double) dto.Surcharge;
-            ReimbursePercentage = (int) dto.ReimbursePercentage;
-            PharmaceuticalForm = pharmaceuticalForm;
-            PharmaceuticalFormId = pharmaceuticalForm.Id;
-
+            BasePrice = dto.BasePrice;
+            Surcharge = dto.Surcharge;
+            ReimbursePercentage = dto.ReimbursePercentage ?? 0;
+            PharmaceuticalFormId = (PharmaceuticalFormId) dto.PharmaceuticalFormId;
         }
 
         public void UpdateMedicamentFromDTO(EditMedicamentDTO dto)
