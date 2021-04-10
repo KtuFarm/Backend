@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Backend.Models.Database;
+﻿using Backend.Models.Database;
 using Newtonsoft.Json;
 
 namespace Backend.Models.DTO
