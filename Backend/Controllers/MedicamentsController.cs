@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
@@ -7,7 +6,6 @@ using Backend.Models;
 using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Services.Interfaces;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
@@ -40,7 +38,7 @@ namespace Backend.Controllers
                 .Include(m => m.PharmaceuticalForm)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (medicament == null) return ApiNotFound("Medicament does not exist!");
+            if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "medicament");
 
             return Ok(new GetMedicamentDTO(medicament));
         }
@@ -65,32 +63,23 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditMedicament(int id, [FromBody] EditMedicamentDTO dto)
         {
-            ValidateEditMedicamentDTO(dto);
-            var medicament = await Context.Medicaments.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (medicament == null) return ApiNotFound("Medicament not found!");
-
-            // medicament.IsPrescriptionRequired = (bool) dto.IsPrescriptionRequired;
-            // medicament.IsReimbursed = (bool) dto.IsReimbursed;
-            // medicament.BasePrice = (decimal) dto.BasePrice;
-            // medicament.Surcharge = (double) dto.Surcharge;
-            // medicament.IsSellable = (bool) dto.IsSellable;
-            // medicament.ReimbursePercentage = (int) dto.ReimbursePercentage;
-
-            await Context.SaveChangesAsync();
-
+            try
+            {
+                _validator.ValidateEditMedicamentDto(dto);
+                
+                var medicament = await Context.Medicaments.FirstOrDefaultAsync(m => m.Id == id);
+                if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "medicament");
+                
+                medicament.UpdateMedicamentFromDTO(dto);
+                
+                await Context.SaveChangesAsync();
+            }
+            catch (DtoValidationException ex)
+            {
+                return ApiBadRequest(ex.Message, ex.Parameter);
+            }
+            
             return Ok();
-        }
-        
-        [AssertionMethod]
-        private static void ValidateEditMedicamentDTO(EditMedicamentDTO dto)
-        {
-            if (!dto.IsPrescriptionRequired.HasValue) throw new ArgumentException("IsPrescriptionRequired is empty!");
-            if (!dto.IsReimbursed.HasValue) throw new ArgumentException("IsReimbursed is empty!");
-            if (dto.BasePrice == null) throw new ArgumentException("BasePrice is empty!");
-            if (dto.Surcharge == null) throw new ArgumentException("Surcharge is empty!");
-            if (!dto.IsSellable.HasValue) throw new ArgumentException("IsSellable is empty!");
-            if (dto.ReimbursePercentage == null) throw new ArgumentException("ReimbursePercentage is empty!");
         }
     }
 }

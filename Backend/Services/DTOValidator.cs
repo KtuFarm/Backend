@@ -10,7 +10,7 @@ namespace Backend.Services
         protected static void ValidateString(string parameter, string name)
         {
             if (string.IsNullOrEmpty(parameter))
-                throw new DtoValidationException(ValidationError.EmptyParameter, name);
+                throw new DtoValidationException(ApiErrorSlug.EmptyParameter, name);
         }
     }
 }
