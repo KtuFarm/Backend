@@ -17,6 +17,6 @@ namespace Backend.Models.DTO
         public bool? IsReimbursed { get; set; }
 
         [JsonProperty("reimbursePercentage")]
-        public int? ReimbursePercentage { get; set; }
+        public double? ReimbursePercentage { get; set; }
     }
 }
