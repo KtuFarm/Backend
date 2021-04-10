@@ -19,12 +19,15 @@ namespace Backend.Services
             ValidatePharmaceuticalForm(dto.PharmaceuticalFormId);
             ValidateString(dto.Country, "country");
             ValidateBasePrice(dto.BasePrice);
-            ValidateReimbursePercentage(dto.ReimbursePercentage, "");
+            ValidateSurcharge(dto.Surcharge);
+            ValidateReimbursePercentage(dto.ReimbursePercentage);
         }
         
         public void ValidateEditMedicamentDto(EditMedicamentDTO dto)
         {
-            throw new NotImplementedException();
+            if (dto.BasePrice != null) ValidateBasePrice((decimal) dto.BasePrice);
+            if (dto.Surcharge != null) ValidateSurcharge((double) dto.Surcharge);
+            if (dto.ReimbursePercentage != null) ValidateReimbursePercentage(dto.ReimbursePercentage);
         }
 
         [AssertionMethod]
@@ -33,28 +36,35 @@ namespace Backend.Services
             ValidateString(barcode, name);
 
             if (!barcode.All(char.IsDigit))
-                throw new DtoValidationException(ValidationError.InvalidBarcode);
+                throw new DtoValidationException(ApiErrorSlug.InvalidBarcode);
         }
         
         [AssertionMethod]
         private static void ValidateBasePrice(decimal price)
         {
             if (price <= 0)
-                throw new DtoValidationException(ValidationError.InvalidNumber, "basePrice");
+                throw new DtoValidationException(ApiErrorSlug.InvalidNumber, "basePrice");
+        }
+        
+        [AssertionMethod]
+        private static void ValidateSurcharge(double surcharge)
+        {
+            if (surcharge <= 0)
+                throw new DtoValidationException(ApiErrorSlug.InvalidNumber, "surcharge");
         }
 
         [AssertionMethod]
         private static void ValidatePharmaceuticalForm(int formId)
         {
             if (!Enum.IsDefined(typeof(PharmaceuticalFormId), formId))
-                throw new DtoValidationException(ValidationError.InvalidPharmaceuticalForm);
+                throw new DtoValidationException(ApiErrorSlug.InvalidPharmaceuticalForm);
         }
         
         [AssertionMethod]
-        private static void ValidateReimbursePercentage(double? percentage, string name)
+        private static void ValidateReimbursePercentage(double? percentage, string name = "")
         {
             if (percentage < 0 || percentage > 100)
-                throw new DtoValidationException(ValidationError.InvalidNumber, name);
+                throw new DtoValidationException(ApiErrorSlug.InvalidNumber, name);
         }
     }
 }
