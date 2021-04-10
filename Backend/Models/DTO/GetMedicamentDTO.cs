@@ -13,7 +13,7 @@ namespace Backend.Models.DTO
         public Meta Meta { get; set; }
 
         [JsonProperty("data")]
-        public MedicamentDTO Data { get; set; }
+        public MedicamentFullDTO Data { get; set; }
 
         public GetMedicamentDTO(Medicament medicament)
         {
