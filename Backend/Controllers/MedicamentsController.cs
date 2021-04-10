@@ -14,6 +14,7 @@ namespace Backend.Controllers
     [ApiController]
     public class MedicamentsController : ApiControllerBase
     {
+        private const string ModelName = "medicament";
         private readonly IMedicamentDTOValidator _validator;
 
         public MedicamentsController(ApiContext context, IMedicamentDTOValidator validator) : base(context)
@@ -38,7 +39,7 @@ namespace Backend.Controllers
                 .Include(m => m.PharmaceuticalForm)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "medicament");
+            if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
             return Ok(new GetMedicamentDTO(medicament));
         }
@@ -68,7 +69,7 @@ namespace Backend.Controllers
                 _validator.ValidateEditMedicamentDto(dto);
                 
                 var medicament = await Context.Medicaments.FirstOrDefaultAsync(m => m.Id == id);
-                if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "medicament");
+                if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
                 
                 medicament.UpdateMedicamentFromDTO(dto);
                 
@@ -78,6 +79,20 @@ namespace Backend.Controllers
             {
                 return ApiBadRequest(ex.Message, ex.Parameter);
             }
+            
+            return Ok();
+        }
+        
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMedicament(int id)
+        {
+            var medicament = await Context.Medicaments
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+
+            medicament.IsSoftDeleted = true;
+            await Context.SaveChangesAsync();
             
             return Ok();
         }
