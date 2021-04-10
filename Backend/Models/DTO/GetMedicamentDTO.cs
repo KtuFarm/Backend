@@ -18,7 +18,7 @@ namespace Backend.Models.DTO
         public GetMedicamentDTO(Medicament medicament)
         {
             Meta = new Meta();
-            Data = new MedicamentDTO(medicament);
+            Data = new MedicamentFullDTO(medicament);
         }
     }
 }
