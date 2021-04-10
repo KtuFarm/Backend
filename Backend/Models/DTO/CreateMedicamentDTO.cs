@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Backend.Models.Database;
+using Newtonsoft.Json;
 
 namespace Backend.Models.DTO
 {
@@ -32,6 +33,6 @@ namespace Backend.Models.DTO
         public bool IsReimbursed { get; set; }
         
         [JsonProperty("reimbursePercentage")]
-        public int? ReimbursePercentage { get; set; }
+        public double? ReimbursePercentage { get; set; }
     }
 }
