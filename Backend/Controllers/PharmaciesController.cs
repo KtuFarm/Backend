@@ -48,7 +48,7 @@ namespace Backend.Controllers
         public async Task<ActionResult<GetPharmacyDTO>> GetPharmacy(int id)
         {
             var pharmacy = await Context.Pharmacies
-                .Include(p => p.PharmacyWorkingHours)
+                .Include(p => p.Registers)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (pharmacy == null) return ApiNotFound("Pharmacy does not exist!");
