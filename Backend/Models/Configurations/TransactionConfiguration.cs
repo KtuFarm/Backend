@@ -24,6 +24,11 @@ namespace Backend.Models.Configurations
                 .HasMany(t => t.Medicaments)
                 .WithOne(m => m.Transaction);
 
+            builder.Property(t => t.PaymentTypeId).HasConversion<int>();
+            builder
+                .HasOne(t => t.PaymentType)
+                .WithMany(pt => pt.Transactions);
+
             builder.HasQueryFilter(t => !t.IsSoftDeleted);
         }
     }
