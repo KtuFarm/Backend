@@ -24,6 +24,12 @@ namespace Backend.Models.Database
         public decimal TotalPrice { get; set; }
         
         [Required]
+        public PaymentTypeId PaymentTypeId { get; set; }
+        
+        [Required]
+        public PaymentType PaymentType { get; set; }
+        
+        [Required]
         [DefaultValue(false)]
         public bool IsSoftDeleted { get; set; }
         
