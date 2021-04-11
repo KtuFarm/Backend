@@ -46,6 +46,8 @@ namespace Backend.Models.Database
         public Pharmacy Pharmacy { get; set; }
 
         public ICollection<Manufacturer> Manufacturers { get; set; }
+        
+        public ICollection<Transaction> Transactions { get; set; }
 
         public User() { }
 

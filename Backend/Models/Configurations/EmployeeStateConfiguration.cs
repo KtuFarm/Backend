@@ -22,7 +22,7 @@ namespace Backend.Models.Configurations
             );
 
             builder
-                .HasMany(ws => ws.Workers)
+                .HasMany(ws => ws.Employees)
                 .WithOne(u => u.EmployeeState);
         }
     }

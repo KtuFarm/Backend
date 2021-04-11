@@ -32,6 +32,10 @@ namespace Backend.Models.Database
         public ICollection<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
 
         public ICollection<User> Pharmacists { get; set; }
+        
+        public ICollection<ProductBalance> Medicaments { get; set; }
+        
+        public ICollection<Transaction> Transactions { get; set; }
 
         public Pharmacy() { }
 

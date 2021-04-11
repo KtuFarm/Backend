@@ -20,7 +20,11 @@ namespace Backend.Models.Configurations
 
             builder
                 .HasOne(u => u.EmployeeState)
-                .WithMany(ws => ws.Workers);
+                .WithMany(es => es.Employees);
+
+            builder
+                .HasMany(u => u.Transactions)
+                .WithOne(t => t.Pharmacist);
 
             builder.HasQueryFilter(u => !u.IsSoftDeleted);
         }
