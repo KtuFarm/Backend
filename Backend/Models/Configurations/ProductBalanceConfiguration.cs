@@ -14,7 +14,7 @@ namespace Backend.Models.Configurations
 
             builder
                 .HasOne(pb => pb.Pharmacy)
-                .WithMany(p => p.Medicaments);
+                .WithMany(p => p.Products);
 
             builder
                 .HasOne(pb => pb.Transaction)

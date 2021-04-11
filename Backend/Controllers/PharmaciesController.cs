@@ -155,5 +155,15 @@ namespace Backend.Controllers
             
             return Ok(new GetProductBalancesDTO(products));
         }
+        
+        [HttpGet("{id}/transactions")]
+        public async Task<ActionResult<GetTransactionsDTO>> GetTransactions(int id)
+        {
+            var transactions = await Context.Transactions
+                .Where(t => t.PharmacyId == id)
+                .ToListAsync();
+            
+            return Ok(new GetTransactionsDTO(transactions));
+        }
     }
 }

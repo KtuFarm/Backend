@@ -33,7 +33,7 @@ namespace Backend.Models.Database
 
         public ICollection<User> Pharmacists { get; set; }
         
-        public ICollection<ProductBalance> Medicaments { get; set; }
+        public ICollection<ProductBalance> Products { get; set; }
         
         public ICollection<Transaction> Transactions { get; set; }
 
