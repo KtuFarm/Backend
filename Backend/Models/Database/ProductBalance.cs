@@ -1,19 +1,24 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
 {
-    public class ProductBalance
+    public class ProductBalance: ISoftDeletable
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required] 
         public double Amount { get; set; } = 0;
 
         [Required] 
         public DateTime ExpirationDate { get; set; }
+        
+        [Required]
+        [DefaultValue(false)]
+        public bool IsSoftDeleted { get; set; }
         
         [Required]
         public int MedicamentId { get; set; }

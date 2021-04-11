@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
 {
-    public class Transaction
+    public class Transaction: ISoftDeletable
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
@@ -21,6 +22,10 @@ namespace Backend.Models.Database
         
         [Required]
         public decimal TotalPrice { get; set; }
+        
+        [Required]
+        [DefaultValue(false)]
+        public bool IsSoftDeleted { get; set; }
         
         [Required]
         public int RegisterId { get; set; }
