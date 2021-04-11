@@ -17,6 +17,8 @@ namespace Backend.Models
         public DbSet<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
         public DbSet<EmployeeState> EmployeeState { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ProductBalance> ProductBalances { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
@@ -35,6 +37,8 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new PharmacyWorkingHoursConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeStateConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductBalanceConfiguration());
+            modelBuilder.ApplyConfiguration(new TransactionConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });

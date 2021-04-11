@@ -19,6 +19,6 @@ namespace Backend.Models.Database
         [Required]
         public string Name { get; set; }
 
-        public ICollection<User> Workers { get; set; }
+        public ICollection<User> Employees { get; set; }
     }
 }

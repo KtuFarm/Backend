@@ -59,6 +59,8 @@ namespace Backend.Models.Database
         public Manufacturer Manufacturer { get; set; }
 
         public ICollection<RequiredMedicamentAmount> RequiredMedicamentAmounts { get; set; }
+        
+        public ICollection<ProductBalance> Balances { get; set; }
 
         public Medicament() {}
         
