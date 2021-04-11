@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.Models.Database;
 using Newtonsoft.Json;
 
 namespace Backend.Models.DTO
@@ -10,6 +11,9 @@ namespace Backend.Models.DTO
         
         [JsonProperty("registerId")]
         public int RegisterId { get; set; }
+        
+        [JsonProperty("paymentTypeId")]
+        public int PaymentTypeId { get; set; }
 
         [JsonProperty("products")] 
         public IEnumerable<TransactionProductDTO> Products;

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
@@ -32,7 +31,8 @@ namespace Backend.Controllers
             var transaction = new Transaction
             {
                 PharmacyId = pharmacy.Id,
-                RegisterId = register.Id
+                RegisterId = register.Id,
+                PaymentTypeId = (PaymentTypeId) dto.PaymentTypeId
             };
             
             foreach (var product in dto.Products)
@@ -43,19 +43,13 @@ namespace Backend.Controllers
                     return ApiBadRequest($"Invalid {productInPharmacy.Medicament.Name} amount!");
 
                 productInPharmacy.Amount -= product.Amount;
-                transaction.Medicaments.Add(new ProductBalance()
-                {
-                    Amount = product.Amount,
-                    Medicament = productInPharmacy.Medicament,
-                    ExpirationDate = productInPharmacy.ExpirationDate,
-                    Transaction = transaction
-                });
+                transaction.AddProduct(productInPharmacy, product.Amount);
             }
 
             Context.Add(transaction);
-
-            return Ok(dto);
-            // return Created();
+            await Context.SaveChangesAsync();
+           
+            return Created();
         }
     }
 }
