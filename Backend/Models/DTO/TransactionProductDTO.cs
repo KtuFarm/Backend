@@ -4,7 +4,7 @@ namespace Backend.Models.DTO
 {
     public class TransactionProductDTO
     {
-        [JsonProperty("ProductBalanceId")]
+        [JsonProperty("productBalanceId")]
         public int ProductBalanceId { get; set; }
         
         [JsonProperty("amount")]
