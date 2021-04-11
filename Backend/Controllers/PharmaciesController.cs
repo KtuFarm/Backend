@@ -144,5 +144,16 @@ namespace Backend.Controllers
             
             return Ok();
         }
+
+        [HttpGet("{id}/products")]
+        public async Task<ActionResult<GetProductBalancesDTO>> GetProductBalances(int id)
+        {
+            var products = await Context.ProductBalances
+                .Include(pb => pb.Medicament)
+                .Where(pb => pb.PharmacyId == id)
+                .ToListAsync();
+            
+            return Ok(new GetProductBalancesDTO(products));
+        }
     }
 }
