@@ -4,14 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
-    public static class MedicamentSeed
+    public class MedicamentSeed : ISeeder
     {
-        public static void EnsureCreated(ApiContext context)
-        {
-            var medicament = context.Medicaments.IgnoreQueryFilters().FirstOrDefault(m => m.Id == 1);
-            if (medicament != null) return;
+        private readonly ApiContext _context;
 
-            context.Medicaments.AddRange(
+        public MedicamentSeed(ApiContext context)
+        {
+            _context = context;
+        }
+
+        public void EnsureCreated()
+        {
+            if (!ShouldSeed()) return;
+
+            _context.Medicaments.AddRange(
                 new Medicament
                 {
                     Id = 1,
@@ -24,7 +30,7 @@ namespace Backend.Models.Seed
                     BasePrice = 69.00M,
                     Surcharge = 20,
                     PharmaceuticalFormId = PharmaceuticalFormId.Spray,
-                    Manufacturer = context.Manufacturers.FirstOrDefault(m => m.Id == 2)
+                    Manufacturer = _context.Manufacturers.FirstOrDefault(m => m.Id == 2)
                 },
                 new Medicament
                 {
@@ -38,7 +44,7 @@ namespace Backend.Models.Seed
                     BasePrice = 69.00M,
                     Surcharge = 20,
                     PharmaceuticalFormId = PharmaceuticalFormId.Tablets,
-                    Manufacturer = context.Manufacturers.FirstOrDefault(m => m.Id == 1)
+                    Manufacturer = _context.Manufacturers.FirstOrDefault(m => m.Id == 1)
                 },
                 new Medicament
                 {
@@ -52,7 +58,7 @@ namespace Backend.Models.Seed
                     BasePrice = 68.99M,
                     Surcharge = 20,
                     PharmaceuticalFormId = PharmaceuticalFormId.Tablets,
-                    Manufacturer = context.Manufacturers.FirstOrDefault(m => m.Id == 3)
+                    Manufacturer = _context.Manufacturers.FirstOrDefault(m => m.Id == 3)
                 }, new Medicament
                 {
                     Id = 4,
@@ -65,9 +71,17 @@ namespace Backend.Models.Seed
                     BasePrice = 69.00M,
                     Surcharge = 20,
                     PharmaceuticalFormId = PharmaceuticalFormId.Ointment,
-                    Manufacturer = context.Manufacturers.FirstOrDefault(m => m.Id == 1)
+                    Manufacturer = _context.Manufacturers.FirstOrDefault(m => m.Id == 1)
                 }
             );
+
+            _context.SaveChanges();
+        }
+
+        private bool ShouldSeed()
+        {
+            var medicament = _context.Medicaments.IgnoreQueryFilters().FirstOrDefault(m => m.Id == 1);
+            return medicament == null;
         }
     }
 }

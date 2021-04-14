@@ -2,6 +2,7 @@ using System;
 using Backend.Configuration;
 using Backend.Middleware;
 using Backend.Models;
+using Backend.Models.Seed;
 using Backend.Services;
 using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -79,7 +80,7 @@ namespace Backend
                 context.Database.Migrate();
             }
 
-            new Seeder(context).Seed();
+            SeedDatabase(context);
 
             app.UseCors("AllowAll");
 
@@ -90,6 +91,19 @@ namespace Backend
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+
+        private static void SeedDatabase(ApiContext context)
+        {
+            new Seeder(context, new ISeeder[]
+            {
+                new ManufacturerSeed(context),
+                new WorkingHoursSeed(context),
+                new MedicamentSeed(context),
+                new PharmacySeed(context),
+                new ProductBalanceSeed(context),
+                new UserSeed(context)
+            }).Seed();
         }
     }
 }

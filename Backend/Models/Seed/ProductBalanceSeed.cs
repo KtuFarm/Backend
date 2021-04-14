@@ -5,15 +5,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
-    public static class ProductBalanceSeed
+    public class ProductBalanceSeed : ISeeder
     {
-        public static void EnsureCreated(ApiContext context)
-        {
-            var testBalance = context.ProductBalances.IgnoreQueryFilters().FirstOrDefault(pb => pb.Id == 1);
-            if (testBalance != null) return;
+        private readonly ApiContext _context;
 
-            var pharmacy = context.Pharmacies.First(p => p.Id == 1);
-            var medicaments = context.Medicaments.Where(m => m.Id <= 3).ToList();
+        public ProductBalanceSeed(ApiContext context)
+        {
+            _context = context;
+        }
+
+        public void EnsureCreated()
+        {
+            if (!ShouldSeed()) return;
+
+            var pharmacy = _context.Pharmacies.First(p => p.Id == 1);
+            var medicaments = _context.Medicaments.Where(m => m.Id <= 3).ToList();
             var balances = medicaments.Select((medicament, i) => new ProductBalance
                 {
                     Id = i + 1,
@@ -24,8 +30,14 @@ namespace Backend.Models.Seed
                 })
                 .ToList();
 
-            context.AddRange(balances);
-            context.SaveChanges();
+            _context.AddRange(balances);
+            _context.SaveChanges();
+        }
+
+        private bool ShouldSeed()
+        {
+            var balance = _context.ProductBalances.IgnoreQueryFilters().FirstOrDefault(m => m.Id == 1);
+            return balance == null;
         }
     }
 }
