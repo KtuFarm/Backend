@@ -5,14 +5,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
-    public static class UserSeed
+    public class UserSeed : ISeeder
     {
-        public static void EnsureCreated(ApiContext context)
-        {
-            var user = context.Users.IgnoreQueryFilters().FirstOrDefault(p => p.Id == 1);
-            if (user != null) return;
+        private readonly ApiContext _context;
 
-            context.Users.AddRange(
+        public UserSeed(ApiContext context)
+        {
+            _context = context;
+        }
+
+        public void EnsureCreated()
+        {
+            if (!ShouldSeed()) return;
+
+
+            _context.Users.AddRange(
                 new User
                 {
                     Id = 1,
@@ -22,7 +29,15 @@ namespace Backend.Models.Seed
                     Position = "Jr. Pharmacist",
                     PharmacyId = 1
                 }
-                );
+            );
+
+            _context.SaveChanges();
+        }
+
+        private bool ShouldSeed()
+        {
+            var user = _context.Users.IgnoreQueryFilters().FirstOrDefault(m => m.Id == 1);
+            return user == null;
         }
     }
 }

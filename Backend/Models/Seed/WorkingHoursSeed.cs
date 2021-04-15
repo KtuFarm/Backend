@@ -5,16 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
-    public static class WorkingHoursSeed
+    public class WorkingHoursSeed : ISeeder
     {
-        public static void EnsureCreated(ApiContext context)
+        private readonly ApiContext _context;
+
+        public WorkingHoursSeed(ApiContext context)
         {
-            var workingHours = context.WorkingHours.IgnoreQueryFilters().FirstOrDefault(wh => wh.Id == 1);
-            if (workingHours != null) return;
+            _context = context;
+        }
+
+        public void EnsureCreated()
+        {
+            if (!ShouldSeed()) return;
 
             for (var day = DayOfWeekId.Monday; day < DayOfWeekId.Saturday; day++)
             {
-                context.Add(
+                _context.Add(
                     new WorkingHours
                     {
                         OpenTime = new TimeSpan(9, 0, 0),
@@ -23,6 +29,14 @@ namespace Backend.Models.Seed
                     }
                 );
             }
+
+            _context.SaveChanges();
+        }
+
+        private bool ShouldSeed()
+        {
+            var hours = _context.WorkingHours.IgnoreQueryFilters().FirstOrDefault(m => m.Id == 1);
+            return hours == null;
         }
     }
 }

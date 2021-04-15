@@ -4,14 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.Seed
 {
-    public static class ManufacturerSeed
+    public class ManufacturerSeed : ISeeder
     {
-        public static void EnsureCreated(ApiContext context)
-        {
-            var medicament = context.Manufacturers.IgnoreQueryFilters().FirstOrDefault(m => m.Id == 1);
-            if (medicament != null) return;
+        private readonly ApiContext _context;
 
-            context.Manufacturers.AddRange(
+        public ManufacturerSeed(ApiContext context)
+        {
+            _context = context;
+        }
+
+        public void EnsureCreated()
+        {
+            if (!ShouldSeed()) return;
+
+            _context.Manufacturers.AddRange(
                 new Manufacturer
                 {
                     Id = 1,
@@ -31,6 +37,14 @@ namespace Backend.Models.Seed
                     Name = "Pfizer Inc."
                 }
             );
+
+            _context.SaveChanges();
+        }
+
+        private bool ShouldSeed()
+        {
+            var manufacturer = _context.Manufacturers.IgnoreQueryFilters().FirstOrDefault(m => m.Id == 1);
+            return manufacturer == null;
         }
     }
 }
