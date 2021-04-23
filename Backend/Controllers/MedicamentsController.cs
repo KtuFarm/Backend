@@ -31,7 +31,7 @@ namespace Backend.Controllers
 
             return Ok(new GetMedicamentsDTO(medicaments));
         }
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<GetMedicamentDTO>> GetMedicament(int id)
         {
@@ -45,7 +45,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddMedicament([FromBody] CreateMedicamentDTO dto)
+        public async Task<ActionResult> CreateMedicament([FromBody] CreateMedicamentDTO dto)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Backend.Controllers
             {
                 return ApiBadRequest(ex.Message, ex.Parameter);
             }
-            
+
             return Created();
         }
 
@@ -67,22 +67,22 @@ namespace Backend.Controllers
             try
             {
                 _validator.ValidateEditMedicamentDto(dto);
-                
+
                 var medicament = await Context.Medicaments.FirstOrDefaultAsync(m => m.Id == id);
                 if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
-                
-                medicament.UpdateMedicamentFromDTO(dto);
-                
+
+                medicament.UpdateFromDTO(dto);
+
                 await Context.SaveChangesAsync();
             }
             catch (DtoValidationException ex)
             {
                 return ApiBadRequest(ex.Message, ex.Parameter);
             }
-            
+
             return Ok();
         }
-        
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMedicament(int id)
         {
@@ -93,7 +93,7 @@ namespace Backend.Controllers
 
             medicament.IsSoftDeleted = true;
             await Context.SaveChangesAsync();
-            
+
             return Ok();
         }
     }

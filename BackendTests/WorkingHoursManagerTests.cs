@@ -42,7 +42,7 @@ namespace BackendTests
         {
             var dto = new List<WorkingHoursDTO>
             {
-                new() {OpenTime = "15:00", CloseTime = "12:00", DayOfWeek = 3}
+                new() { OpenTime = "15:00", CloseTime = "12:00", DayOfWeek = 3 }
             };
 
             AssertInvalidArgument(dto, "Invalid working hours!");
@@ -53,7 +53,7 @@ namespace BackendTests
         {
             var dto = new List<WorkingHoursDTO>
             {
-                new() {OpenTime = "10:00", CloseTime = "12:00", DayOfWeek = 10}
+                new() { OpenTime = "10:00", CloseTime = "12:00", DayOfWeek = 10 }
             };
 
             AssertInvalidArgument(dto, "Invalid day of the week!");
@@ -64,8 +64,8 @@ namespace BackendTests
         {
             var dto = new List<WorkingHoursDTO>
             {
-                new() {OpenTime = "09:10", CloseTime = "12:00", DayOfWeek = 2},
-                new() {OpenTime = "10:00", CloseTime = "12:00", DayOfWeek = 2}
+                new() { OpenTime = "09:10", CloseTime = "12:00", DayOfWeek = 2 },
+                new() { OpenTime = "10:00", CloseTime = "12:00", DayOfWeek = 2 }
             };
 
             AssertInvalidArgument(dto, "Days of week should be unique!");
@@ -82,8 +82,8 @@ namespace BackendTests
         {
             var dto = new List<WorkingHoursDTO>
             {
-                new() {OpenTime = "09:00", CloseTime = "18:00", DayOfWeek = 1},
-                new() {OpenTime = "09:00", CloseTime = "18:00", DayOfWeek = 2}
+                new() { OpenTime = "09:00", CloseTime = "18:00", DayOfWeek = 1 },
+                new() { OpenTime = "09:00", CloseTime = "18:00", DayOfWeek = 2 }
             };
 
             var wh = _manager.GetWorkingHoursFromDTO(dto);
@@ -97,8 +97,8 @@ namespace BackendTests
         {
             var dto = new List<WorkingHoursDTO>
             {
-                new() {OpenTime = "09:00", CloseTime = "15:00", DayOfWeek = 6},
-                new() {OpenTime = "09:00", CloseTime = "13:00", DayOfWeek = 7}
+                new() { OpenTime = "09:00", CloseTime = "15:00", DayOfWeek = 6 },
+                new() { OpenTime = "09:00", CloseTime = "13:00", DayOfWeek = 7 }
             };
 
             var wh = _manager.GetWorkingHoursFromDTO(dto);
