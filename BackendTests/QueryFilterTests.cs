@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Backend.Models;
 using BackendTests.Mocks;
 using Microsoft.EntityFrameworkCore;
@@ -9,8 +10,10 @@ namespace BackendTests
 {
     public class QueryFilterTests
     {
+        private const int DeletedPharmacyId = 2;
+
         private ApiContext _context;
-        
+
         [SetUp]
         public void SetUp()
         {
@@ -26,33 +29,19 @@ namespace BackendTests
         [Test]
         public void TestQueryFilter()
         {
-            const int id = 1;
-            
-            DeletePharmacy(id);
+            var pharmacy = _context.Pharmacies.FirstOrDefault(p => p.Id == DeletedPharmacyId);
 
-            var pharmacy = _context.Pharmacies.FirstOrDefault(p => p.Id == id);
-            
             IsNull(pharmacy);
         }
 
         [Test]
-        public void TestIgnoreQueryFilter()
+        public async Task TestIgnoreQueryFilter()
         {
-            const int id = 1;
-            
-            DeletePharmacy(id);
+            var pharmacy = await _context.Pharmacies
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Id == DeletedPharmacyId);
 
-            var pharmacy = _context.Pharmacies.IgnoreQueryFilters().FirstOrDefault(p => p.Id == id);
-            
             IsTrue(pharmacy?.IsSoftDeleted);
-        }
-
-        private void DeletePharmacy(int id)
-        {
-            var pharmacy = _context.Pharmacies.FirstOrDefault(p => p.Id == id);
-            if (pharmacy != null) pharmacy.IsSoftDeleted = true;
-
-            _context.SaveChanges();
         }
     }
 }
