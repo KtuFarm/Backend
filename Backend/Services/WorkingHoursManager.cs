@@ -21,6 +21,11 @@ namespace Backend.Services
 
         public List<WorkingHours> GetWorkingHoursFromDTO(List<WorkingHoursDTO> workingHoursData)
         {
+            if (workingHoursData == null || workingHoursData.Count == 0)
+            {
+                return new List<WorkingHours>();
+            }
+
             ValidateDistinctDays(workingHoursData);
 
             var list = new List<WorkingHours>();

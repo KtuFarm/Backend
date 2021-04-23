@@ -63,6 +63,7 @@ namespace Backend
         {
             services.AddScoped<IWorkingHoursManager, WorkingHoursManager>();
             services.AddScoped<IMedicamentDTOValidator, MedicamentDTOValidator>();
+            services.AddScoped<IPharmacyDTOValidator, IPharmacyDTOValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
