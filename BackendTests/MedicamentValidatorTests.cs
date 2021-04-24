@@ -105,7 +105,9 @@ namespace BackendTests
                 Surcharge = 50,
                 IsReimbursed = false
             };
-            
+
+            _validator.ValidateEditMedicamentDto(dto);
+
             Pass();
         }
         

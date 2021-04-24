@@ -5,6 +5,7 @@ using Backend.Models;
 using Backend.Models.Seed;
 using Backend.Services;
 using Backend.Services.Interfaces;
+using Backend.Services.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,7 @@ namespace Backend
         {
             services.AddScoped<IWorkingHoursManager, WorkingHoursManager>();
             services.AddScoped<IMedicamentDTOValidator, MedicamentDTOValidator>();
+            services.AddScoped<IPharmacyDTOValidator, PharmacyDTOValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -53,7 +53,7 @@ namespace BackendTests
                 Surcharge = 50.0
             };
             
-            medicament.UpdateMedicamentFromDTO(editDto);
+            medicament.UpdateFromDTO(editDto);
 
             bool wasUpdatedSuccessfully =
                 medicament.BasePrice == editDto.BasePrice &&

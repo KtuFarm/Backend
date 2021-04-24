@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Backend.Models.Database
 {
-    public class Pharmacy: ISoftDeletable
+    public class Pharmacy : ISoftDeletable
     {
         [Key]
         [Required]
@@ -20,7 +20,7 @@ namespace Backend.Models.Database
         [StringLength(255)]
         public string City { get; set; }
 
-        [Required] 
+        [Required]
         [DefaultValue(false)]
         public bool IsSoftDeleted { get; set; } = false;
 
@@ -32,9 +32,9 @@ namespace Backend.Models.Database
         public ICollection<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
 
         public ICollection<User> Pharmacists { get; set; }
-        
+
         public ICollection<ProductBalance> Products { get; set; }
-        
+
         public ICollection<Transaction> Transactions { get; set; }
 
         public Pharmacy() { }
@@ -44,10 +44,31 @@ namespace Backend.Models.Database
             Address = dto.Address;
             City = dto.City;
 
+            CreateRegisters(dto.RegistersCount);
             UpdateWorkingHours(workingHours);
         }
 
-        public void UpdateWorkingHours(IEnumerable<WorkingHours> workingHours)
+        private void CreateRegisters(int count)
+        {
+            Registers = new List<Register>();
+            for (int i = 0; i < count; i++)
+            {
+                Registers.Add(new Register(this));
+            }
+        }
+
+        public void UpdateFromDTO(EditPharmacyDTO dto, IEnumerable<WorkingHours> workingHours)
+        {
+            Address = (dto.Address ?? Address);
+            City = (dto.City ?? City);
+
+            if (dto.WorkingHours != null)
+            {
+                UpdateWorkingHours(workingHours);
+            }
+        }
+
+        private void UpdateWorkingHours(IEnumerable<WorkingHours> workingHours)
         {
             PharmacyWorkingHours?.Clear();
             PharmacyWorkingHours = workingHours.Select(hours => new PharmacyWorkingHours(this, hours)).ToList();

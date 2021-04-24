@@ -4,11 +4,10 @@ using Backend.Models.DTO;
 using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+using Backend.Exceptions;
 
 namespace Backend.Controllers
 {
@@ -16,11 +15,19 @@ namespace Backend.Controllers
     [ApiController]
     public class PharmaciesController : ApiControllerBase
     {
-        private readonly IWorkingHoursManager _workingHoursManager;
+        private const string ModelName = "pharmacy";
 
-        public PharmaciesController(ApiContext context, IWorkingHoursManager workingHoursManager) : base(context)
+        private readonly IWorkingHoursManager _workingHoursManager;
+        private readonly IPharmacyDTOValidator _validator;
+
+        public PharmaciesController(
+            ApiContext context,
+            IWorkingHoursManager workingHoursManager,
+            IPharmacyDTOValidator validator
+        ) : base(context)
         {
             _workingHoursManager = workingHoursManager;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -32,7 +39,7 @@ namespace Backend.Controllers
 
             return Ok(new GetPharmaciesDTO(pharmacies));
         }
-        
+
         [HttpGet("all")]
         public async Task<ActionResult<GetPharmaciesDTO>> GetAllPharmacies()
         {
@@ -51,8 +58,8 @@ namespace Backend.Controllers
                 .Include(p => p.Registers)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (pharmacy == null) return ApiNotFound("Pharmacy does not exist!");
-            
+            if (pharmacy == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+
             var workingHours = await _workingHoursManager.GetPharmacyWorkingHours(pharmacy.Id);
 
             return Ok(new GetPharmacyDTO(pharmacy, workingHours));
@@ -64,84 +71,59 @@ namespace Backend.Controllers
             List<WorkingHours> workingHours;
             try
             {
-                ValidateCreatePharmacyDTO(dto);
+                _validator.ValidateCreatePharmacyDTO(dto);
                 workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dto.WorkingHours);
             }
-            catch (ArgumentException ex)
+            catch (DtoValidationException ex)
             {
-                return ApiBadRequest("Invalid request body!", ex.Message);
+                return ApiBadRequest(ex.Message, ex.Parameter);
             }
 
-            var pharmacy = new Pharmacy(dto, workingHours);
-            
-            CreateRegisters(dto.RegistersCount, pharmacy);
-            Context.Add(pharmacy);
-            
+            Context.Add(new Pharmacy(dto, workingHours));
             await Context.SaveChangesAsync();
 
             return Created();
         }
 
-        [AssertionMethod]
-        private static void ValidateCreatePharmacyDTO(CreatePharmacyDTO dto)
-        {
-            if (string.IsNullOrEmpty(dto.Address)) throw new ArgumentException("Address is empty!");
-            if (string.IsNullOrEmpty(dto.City)) throw new ArgumentException("City is empty!");
-            if (dto.RegistersCount < 1) throw new ArgumentException("There should be at least 1 register!");
-        }
-
-        private void CreateRegisters(int count, Pharmacy pharmacy)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                Context.Add(new Register(pharmacy));
-            }
-        }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> EditPharmacy(int id, [FromBody] EditPharmacyDTO dto)
         {
-            if (!IsValidApiRequest()) return InvalidHeaders();
-
-            var pharmacy = await Context.Pharmacies
-                .Include(p => p.PharmacyWorkingHours)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (pharmacy == null) return ApiNotFound("Pharmacy does not exist!");
-            
-            pharmacy.Address = dto.Address ?? pharmacy.Address;
-            pharmacy.City = dto.City ?? pharmacy.City;
-
-            if (dto.WorkingHours != null)
+            try
             {
-                try
-                {
-                    var workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dto.WorkingHours);
-                    pharmacy.UpdateWorkingHours(workingHours);
-                }
-                catch (ArgumentException ex)
-                {
-                    return ApiBadRequest("Invalid request body!", ex.Message);
-                }
+                _validator.ValidateEditPharmacyDTO(dto);
+
+                var pharmacy = await Context.Pharmacies
+                    .Include(p => p.PharmacyWorkingHours)
+                    .FirstOrDefaultAsync(p => p.Id == id);
+
+                if (pharmacy == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+
+                var workingHours = _workingHoursManager.GetWorkingHoursFromDTO(dto.WorkingHours);
+                pharmacy.UpdateFromDTO(dto, workingHours);
+
+                await Context.SaveChangesAsync();
             }
-            
-            await Context.SaveChangesAsync();
-            
+            catch (DtoValidationException ex)
+            {
+                return ApiBadRequest(ex.Message, ex.Parameter);
+            }
+
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePharmacy(int id)
-        {   
+        {
             var pharmacy = await Context.Pharmacies
                 .Include(p => p.PharmacyWorkingHours)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (pharmacy == null) return ApiNotFound("Pharmacy does not exist!");
+            if (pharmacy == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
             pharmacy.IsSoftDeleted = true;
             await Context.SaveChangesAsync();
-            
+
             return Ok();
         }
 
@@ -152,17 +134,17 @@ namespace Backend.Controllers
                 .Include(pb => pb.Medicament)
                 .Where(pb => pb.PharmacyId == id)
                 .ToListAsync();
-            
+
             return Ok(new GetProductBalancesDTO(products));
         }
-        
+
         [HttpGet("{id}/transactions")]
         public async Task<ActionResult<GetTransactionsDTO>> GetTransactions(int id)
         {
             var transactions = await Context.Transactions
                 .Where(t => t.PharmacyId == id)
                 .ToListAsync();
-            
+
             return Ok(new GetTransactionsDTO(transactions));
         }
     }
