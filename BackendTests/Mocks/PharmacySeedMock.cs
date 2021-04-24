@@ -14,25 +14,42 @@ namespace BackendTests.Mocks
             var testPharmacy = context.Pharmacies.FirstOrDefault(p => p.Id == 1);
             if (testPharmacy != null) return;
 
-            var pharmacy = new Pharmacy
+            var pharmacies = new List<Pharmacy>
             {
-                Id = 1,
-                Address = "Test str.",
-                City = "City",
-                Registers = new List<Register>()
+                new()
+                {
+                    Id = 1,
+                    Address = "Test str.",
+                    City = "City",
+                    Registers = new List<Register>()
+                },
+                new()
+                {
+                    Id = 2,
+                    Address = "Test str.",
+                    City = "Deleted",
+                    Registers = new List<Register>(),
+                    IsSoftDeleted = true
+                },
             };
+            SetWorkingHours(context, pharmacies);
 
-            context.Pharmacies.Add(pharmacy);
-
-            var workingHours = context.WorkingHours.Where(wh => wh.Id >= 1 && wh.Id <= 5).ToList();
-            foreach (var hours in workingHours)
-            {
-                context.PharmacyWorkingHours.Add(
-                    new PharmacyWorkingHours(pharmacy, hours)
-                );
-            }
-
+            context.Pharmacies.AddRange(pharmacies);
             context.SaveChanges();
+        }
+
+        private static void SetWorkingHours(ApiContext context, IEnumerable<Pharmacy> pharmacies)
+        {
+            var workingHours = context.WorkingHours.Where(wh => wh.Id >= 1 && wh.Id <= 5).ToList();
+            foreach (var pharmacy in pharmacies)
+            {
+                foreach (var hours in workingHours)
+                {
+                    context.PharmacyWorkingHours.Add(
+                        new PharmacyWorkingHours(pharmacy, hours)
+                    );
+                }
+            }
         }
     }
 }
