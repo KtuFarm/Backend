@@ -5,7 +5,7 @@ using Backend.Exceptions;
 using Backend.Models;
 using Backend.Models.Database;
 using Backend.Models.DTO;
-using Backend.Services.Interfaces;
+using Backend.Services.Validators.MedicamentDTOValidator;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers

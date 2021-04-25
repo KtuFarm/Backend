@@ -1,7 +1,7 @@
 using Backend.Exceptions;
 using Backend.Models.DTO;
 using Backend.Services;
-using Backend.Services.Interfaces;
+using Backend.Services.Validators.MedicamentDTOValidator;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 

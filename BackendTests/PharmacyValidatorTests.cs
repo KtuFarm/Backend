@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Backend.Exceptions;
 using Backend.Models.DTO;
-using Backend.Services.Interfaces;
 using Backend.Services.Validators;
+using Backend.Services.Validators.PharmacyDTOValidator;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 

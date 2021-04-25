@@ -3,7 +3,7 @@ using Backend.Exceptions;
 using Backend.Models;
 using JetBrains.Annotations;
 
-namespace Backend.Services
+namespace Backend.Services.Validators
 {
     public class DTOValidator
     {

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Services.WorkingHoursManager;
 using static NUnit.Framework.Assert;
 
 namespace BackendTests

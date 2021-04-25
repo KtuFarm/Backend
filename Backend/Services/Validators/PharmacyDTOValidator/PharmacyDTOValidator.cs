@@ -1,7 +1,6 @@
 ﻿using Backend.Models.DTO;
-using Backend.Services.Interfaces;
 
-namespace Backend.Services.Validators
+namespace Backend.Services.Validators.PharmacyDTOValidator
 {
     public class PharmacyDTOValidator : DTOValidator, IPharmacyDTOValidator
     {

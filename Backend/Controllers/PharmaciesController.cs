@@ -1,7 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Models.Database;
 using Backend.Models.DTO;
-using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -9,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
 using Backend.Models.Common.DTO;
+using Backend.Services.Validators.PharmacyDTOValidator;
+using Backend.Services.WorkingHoursManager;
 
 namespace Backend.Controllers
 {

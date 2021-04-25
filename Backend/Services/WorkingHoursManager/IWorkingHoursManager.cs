@@ -1,9 +1,9 @@
-using Backend.Models.Database;
-using Backend.Models.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Backend.Models.Database;
+using Backend.Models.DTO;
 
-namespace Backend.Services.Interfaces
+namespace Backend.Services.WorkingHoursManager
 {
     public interface IWorkingHoursManager
     {

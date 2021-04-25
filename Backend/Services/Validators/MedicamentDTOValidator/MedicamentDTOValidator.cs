@@ -4,10 +4,9 @@ using Backend.Exceptions;
 using Backend.Models;
 using Backend.Models.Database;
 using Backend.Models.DTO;
-using Backend.Services.Interfaces;
 using JetBrains.Annotations;
 
-namespace Backend.Services
+namespace Backend.Services.Validators.MedicamentDTOValidator
 {
     public class MedicamentDTOValidator : DTOValidator, IMedicamentDTOValidator
     {

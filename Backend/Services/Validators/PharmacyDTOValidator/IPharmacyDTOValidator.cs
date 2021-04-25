@@ -1,7 +1,7 @@
 ﻿using Backend.Models.DTO;
 using JetBrains.Annotations;
 
-namespace Backend.Services.Interfaces
+namespace Backend.Services.Validators.PharmacyDTOValidator
 {
     public interface IPharmacyDTOValidator
     {
