@@ -2,6 +2,7 @@
 using System.Linq;
 using Backend.Exceptions;
 using Backend.Models;
+using Backend.Models.Common;
 using Backend.Models.Database;
 using Backend.Models.DTO;
 using JetBrains.Annotations;

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Backend.Exceptions;
 using Backend.Models;
+using Backend.Models.Common;
 using JetBrains.Annotations;
 
 namespace Backend.Services.Validators

@@ -1,4 +1,4 @@
-namespace Backend.Models.Database
+namespace Backend.Models.Common
 {
     public interface ISoftDeletable
     {

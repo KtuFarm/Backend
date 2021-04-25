@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Backend.Models.Common;
 using Backend.Models.DTO;
 
 namespace Backend.Models.Database

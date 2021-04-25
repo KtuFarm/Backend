@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
 using Backend.Models;
+using Backend.Models.Common;
 using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Services.Validators.MedicamentDTOValidator;

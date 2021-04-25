@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Backend.Models.Common;
 
 namespace Backend.Models.Database
 {

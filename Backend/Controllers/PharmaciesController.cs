@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
+using Backend.Models.Common;
 using Backend.Models.Common.DTO;
 using Backend.Services.Validators.PharmacyDTOValidator;
 using Backend.Services.WorkingHoursManager;
