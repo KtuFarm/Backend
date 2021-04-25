@@ -1,13 +1,13 @@
-﻿using Backend.Models;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Backend.Models;
+using Backend.Models.DTO;
+using Backend.Models.UserEntity;
+using Backend.Models.UserEntity.DTO;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Backend.Models.PharmacyEntity.DTO;
-using Backend.Models.UserEntity;
-using Backend.Models.UserEntity.DTO;
 
 namespace Backend.Controllers
 {
@@ -15,27 +15,29 @@ namespace Backend.Controllers
     [ApiController]
     public class UsersController : ApiControllerBase
     {
-        public UsersController(ApiContext context) : base(context) {}
+        public UsersController(ApiContext context) : base(context) { }
 
         [HttpGet]
-        public async Task<ActionResult<UserDTO>> GetUsers()
+        public async Task<ActionResult<GetListDTO<UserDTO>>> GetUsers()
         {
             var users = await Context.Users
-                .Select(u => new GetUserDTO(u))
+                .Select(u => new UserDTO(u))
                 .ToListAsync();
 
-            return Ok(new GetUsersDTO(users));
+            return Ok(new GetListDTO<UserDTO>(users));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetPharmacyDTO>> GetUser(int id)
+        public async Task<ActionResult<GetObjectDTO<UserFullDTO>>> GetUser(int id)
         {
             var user = await Context.Users
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .Where(u => u.Id == id)
+                .Select(u => new UserFullDTO(u))
+                .FirstOrDefaultAsync();
 
             if (user == null) return ApiNotFound("User does not exist!");
 
-            return Ok(new GetUserDTO(user));
+            return Ok(new GetObjectDTO<UserFullDTO>(user));
         }
 
         [HttpPost]
@@ -43,7 +45,7 @@ namespace Backend.Controllers
         {
             ValidateCreateUserDTO(dataFromBody);
 
-            Context.Users.Add(new User(dataFromBody));
+            await Context.Users.AddAsync(new User(dataFromBody));
             await Context.SaveChangesAsync();
 
             return Created();

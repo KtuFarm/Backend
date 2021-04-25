@@ -58,7 +58,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetPharmacyDTO>> GetPharmacy(int id)
+        public async Task<ActionResult<GetObjectDTO<PharmacyFullDTO>>> GetPharmacy(int id)
         {
             var pharmacy = await Context.Pharmacies
                 .Include(p => p.Registers)
@@ -67,8 +67,9 @@ namespace Backend.Controllers
             if (pharmacy == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
             var workingHours = await _workingHoursManager.GetPharmacyWorkingHours(pharmacy.Id);
-
-            return Ok(new GetPharmacyDTO(pharmacy, workingHours));
+            var dto = new PharmacyFullDTO(pharmacy, workingHours);
+            
+            return Ok(new GetObjectDTO<PharmacyFullDTO>(dto));
         }
 
         [HttpPost]
