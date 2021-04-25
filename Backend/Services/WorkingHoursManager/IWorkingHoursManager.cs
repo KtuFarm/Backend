@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Backend.Models.Database;
-using Backend.Models.DTO;
+using Backend.Models.WorkingHoursEntity;
+using Backend.Models.WorkingHoursEntity.DTO;
 
 namespace Backend.Services.WorkingHoursManager
 {

@@ -1,4 +1,4 @@
-﻿using Backend.Models.DTO;
+﻿using Backend.Models.PharmacyEntity.DTO;
 using JetBrains.Annotations;
 
 namespace Backend.Services.Validators.PharmacyDTOValidator

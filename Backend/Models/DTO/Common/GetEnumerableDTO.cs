@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.Models.Common;
 using Newtonsoft.Json;
 
 namespace Backend.Models.DTO

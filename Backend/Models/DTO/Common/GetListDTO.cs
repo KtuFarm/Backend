@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Backend.Models.Common;
 using Newtonsoft.Json;
 
-namespace Backend.Models.Common.DTO
+namespace Backend.Models.DTO
 {
     public class GetListDTO<T>
     {

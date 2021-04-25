@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
+using Backend.Models.MedicamentEntity;
+using Backend.Models.PharmacyEntity;
 
 namespace Backend.Models.Database
 {

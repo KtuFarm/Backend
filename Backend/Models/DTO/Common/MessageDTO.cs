@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Backend.Models.Common;
+using Newtonsoft.Json;
 
 namespace Backend.Models.DTO
 {

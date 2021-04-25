@@ -1,5 +1,6 @@
 using Backend.Models.Database;
-using Backend.Models.DTO;
+using Backend.Models.MedicamentEntity;
+using Backend.Models.MedicamentEntity.DTO;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 

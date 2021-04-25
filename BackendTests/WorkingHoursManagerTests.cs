@@ -1,12 +1,11 @@
 using Backend.Models;
-using Backend.Models.DTO;
-using Backend.Services;
 using BackendTests.Mocks;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Models.WorkingHoursEntity.DTO;
 using Backend.Services.WorkingHoursManager;
 using static NUnit.Framework.Assert;
 

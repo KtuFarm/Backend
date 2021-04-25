@@ -2,6 +2,8 @@ using Backend.Models;
 using Backend.Models.Database;
 using System.Collections.Generic;
 using System.Linq;
+using Backend.Models.PharmacyEntity;
+using Backend.Models.RegisterEntity;
 
 namespace BackendTests.Mocks
 {

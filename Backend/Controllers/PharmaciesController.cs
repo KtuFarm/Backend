@@ -1,16 +1,19 @@
-﻿using Backend.Models;
-using Backend.Models.Database;
-using Backend.Models.DTO;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
+using Backend.Models;
 using Backend.Models.Common;
-using Backend.Models.Common.DTO;
+using Backend.Models.DTO;
+using Backend.Models.PharmacyEntity;
+using Backend.Models.PharmacyEntity.DTO;
+using Backend.Models.ProductBalanceEntity.DTO;
+using Backend.Models.TransactionEntity.DTO;
+using Backend.Models.WorkingHoursEntity;
 using Backend.Services.Validators.PharmacyDTOValidator;
 using Backend.Services.WorkingHoursManager;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {

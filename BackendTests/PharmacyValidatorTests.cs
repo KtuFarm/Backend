@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Backend.Exceptions;
-using Backend.Models.DTO;
-using Backend.Services.Validators;
+using Backend.Models.PharmacyEntity.DTO;
+using Backend.Models.WorkingHoursEntity.DTO;
 using Backend.Services.Validators.PharmacyDTOValidator;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;

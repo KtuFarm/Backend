@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
+using Backend.Models.PharmacyEntity;
+using Backend.Models.WorkingHoursEntity;
 
 namespace Backend.Models.Database
 {

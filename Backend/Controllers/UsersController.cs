@@ -1,12 +1,13 @@
 ﻿using Backend.Models;
-using Backend.Models.Database;
-using Backend.Models.DTO;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Models.PharmacyEntity.DTO;
+using Backend.Models.UserEntity;
+using Backend.Models.UserEntity.DTO;
 
 namespace Backend.Controllers
 {

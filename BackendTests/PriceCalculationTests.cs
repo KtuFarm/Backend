@@ -1,4 +1,4 @@
-using Backend.Models.Database;
+using Backend.Models.MedicamentEntity;
 using NUnit.Framework;
 
 namespace BackendTests

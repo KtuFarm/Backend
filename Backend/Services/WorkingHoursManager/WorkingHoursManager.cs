@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
-using Backend.Models.Database;
-using Backend.Models.DTO;
+using Backend.Models.WorkingHoursEntity;
+using Backend.Models.WorkingHoursEntity.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services.WorkingHoursManager

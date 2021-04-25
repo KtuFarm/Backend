@@ -1,5 +1,13 @@
 ﻿using Backend.Models.Configurations;
 using Backend.Models.Database;
+using Backend.Models.ManufacturerEntity;
+using Backend.Models.MedicamentEntity;
+using Backend.Models.PharmacyEntity;
+using Backend.Models.ProductBalanceEntity;
+using Backend.Models.RegisterEntity;
+using Backend.Models.TransactionEntity;
+using Backend.Models.UserEntity;
+using Backend.Models.WorkingHoursEntity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models

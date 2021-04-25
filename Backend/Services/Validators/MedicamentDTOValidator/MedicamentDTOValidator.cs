@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Backend.Exceptions;
-using Backend.Models;
 using Backend.Models.Common;
 using Backend.Models.Database;
-using Backend.Models.DTO;
+using Backend.Models.MedicamentEntity.DTO;
 using JetBrains.Annotations;
 
 namespace Backend.Services.Validators.MedicamentDTOValidator

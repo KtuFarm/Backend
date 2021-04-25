@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Backend.Exceptions;
 using Backend.Models;
 using Backend.Models.Common;
-using Backend.Models.Database;
-using Backend.Models.DTO;
+using Backend.Models.MedicamentEntity;
+using Backend.Models.MedicamentEntity.DTO;
 using Backend.Services.Validators.MedicamentDTOValidator;
 using Microsoft.EntityFrameworkCore;
 
