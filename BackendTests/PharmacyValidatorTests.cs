@@ -85,7 +85,7 @@ namespace BackendTests
         [Test]
         public void TestValidEditPharmacyDto()
         {
-            var dto = new EditPharmacyDTO()
+            var dto = new EditPharmacyDTO
             {
                 Address = "Test 2",
                 City = "Kaunas",
@@ -108,7 +108,7 @@ namespace BackendTests
         [Test]
         public void TestInvalidEditAddress()
         {
-            var dto = new EditPharmacyDTO()
+            var dto = new EditPharmacyDTO
             {
                 Address = ""
             };
@@ -119,7 +119,7 @@ namespace BackendTests
         [Test]
         public void TestInvalidEditCity()
         {
-            var dto = new EditPharmacyDTO()
+            var dto = new EditPharmacyDTO
             {
                 City = ""
             };
@@ -130,7 +130,7 @@ namespace BackendTests
         [Test]
         public void TestInvalidEditWorkingHours()
         {
-            var dto = new EditPharmacyDTO()
+            var dto = new EditPharmacyDTO
             {
                 WorkingHours = new List<WorkingHoursDTO>()
             };

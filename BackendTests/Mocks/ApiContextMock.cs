@@ -5,9 +5,10 @@ namespace BackendTests.Mocks
 {
     public class ApiContextMock : ApiContext
     {
-        private static readonly DbContextOptions<ApiContext> DbContextOptions = new DbContextOptionsBuilder<ApiContext>()
-            .UseInMemoryDatabase("MockDb")
-            .Options;
+        private static readonly DbContextOptions<ApiContext> DbContextOptions =
+            new DbContextOptionsBuilder<ApiContext>()
+                .UseInMemoryDatabase("MockDb")
+                .Options;
 
         public ApiContextMock() : base(DbContextOptions)
         {

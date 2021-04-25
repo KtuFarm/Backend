@@ -1,12 +1,12 @@
-using Backend.Models;
-using BackendTests.Mocks;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Models;
 using Backend.Models.WorkingHoursEntity.DTO;
 using Backend.Services.WorkingHoursManager;
+using BackendTests.Mocks;
+using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 namespace BackendTests
@@ -124,7 +124,7 @@ namespace BackendTests
         public void TestCreateEmptyWorkingHours()
         {
             var wh = _manager.GetWorkingHoursFromDTO(new List<WorkingHoursDTO>());
-            
+
             IsEmpty(wh);
         }
     }
