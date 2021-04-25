@@ -74,7 +74,7 @@ namespace BackendTests
         private void AssertInvalidArgument(List<WorkingHoursDTO> dto, string errorMessage)
         {
             var ex = Throws<ArgumentException>(() => _manager.GetWorkingHoursFromDTO(dto));
-            AreEqual(errorMessage, ex.Message);
+            AreEqual(errorMessage, ex?.Message);
         }
 
         [Test]
@@ -118,6 +118,14 @@ namespace BackendTests
             var wh = await _manager.GetPharmacyWorkingHours(id);
 
             AreEqual(PharmacySeedMock.PharmacyWorkingHoursCount, wh.Count());
+        }
+
+        [Test]
+        public void TestCreateEmptyWorkingHours()
+        {
+            var wh = _manager.GetWorkingHoursFromDTO(new List<WorkingHoursDTO>());
+            
+            IsEmpty(wh);
         }
     }
 }
