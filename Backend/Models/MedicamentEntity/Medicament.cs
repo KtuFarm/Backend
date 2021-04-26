@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
 using Backend.Models.Database;
+using Backend.Models.ManufacturerEntity;
 using Backend.Models.MedicamentEntity.DTO;
 using Backend.Models.ProductBalanceEntity;
 

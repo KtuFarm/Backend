@@ -4,13 +4,14 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
 using Backend.Models.Database;
+using Backend.Models.ManufacturerEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.TransactionEntity;
 using Backend.Models.UserEntity.DTO;
 
 namespace Backend.Models.UserEntity
 {
-    public class User: ISoftDeletable
+    public class User : ISoftDeletable
     {
         [Key]
         [Required]
@@ -39,7 +40,7 @@ namespace Backend.Models.UserEntity
         [StringLength(255)]
         public string Position { get; set; }
 
-        [Required] 
+        [Required]
         [DefaultValue(false)]
         public bool IsSoftDeleted { get; set; } = false;
 
@@ -49,8 +50,8 @@ namespace Backend.Models.UserEntity
         [Required]
         public Pharmacy Pharmacy { get; set; }
 
-        public ICollection<Manufacturer> Manufacturers { get; set; }
-        
+        public IEnumerable<Manufacturer> Manufacturers { get; set; }
+
         public ICollection<Transaction> Transactions { get; set; }
 
         public User() { }

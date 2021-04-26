@@ -1,5 +1,4 @@
-﻿using Backend.Models.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backend.Models.ManufacturerEntity

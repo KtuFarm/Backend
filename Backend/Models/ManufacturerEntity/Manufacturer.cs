@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Backend.Models.MedicamentEntity;
 using Backend.Models.UserEntity;
 
-namespace Backend.Models.Database
+namespace Backend.Models.ManufacturerEntity
 {
     public class Manufacturer
     {
