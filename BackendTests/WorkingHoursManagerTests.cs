@@ -1,12 +1,12 @@
-using Backend.Models;
-using Backend.Models.DTO;
-using Backend.Services;
-using BackendTests.Mocks;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Models;
+using Backend.Models.WorkingHoursEntity.DTO;
+using Backend.Services.WorkingHoursManager;
+using BackendTests.Mocks;
+using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 namespace BackendTests
@@ -74,7 +74,7 @@ namespace BackendTests
         private void AssertInvalidArgument(List<WorkingHoursDTO> dto, string errorMessage)
         {
             var ex = Throws<ArgumentException>(() => _manager.GetWorkingHoursFromDTO(dto));
-            AreEqual(errorMessage, ex.Message);
+            AreEqual(errorMessage, ex?.Message);
         }
 
         [Test]
@@ -118,6 +118,14 @@ namespace BackendTests
             var wh = await _manager.GetPharmacyWorkingHours(id);
 
             AreEqual(PharmacySeedMock.PharmacyWorkingHoursCount, wh.Count());
+        }
+
+        [Test]
+        public void TestCreateEmptyWorkingHours()
+        {
+            var wh = _manager.GetWorkingHoursFromDTO(new List<WorkingHoursDTO>());
+
+            IsEmpty(wh);
         }
     }
 }

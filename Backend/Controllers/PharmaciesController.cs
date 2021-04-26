@@ -1,13 +1,19 @@
-﻿using Backend.Models;
-using Backend.Models.Database;
-using Backend.Models.DTO;
-using Backend.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
+using Backend.Models;
+using Backend.Models.Common;
+using Backend.Models.DTO;
+using Backend.Models.PharmacyEntity;
+using Backend.Models.PharmacyEntity.DTO;
+using Backend.Models.ProductBalanceEntity.DTO;
+using Backend.Models.TransactionEntity.DTO;
+using Backend.Models.WorkingHoursEntity;
+using Backend.Services.Validators.PharmacyDTOValidator;
+using Backend.Services.WorkingHoursManager;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -31,24 +37,24 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetPharmaciesDTO>> GetPharmacies()
+        public async Task<ActionResult<GetListDTO<PharmacyDTO>>> GetPharmacies()
         {
             var pharmacies = await Context.Pharmacies
                 .Select(p => new PharmacyDTO(p))
                 .ToListAsync();
 
-            return Ok(new GetPharmaciesDTO(pharmacies));
+            return Ok(new GetListDTO<PharmacyDTO>(pharmacies));
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<GetPharmaciesDTO>> GetAllPharmacies()
+        public async Task<ActionResult<GetListDTO<PharmacyDTO>>> GetAllPharmacies()
         {
             var pharmacies = await Context.Pharmacies
                 .IgnoreQueryFilters()
                 .Select(p => new PharmacyDTO(p))
                 .ToListAsync();
 
-            return Ok(new GetPharmaciesDTO(pharmacies));
+            return Ok(new GetListDTO<PharmacyDTO>(pharmacies));
         }
 
         [HttpGet("{id}")]
@@ -128,24 +134,26 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}/products")]
-        public async Task<ActionResult<GetProductBalancesDTO>> GetProductBalances(int id)
+        public async Task<ActionResult<GetListDTO<ProductBalanceDTO>>> GetProductBalances(int id)
         {
             var products = await Context.ProductBalances
                 .Include(pb => pb.Medicament)
                 .Where(pb => pb.PharmacyId == id)
+                .Select(p => new ProductBalanceDTO(p))
                 .ToListAsync();
 
-            return Ok(new GetProductBalancesDTO(products));
+            return Ok(new GetListDTO<ProductBalanceDTO>(products));
         }
 
         [HttpGet("{id}/transactions")]
-        public async Task<ActionResult<GetTransactionsDTO>> GetTransactions(int id)
+        public async Task<ActionResult<GetListDTO<TransactionDTO>>> GetTransactions(int id)
         {
             var transactions = await Context.Transactions
                 .Where(t => t.PharmacyId == id)
+                .Select(t => new TransactionDTO(t))
                 .ToListAsync();
 
-            return Ok(new GetTransactionsDTO(transactions));
+            return Ok(new GetListDTO<TransactionDTO>(transactions));
         }
     }
 }

@@ -1,7 +1,9 @@
-using Backend.Models;
-using Backend.Models.Database;
 using System.Collections.Generic;
 using System.Linq;
+using Backend.Models;
+using Backend.Models.Database;
+using Backend.Models.PharmacyEntity;
+using Backend.Models.RegisterEntity;
 
 namespace BackendTests.Mocks
 {
@@ -30,7 +32,7 @@ namespace BackendTests.Mocks
                     City = "Deleted",
                     Registers = new List<Register>(),
                     IsSoftDeleted = true
-                },
+                }
             };
             SetWorkingHours(context, pharmacies);
 
@@ -42,14 +44,10 @@ namespace BackendTests.Mocks
         {
             var workingHours = context.WorkingHours.Where(wh => wh.Id >= 1 && wh.Id <= 5).ToList();
             foreach (var pharmacy in pharmacies)
-            {
-                foreach (var hours in workingHours)
-                {
-                    context.PharmacyWorkingHours.Add(
-                        new PharmacyWorkingHours(pharmacy, hours)
-                    );
-                }
-            }
+            foreach (var hours in workingHours)
+                context.PharmacyWorkingHours.Add(
+                    new PharmacyWorkingHours(pharmacy, hours)
+                );
         }
     }
 }

@@ -1,7 +1,8 @@
-using Backend.Models;
-using Backend.Models.Database;
 using System;
 using System.Linq;
+using Backend.Models;
+using Backend.Models.Database;
+using Backend.Models.WorkingHoursEntity;
 
 namespace BackendTests.Mocks
 {
@@ -15,7 +16,6 @@ namespace BackendTests.Mocks
             if (workingHours != null) return;
 
             for (var day = DayOfWeekId.Monday; day < DayOfWeekId.Saturday; day++)
-            {
                 context.Add(
                     new WorkingHours
                     {
@@ -24,7 +24,6 @@ namespace BackendTests.Mocks
                         DayOfWeekId = day
                     }
                 );
-            }
 
             context.SaveChanges();
         }

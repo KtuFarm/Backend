@@ -1,4 +1,4 @@
-using Backend.Models.Database;
+using Backend.Models.MedicamentEntity;
 using NUnit.Framework;
 
 namespace BackendTests
@@ -13,10 +13,10 @@ namespace BackendTests
                 BasePrice = 20M,
                 Surcharge = 10
             };
-            
+
             Assert.AreEqual(m.CalculatePriceReimbursed(), 22);
         }
-        
+
         [Test]
         public void TestBasePriceWithReimburse()
         {
@@ -25,7 +25,7 @@ namespace BackendTests
                 BasePrice = 20M,
                 ReimbursePercentage = 10
             };
-            
+
             Assert.AreEqual(m.CalculatePriceReimbursed(), 18);
         }
 
@@ -38,7 +38,7 @@ namespace BackendTests
                 Surcharge = 50,
                 ReimbursePercentage = 10
             };
-            
+
             Assert.AreEqual(m.CalculatePriceReimbursed(), 27);
         }
     }

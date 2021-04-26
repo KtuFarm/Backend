@@ -3,9 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
 using Backend.Models;
-using Backend.Models.Database;
-using Backend.Models.DTO;
-using Backend.Services.Interfaces;
+using Backend.Models.Common;
+using Backend.Models.MedicamentEntity;
+using Backend.Models.MedicamentEntity.DTO;
+using Backend.Services.Validators.MedicamentDTOValidator;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers

@@ -1,4 +1,6 @@
 ﻿using Backend.Models.Database;
+using Backend.Models.MedicamentEntity;
+using Backend.Models.PharmacyEntity;
 using Newtonsoft.Json;
 
 namespace Backend.Models.DTO

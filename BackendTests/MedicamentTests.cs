@@ -1,5 +1,6 @@
 using Backend.Models.Database;
-using Backend.Models.DTO;
+using Backend.Models.MedicamentEntity;
+using Backend.Models.MedicamentEntity.DTO;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
@@ -27,14 +28,14 @@ namespace BackendTests
                 Name = "test",
                 ActiveSubstance = "test",
                 BarCode = "123456",
-                PharmaceuticalFormId = (PharmaceuticalFormId)1,
+                PharmaceuticalFormId = (PharmaceuticalFormId) 1,
                 Country = "test",
                 IsPrescriptionRequired = false,
                 BasePrice = 10,
                 Surcharge = 100,
                 IsReimbursed = false
             };
-        
+
         [Test]
         public void TestCreateMedicamentFromDto()
         {
@@ -47,18 +48,18 @@ namespace BackendTests
         public void TestEditMedicamentWithDto()
         {
             var medicament = ControlMedicament;
-            var editDto = new EditMedicamentDTO()
+            var editDto = new EditMedicamentDTO
             {
                 BasePrice = 100,
                 Surcharge = 50.0
             };
-            
+
             medicament.UpdateFromDTO(editDto);
 
             bool wasUpdatedSuccessfully =
                 medicament.BasePrice == editDto.BasePrice &&
                 medicament.Surcharge == editDto.Surcharge;
-            
+
             IsTrue(wasUpdatedSuccessfully);
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Backend.Models.TransactionEntity;
 
 namespace Backend.Models.Database
 {
