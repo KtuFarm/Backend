@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Backend.Exceptions;
 using Backend.Models;
 using Backend.Models.Common;
+using Backend.Models.DTO;
 using Backend.Models.MedicamentEntity;
 using Backend.Models.MedicamentEntity.DTO;
 using Backend.Services.Validators.MedicamentDTOValidator;
@@ -24,25 +25,27 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetMedicamentsDTO>> GetMedicaments()
+        public async Task<ActionResult<GetListDTO<MedicamentDTO>>> GetMedicaments()
         {
             var medicaments = await Context.Medicaments
                 .Select(m => new MedicamentDTO(m))
                 .ToListAsync();
 
-            return Ok(new GetMedicamentsDTO(medicaments));
+            return Ok(new GetListDTO<MedicamentDTO>(medicaments));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetMedicamentDTO>> GetMedicament(int id)
+        public async Task<ActionResult<GetObjectDTO<MedicamentFullDTO>>> GetMedicament(int id)
         {
             var medicament = await Context.Medicaments
+                .Where(m => m.Id == id)
                 .Include(m => m.PharmaceuticalForm)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Select(m => new MedicamentFullDTO(m))
+                .FirstOrDefaultAsync();
 
             if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
-            return Ok(new GetMedicamentDTO(medicament));
+            return Ok(new GetObjectDTO<MedicamentFullDTO>(medicament));
         }
 
         [HttpPost]

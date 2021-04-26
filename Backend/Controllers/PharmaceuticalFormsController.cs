@@ -14,7 +14,7 @@ namespace Backend.Controllers
         public PharmaceuticalFormsController(ApiContext context) : base(context) { }
 
         [HttpGet]
-        public async Task<ActionResult<GetEnumerableDTO>> GetPharmaceuticalForm()
+        public async Task<ActionResult<GetListDTO<EnumDTO>>> GetPharmaceuticalForm()
         {
             var forms = await Context.PharmaceuticalForms
                 .Select(pf => new EnumDTO
@@ -24,7 +24,7 @@ namespace Backend.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(new GetEnumerableDTO(forms));
+            return Ok(new GetListDTO<EnumDTO>(forms));
         }
     }
 }

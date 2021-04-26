@@ -14,7 +14,7 @@ namespace Backend.Controllers
         public PaymentTypesController(ApiContext context) : base(context) { }
 
         [HttpGet]
-        public async Task<ActionResult<GetEnumerableDTO>> GetPaymentTypes()
+        public async Task<ActionResult<GetListDTO<EnumDTO>>> GetPaymentTypes()
         {
             var types = await Context.PaymentTypes
                 .Select(pt => new EnumDTO
@@ -24,7 +24,7 @@ namespace Backend.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(new GetEnumerableDTO(types));
+            return Ok(new GetListDTO<EnumDTO>(types));
         }
     }
 }
