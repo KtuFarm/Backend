@@ -35,16 +35,16 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetObjectDTO<MedicamentDTO>>> GetMedicament(int id)
+        public async Task<ActionResult<GetObjectDTO<MedicamentFullDTO>>> GetMedicament(int id)
         {
             var medicament = await Context.Medicaments
                 .Include(m => m.PharmaceuticalForm)
-                .Select(m => new MedicamentDTO(m))
+                .Select(m => new MedicamentFullDTO(m))
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (medicament == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
-            return Ok(new GetObjectDTO<MedicamentDTO>(medicament));
+            return Ok(new GetObjectDTO<MedicamentFullDTO>(medicament));
         }
 
         [HttpPost]
