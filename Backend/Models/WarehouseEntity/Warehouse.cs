@@ -21,7 +21,6 @@ namespace Backend.Models.WarehouseEntity
         [StringLength(255)]
         public string City { get; set; }
 
-
         [Required]
         [DefaultValue(false)]
         public bool IsSoftDeleted { get; set; } = false;
