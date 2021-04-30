@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backend.Models.ProductBalanceEntity
 {
-    public class ProductBalanceConfiguration: IEntityTypeConfiguration<ProductBalance>
+    public class ProductBalanceConfiguration : IEntityTypeConfiguration<ProductBalance>
     {
         public void Configure(EntityTypeBuilder<ProductBalance> builder)
         {
@@ -18,6 +18,10 @@ namespace Backend.Models.ProductBalanceEntity
             builder
                 .HasOne(pb => pb.Transaction)
                 .WithMany(t => t.Medicaments);
+
+            builder
+                .HasOne(pb => pb.Warehouse)
+                .WithMany(w => w.Products);
 
             builder.HasQueryFilter(pb => !pb.IsSoftDeleted);
         }

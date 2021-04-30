@@ -7,6 +7,7 @@ using Backend.Models.ProductBalanceEntity;
 using Backend.Models.RegisterEntity;
 using Backend.Models.TransactionEntity;
 using Backend.Models.UserEntity;
+using Backend.Models.WarehouseEntity;
 using Backend.Models.WorkingHoursEntity;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ namespace Backend.Models
         public DbSet<ProductBalance> ProductBalances { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Warehouse> Warehouses { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
@@ -49,6 +51,7 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new ProductBalanceConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
