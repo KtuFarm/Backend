@@ -8,6 +8,7 @@ using Backend.Models.ManufacturerEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.TransactionEntity;
 using Backend.Models.UserEntity.DTO;
+using Backend.Models.WarehouseEntity;
 
 namespace Backend.Models.UserEntity
 {
@@ -44,11 +45,13 @@ namespace Backend.Models.UserEntity
         [DefaultValue(false)]
         public bool IsSoftDeleted { get; set; } = false;
 
-        [Required]
-        public int PharmacyId { get; set; }
+        public int? PharmacyId { get; set; }
 
-        [Required]
         public Pharmacy Pharmacy { get; set; }
+
+        public int? WarehouseId { get; set; }
+
+        public Warehouse Warehouse { get; set; }
 
         public IEnumerable<Manufacturer> Manufacturers { get; set; }
 

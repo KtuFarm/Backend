@@ -8,6 +8,7 @@ using Backend.Models.MedicamentEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.UserEntity;
+using Backend.Models.WarehouseEntity;
 using Backend.Models.WorkingHoursEntity;
 using Backend.Services.Validators.MedicamentDTOValidator;
 using Backend.Services.Validators.PharmacyDTOValidator;
@@ -110,7 +111,8 @@ namespace Backend
                 new MedicamentSeed(context),
                 new PharmacySeed(context),
                 new ProductBalanceSeed(context),
-                new UserSeed(context)
+                new UserSeed(context),
+                new WarehouseSeed(context)
             }).Seed();
         }
     }
