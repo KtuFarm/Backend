@@ -8,6 +8,7 @@ namespace Backend.Models.UserEntity
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.Property(u => u.EmployeeStateId).HasConversion<int>();
+            builder.Property(u => u.DepartmentId).HasConversion<int>();
 
             builder
                 .HasOne(u => u.Pharmacy)
@@ -28,6 +29,10 @@ namespace Backend.Models.UserEntity
             builder
                 .HasOne(u => u.Warehouse)
                 .WithMany(w => w.Employees);
+
+            builder
+                .HasOne(u => u.Department)
+                .WithMany(d => d.Users);
 
             builder
                 .HasMany(u => u.OrderUsers)

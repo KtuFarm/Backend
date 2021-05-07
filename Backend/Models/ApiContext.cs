@@ -52,6 +52,7 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new WorkingHoursConfiguration());
             modelBuilder.ApplyConfiguration(new PharmacyWorkingHoursConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeStateConfiguration());
+            modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProductBalanceConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentTypeConfiguration());

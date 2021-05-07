@@ -38,13 +38,11 @@ namespace Backend.Models.UserEntity
 
         [Required]
         [DefaultValue("")]
-        public string Email { get; set; }
+        public string Email { get; set; } = "";
 
-        [Required]
         [DefaultValue(DepartmentId.None)]
-        public DepartmentId DepartmentId { get; set; }
+        public DepartmentId DepartmentId { get; set; } = DepartmentId.None;
 
-        [Required]
         public Department Department { get; set; }
 
         public DateTime? DismissalDate { get; set; } = null;
