@@ -15,6 +15,10 @@ namespace Backend.Models.WarehouseEntity
                 .HasMany(w => w.Products)
                 .WithOne(pb => pb.Warehouse);
 
+            builder
+                .HasMany(w => w.Orders)
+                .WithOne(o => o.Warehouse);
+
             builder.HasQueryFilter(p => !p.IsSoftDeleted);
         }
     }

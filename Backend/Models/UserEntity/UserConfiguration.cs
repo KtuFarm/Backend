@@ -29,6 +29,14 @@ namespace Backend.Models.UserEntity
                 .HasOne(u => u.Warehouse)
                 .WithMany(w => w.Employees);
 
+            builder
+                .HasMany(u => u.Orders)
+                .WithOne(o => o.Courier);
+
+            builder
+                .HasMany(u => u.Orders)
+                .WithOne(o => o.Pharmacist);
+
             builder.HasQueryFilter(u => !u.IsSoftDeleted);
         }
     }

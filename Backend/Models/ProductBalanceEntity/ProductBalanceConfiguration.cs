@@ -23,6 +23,10 @@ namespace Backend.Models.ProductBalanceEntity
                 .HasOne(pb => pb.Warehouse)
                 .WithMany(w => w.Products);
 
+            builder
+                .HasMany(pb => pb.OrderProductBalances)
+                .WithOne(opb => opb.ProductBalance);
+
             builder.HasQueryFilter(pb => !pb.IsSoftDeleted);
         }
     }

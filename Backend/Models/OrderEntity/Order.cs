@@ -37,9 +37,12 @@ namespace Backend.Models.OrderEntity
 
         [Required]
         public OrderState OrderState { get; set; }
-
+        
         [Required]
         public double Total { get; set; }
+
+        [Required]
+        public ICollection<OrderProductBalance> OrderProductBalances { get; set; }
 
         public int? WarehouseId { get; set; }
 

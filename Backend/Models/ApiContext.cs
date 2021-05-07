@@ -2,6 +2,7 @@
 using Backend.Models.Database;
 using Backend.Models.ManufacturerEntity;
 using Backend.Models.MedicamentEntity;
+using Backend.Models.OrderEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.RegisterEntity;
@@ -52,9 +53,13 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new PaymentTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
             modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderProductBalanceConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
+            modelBuilder.Entity<OrderProductBalance>()
+                .HasKey(opb => new {opb.OrderId, opb.ProductBalanceId});
         }
     }
 }
