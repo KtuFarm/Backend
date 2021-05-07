@@ -37,9 +37,11 @@ namespace Backend.Models.UserEntity
         public EmployeeState EmployeeState { get; set; }
 
         [Required]
+        [DefaultValue("")]
         public string Email { get; set; }
 
         [Required]
+        [DefaultValue(DepartmentId.None)]
         public DepartmentId DepartmentId { get; set; }
 
         [Required]

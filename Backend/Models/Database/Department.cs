@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Backend.Models.UserEntity;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.Database
 {
@@ -19,5 +21,7 @@ namespace Backend.Models.Database
 
         [Required]
         public string Name { get; set; }
+
+        public ICollection<User> Users { get; set; }
     }
 }
