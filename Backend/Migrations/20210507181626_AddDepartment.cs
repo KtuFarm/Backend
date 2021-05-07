@@ -11,7 +11,7 @@ namespace Backend.Migrations
                 table: "Users",
                 type: "int",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 1);
 
             migrationBuilder.AddColumn<string>(
                 name: "Email",

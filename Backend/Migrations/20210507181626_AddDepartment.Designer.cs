@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20210507180128_AddDepartment")]
+    [Migration("20210507181626_AddDepartment")]
     partial class AddDepartment
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -733,9 +733,9 @@ namespace Backend.Migrations
 
                     b.Navigation("PaymentType");
 
-                    b.Navigation("Pharmacy");
-
                     b.Navigation("Pharmacist");
+
+                    b.Navigation("Pharmacy");
 
                     b.Navigation("Register");
                 });

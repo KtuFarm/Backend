@@ -40,6 +40,7 @@ namespace Backend.Models.UserEntity
         [DefaultValue("")]
         public string Email { get; set; } = "";
 
+        [Required]
         [DefaultValue(DepartmentId.None)]
         public DepartmentId DepartmentId { get; set; } = DepartmentId.None;
 

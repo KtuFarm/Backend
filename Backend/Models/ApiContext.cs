@@ -26,6 +26,7 @@ namespace Backend.Models
         public DbSet<WorkingHours> WorkingHours { get; set; }
         public DbSet<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
         public DbSet<EmployeeState> EmployeeState { get; set; }
+        public DbSet<Department> Departments { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ProductBalance> ProductBalances { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }

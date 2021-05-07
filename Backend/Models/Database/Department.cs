@@ -13,6 +13,7 @@ namespace Backend.Models.Database
         Transportation,
         Manufacturer
     }
+
     public class Department
     {
         [Key]
