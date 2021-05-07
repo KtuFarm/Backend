@@ -9,6 +9,8 @@ using Backend.Models.MedicamentEntity;
 using Backend.Models.MedicamentEntity.DTO;
 using Backend.Services.Validators.MedicamentDTOValidator;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Backend.Models.UserEntity;
 
 namespace Backend.Controllers
 {
@@ -19,7 +21,7 @@ namespace Backend.Controllers
         private const string ModelName = "medicament";
         private readonly IMedicamentDTOValidator _validator;
 
-        public MedicamentsController(ApiContext context, IMedicamentDTOValidator validator) : base(context)
+        public MedicamentsController(ApiContext context, IMedicamentDTOValidator validator, UserManager<User> userManager) : base(context, userManager)
         {
             _validator = validator;
         }

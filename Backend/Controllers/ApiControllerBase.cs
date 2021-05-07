@@ -1,5 +1,7 @@
 ﻿using Backend.Models;
 using Backend.Models.DTO;
+using Backend.Models.UserEntity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -8,11 +10,16 @@ namespace Backend.Controllers
     {
         protected const string ApiContentType = "application/json";
 
+        protected readonly UserManager<User> UserManager;
+
         protected ApiContext Context { get; }
 
-        public ApiControllerBase(ApiContext context)
+        private const string ApiHeader = "X-Api-Request";
+
+        public ApiControllerBase(ApiContext context, UserManager<User> userManager)
         {
             Context = context;
+            UserManager = userManager;
         }
 
         protected ActionResult Created()

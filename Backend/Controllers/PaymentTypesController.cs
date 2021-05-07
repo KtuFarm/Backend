@@ -4,6 +4,8 @@ using Backend.Models;
 using Backend.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Backend.Models.UserEntity;
 
 namespace Backend.Controllers
 {
@@ -11,7 +13,7 @@ namespace Backend.Controllers
     [ApiController]
     public class PaymentTypesController: ApiControllerBase
     {
-        public PaymentTypesController(ApiContext context) : base(context) { }
+        public PaymentTypesController(ApiContext context, UserManager<User> userManager) : base(context, userManager) { }
 
         [HttpGet]
         public async Task<ActionResult<GetListDTO<EnumDTO>>> GetPaymentTypes()

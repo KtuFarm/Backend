@@ -1,4 +1,5 @@
 using System;
+using API.Services;
 using Backend.Configuration;
 using Backend.Middleware;
 using Backend.Models;
@@ -12,6 +13,7 @@ using Backend.Models.WarehouseEntity;
 using Backend.Models.WorkingHoursEntity;
 using Backend.Services.HeadersValidator;
 using Backend.Services.RequestValidator;
+using Backend.Services.Jwt;
 using Backend.Services.Validators.MedicamentDTOValidator;
 using Backend.Services.Validators.PharmacyDTOValidator;
 using Backend.Services.WorkingHoursManager;
@@ -75,6 +77,7 @@ namespace Backend
             services.AddScoped<IWorkingHoursManager, WorkingHoursManager>();
             services.AddScoped<IMedicamentDTOValidator, MedicamentDTOValidator>();
             services.AddScoped<IPharmacyDTOValidator, PharmacyDTOValidator>();
+            services.AddScoped<IJwtService, JwtService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

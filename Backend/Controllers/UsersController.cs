@@ -5,7 +5,10 @@ using Backend.Models;
 using Backend.Models.DTO;
 using Backend.Models.UserEntity;
 using Backend.Models.UserEntity.DTO;
+using Backend.Services.Jwt;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +18,12 @@ namespace Backend.Controllers
     [ApiController]
     public class UsersController : ApiControllerBase
     {
-        public UsersController(ApiContext context) : base(context) { }
+        private readonly IJwtService _jwt;
+
+        public UsersController(ApiContext context, IJwtService jwt, UserManager<User> userManager) : base(context, userManager)
+        {
+            _jwt = jwt;
+        }
 
         [HttpGet]
         public async Task<ActionResult<GetListDTO<UserDTO>>> GetUsers()
@@ -70,6 +78,34 @@ namespace Backend.Controllers
 
             await Context.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginDTO model)
+        {
+            if (!IsValidApiRequest())
+            {
+                return ApiBadRequest("Invalid Headers!");
+            }
+
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return ApiBadRequest("User does not exist.");
+
+            if (await UserManager.CheckPasswordAsync(user, model.Password))
+            {
+                return Ok(new
+                {
+                    token = _jwt.GenerateSecurityToken(new JwtUser()
+                    {
+                        Email = user.Email,
+                        RoleId = user.DepartmentId
+                    })
+                });
+            }
+
+            return ApiBadRequest("Bad password");
         }
 
         [AssertionMethod]

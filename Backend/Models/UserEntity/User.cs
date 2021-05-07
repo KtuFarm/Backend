@@ -36,6 +36,15 @@ namespace Backend.Models.UserEntity
         [Required]
         public EmployeeState EmployeeState { get; set; }
 
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public DepartmentId DepartmentId { get; set; }
+
+        [Required]
+        public Department Department { get; set; }
+
         public DateTime? DismissalDate { get; set; } = null;
 
         [Required]

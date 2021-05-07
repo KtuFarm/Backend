@@ -9,9 +9,11 @@ using Backend.Models.PharmacyEntity;
 using Backend.Models.PharmacyEntity.DTO;
 using Backend.Models.ProductBalanceEntity.DTO;
 using Backend.Models.TransactionEntity.DTO;
+using Backend.Models.UserEntity;
 using Backend.Models.WorkingHoursEntity;
 using Backend.Services.Validators.PharmacyDTOValidator;
 using Backend.Services.WorkingHoursManager;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,8 +31,9 @@ namespace Backend.Controllers
         public PharmaciesController(
             ApiContext context,
             IWorkingHoursManager workingHoursManager,
-            IPharmacyDTOValidator validator
-        ) : base(context)
+            IPharmacyDTOValidator validator,
+            UserManager<User> userManager
+        ) : base(context, userManager)
         {
             _workingHoursManager = workingHoursManager;
             _validator = validator;

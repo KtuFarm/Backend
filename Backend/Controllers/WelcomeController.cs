@@ -1,5 +1,7 @@
 ﻿using Backend.Models;
 using Backend.Models.DTO;
+using Backend.Models.UserEntity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -9,7 +11,7 @@ namespace Backend.Controllers
     [Produces(ApiContentType)]
     public class WelcomeController : ApiControllerBase
     {
-        public WelcomeController(ApiContext context) : base(context) { }
+        public WelcomeController(ApiContext context, UserManager<User> userManager) : base(context, userManager) { }
 
         [HttpGet]
         public ActionResult<MessageDTO> GetQuizMessage()
