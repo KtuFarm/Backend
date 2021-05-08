@@ -19,6 +19,8 @@ namespace Backend.Models.Configurations
             builder
                 .HasOne(or => or.User)
                 .WithMany(u => u.OrderUsers);
+
+            builder.HasQueryFilter(ou => !ou.IsSoftDeleted);
         }
     }
 }

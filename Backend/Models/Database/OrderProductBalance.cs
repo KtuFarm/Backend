@@ -17,7 +17,8 @@ namespace Backend.Models.Database
 
         public int ProductBalanceId { get; set; }
         public ProductBalance ProductBalance { get; set; }
-
+        
+        [Required]
         [DefaultValue(false)] 
         public bool IsSoftDeleted { get; set; } = false;
     }

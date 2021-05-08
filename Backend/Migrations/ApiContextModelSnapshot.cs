@@ -676,9 +676,9 @@ namespace Backend.Migrations
 
                     b.Navigation("PaymentType");
 
-                    b.Navigation("Pharmacist");
-
                     b.Navigation("Pharmacy");
+
+                    b.Navigation("Pharmacist");
 
                     b.Navigation("Register");
                 });
