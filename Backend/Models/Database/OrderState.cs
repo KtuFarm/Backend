@@ -15,7 +15,7 @@ namespace Backend.Models.Database
         Ready,
         InTransit,
         Delivered,
-        OnTheWayToReturn,
+        Returning,
         Returned
     }
 
@@ -29,6 +29,5 @@ namespace Backend.Models.Database
         public string Name { get; set; }
 
         public ICollection<Order> Orders { get; set; }
-
     }
 }
