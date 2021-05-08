@@ -49,8 +49,6 @@ namespace Backend.Models.OrderEntity
         [Required]
         public Warehouse Warehouse { get; set; }
 
-        public int? PharmacistId { get; set; }
-
         [Required]
         public ICollection<OrderUser> OrderUsers { get; set; }
 
