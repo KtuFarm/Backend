@@ -22,12 +22,8 @@ namespace Backend.Models.OrderEntity
                 .WithMany(w => w.Orders);
 
             builder
-                .HasOne(o => o.Pharmacist)
-                .WithMany(u => u.Orders);
-
-            builder
-                .HasOne(o => o.Courier)
-                .WithMany(u => u.Orders);
+                .HasMany(o => o.OrderUsers)
+                .WithOne(ou => ou.Order);
 
             builder
                 .HasMany(o => o.OrderProductBalances)

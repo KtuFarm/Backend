@@ -52,12 +52,7 @@ namespace Backend.Models.OrderEntity
         public int? PharmacistId { get; set; }
 
         [Required]
-        public User Pharmacist { get; set; }
-
-        public int? CourierId { get; set; }
-
-        [Required]
-        public User Courier { get; set; }
+        public ICollection<OrderUser> OrderUsers { get; set; }
 
         [Required]
         [DefaultValue(false)]

@@ -59,7 +59,9 @@ namespace Backend.Models
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
             modelBuilder.Entity<OrderProductBalance>()
-                .HasKey(opb => new {opb.OrderId, opb.ProductBalanceId});
+                .HasKey(opb => new { opb.OrderId, opb.ProductBalanceId });
+            modelBuilder.Entity<OrderUser>()
+                .HasKey(ou => new {ou.OrderId, ou.UserId});
         }
     }
 }

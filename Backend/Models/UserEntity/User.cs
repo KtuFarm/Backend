@@ -58,7 +58,7 @@ namespace Backend.Models.UserEntity
 
         public ICollection<Transaction> Transactions { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<OrderUser> OrderUsers { get; set; }
 
         public User() { }
 
