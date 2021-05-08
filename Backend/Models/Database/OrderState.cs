@@ -11,11 +11,11 @@ namespace Backend.Models.Database
     {
         Created = 1,
         Approved,
-
+        InPreparation,
         Ready,
         InTransit,
         Delivered,
-
+        OnTheWayToReturn,
         Returned
     }
 
