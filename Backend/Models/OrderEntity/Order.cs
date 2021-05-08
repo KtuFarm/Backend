@@ -44,6 +44,7 @@ namespace Backend.Models.OrderEntity
         [Required]
         public ICollection<OrderProductBalance> OrderProductBalances { get; set; }
 
+        [Required]
         public int? WarehouseId { get; set; }
 
         [Required]
