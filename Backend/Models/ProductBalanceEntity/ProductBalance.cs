@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
+using Backend.Models.Database;
 using Backend.Models.MedicamentEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.TransactionEntity;
@@ -42,5 +44,7 @@ namespace Backend.Models.ProductBalanceEntity
         public int? WarehouseId { get; set; }
 
         public Warehouse Warehouse { get; set; }
+
+        public ICollection<OrderProductBalance> OrderProductBalances { get; set; }
     }
 }

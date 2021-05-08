@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
 using Backend.Models.Database;
 using Backend.Models.ManufacturerEntity;
+using Backend.Models.OrderEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.TransactionEntity;
 using Backend.Models.UserEntity.DTO;
@@ -56,6 +57,8 @@ namespace Backend.Models.UserEntity
         public IEnumerable<Manufacturer> Manufacturers { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; }
+
+        public ICollection<OrderUser> OrderUsers { get; set; }
 
         public User() { }
 

@@ -2,6 +2,7 @@
 using Backend.Models.Database;
 using Backend.Models.ManufacturerEntity;
 using Backend.Models.MedicamentEntity;
+using Backend.Models.OrderEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.RegisterEntity;
@@ -30,6 +31,9 @@ namespace Backend.Models
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<OrderState> OrderStates { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderUser> OrderUsers { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
@@ -52,9 +56,17 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new PaymentTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
             modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderProductBalanceConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderUserConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderStateConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
+            modelBuilder.Entity<OrderProductBalance>()
+                .HasKey(opb => new { opb.OrderId, opb.ProductBalanceId });
+            modelBuilder.Entity<OrderUser>()
+                .HasKey(ou => new {ou.OrderId, ou.UserId});
         }
     }
 }

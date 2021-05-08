@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
+using Backend.Models.OrderEntity;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.UserEntity;
 
@@ -28,5 +29,7 @@ namespace Backend.Models.WarehouseEntity
         public ICollection<User> Employees { get; set; }
 
         public ICollection<ProductBalance> Products { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
     }
 }
