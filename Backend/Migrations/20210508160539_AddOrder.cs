@@ -113,7 +113,7 @@ namespace Backend.Migrations
                     { 4, "Ready" },
                     { 5, "InTransit" },
                     { 6, "Delivered" },
-                    { 7, "OnTheWayToReturn" },
+                    { 7, "Returning" },
                     { 8, "Returned" }
                 });
 

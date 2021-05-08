@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20210508153523_AddOrder")]
+    [Migration("20210508160539_AddOrder")]
     partial class AddOrder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,7 +166,7 @@ namespace Backend.Migrations
                         new
                         {
                             Id = 7,
-                            Name = "OnTheWayToReturn"
+                            Name = "Returning"
                         },
                         new
                         {
@@ -443,8 +443,7 @@ namespace Backend.Migrations
                     b.Property<double>("Total")
                         .HasColumnType("double");
 
-                    b.Property<int?>("WarehouseId")
-                        .IsRequired()
+                    b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

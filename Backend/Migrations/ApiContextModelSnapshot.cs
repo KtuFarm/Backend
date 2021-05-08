@@ -164,7 +164,7 @@ namespace Backend.Migrations
                         new
                         {
                             Id = 7,
-                            Name = "OnTheWayToReturn"
+                            Name = "Returning"
                         },
                         new
                         {
@@ -441,8 +441,7 @@ namespace Backend.Migrations
                     b.Property<double>("Total")
                         .HasColumnType("double");
 
-                    b.Property<int?>("WarehouseId")
-                        .IsRequired()
+                    b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
