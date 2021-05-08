@@ -59,6 +59,7 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new OrderProductBalanceConfiguration());
             modelBuilder.ApplyConfiguration(new OrderUserConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderStateConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
