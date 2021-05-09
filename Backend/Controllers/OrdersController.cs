@@ -2,6 +2,7 @@
 using Backend.Models;
 using Backend.Models.DTO;
 using Backend.Models.OrderEntity.DTO;
+using Backend.Services.OrderManager;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -10,13 +11,16 @@ namespace Backend.Controllers
     [ApiController]
     public class OrdersController : ApiControllerBase
     {
-        public OrdersController(ApiContext context) : base(context) { }
+        private readonly IOrderManager _orderManager;
+
+        public OrdersController(ApiContext context, IOrderManager orderManager) : base(context)
+        {
+            _orderManager = orderManager;
+        }
 
         [HttpPost]
         public ActionResult<GetObjectDTO<CreateOrderDTO>> CreateOrder([FromBody] CreateOrderDTO dto)
         {
-            throw new NotImplementedException();
-            
 
             return Ok(new GetObjectDTO<CreateOrderDTO>(dto));
         }
