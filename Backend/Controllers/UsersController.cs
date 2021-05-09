@@ -21,7 +21,8 @@ namespace Backend.Controllers
     {
         private readonly IJwtService _jwt;
 
-        public UsersController(ApiContext context, IJwtService jwt, UserManager<User> userManager) : base(context, userManager)
+        public UsersController(ApiContext context, IJwtService jwt, UserManager<User> userManager) : base(context,
+            userManager)
         {
             _jwt = jwt;
         }
@@ -50,6 +51,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
+        [Obsolete]
         public async Task<ActionResult> AddUser([FromBody] CreateUserDTO dataFromBody)
         {
             ValidateCreateUserDTO(dataFromBody);
@@ -111,8 +113,11 @@ namespace Backend.Controllers
 
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<ActionResult<GetObjectDTO<string>>> Signup(SignupDTO dto)
+        public async Task<ActionResult<GetObjectDTO<string>>> Signup([FromBody] CreateUserDTO dto)
         {
+            // TODO: Validation
+            ValidateCreateUserDTO(dto);
+
             /*if (!IsValidApiRequest())
             {
                 return ApiBadRequest("Invalid Headers!");
@@ -125,36 +130,19 @@ namespace Backend.Controllers
                     return ApiBadRequest(res.Errors.First().Description);
             }*/
 
-            // var user = new User(model);
-
-            /*switch (model.RoleId)
-            {
-                case DepartmentId.Pharmacy:
-                    user.Pharmacy = Context.Pharmacy.FirstOrDefault(z => z.Id == model.PharmacyWarehouseOrTruck);
-                    break;
-                case DepartmentId.Warehouse:
-                    user.Warehouse = Context.Warehouse.FirstOrDefault(z => z.Id == model.PharmacyWarehouseOrTruck);
-                    break;
-                case DepartmentId.Transportation:
-                    Context.TruckEmployees.Add(new TruckEmployee()
-                    {
-                        Truck = Context.Truck.FirstOrDefault(z => z.Id == model.PharmacyWarehouseOrTruck),
-                        Employee = user
-                    });
-                    break;
-            }*/
-
-            /*var result = await UserManager.CreateAsync(user, model.Password);
+            var user = new User(dto);
+            var result = await UserManager.CreateAsync(user, dto.Password);
+            
             if (!result.Succeeded)
-                return ApiBadRequest(result.Errors.First().Description);*/
+                return ApiBadRequest(result.Errors.First().Description);
 
             string token = _jwt.GenerateSecurityToken(new JwtUser
             {
                 Email = dto.Email,
-                RoleId = (DepartmentId)dto.RoleId
+                RoleId = (DepartmentId) dto.DepartmentId
             });
 
-            return Created(new GetObjectDTO<string> (token));
+            return Created(new GetObjectDTO<string>(token));
         }
 
         [AssertionMethod]

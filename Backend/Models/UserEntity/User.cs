@@ -83,11 +83,30 @@ namespace Backend.Models.UserEntity
 
         public User(CreateUserDTO dto)
         {
+            Email = dto.Email;
+            Username = $"{dto.Name}_{dto.Surname}";
+
             Name = dto.Name;
             Surname = dto.Surname;
             Position = dto.Position;
             RegistrationDate = DateTime.Now;
-            PharmacyId = dto.PharmacyId ?? 1;
+            DepartmentId = (DepartmentId) dto.DepartmentId;
+
+            SetWorkplace(dto);
+        }
+
+        private void SetWorkplace(CreateUserDTO dto)
+        {
+            var departmentId = (DepartmentId) dto.DepartmentId;
+            switch (departmentId)
+            {
+                case DepartmentId.Pharmacy:
+                    PharmacyId = dto.PharmacyId;
+                    break;
+                case DepartmentId.Warehouse:
+                    WarehouseId = dto.WarehouseId;
+                    break;
+            }
         }
 
         public void UpdateFromDTO(EditUserDTO dto)
