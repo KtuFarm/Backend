@@ -3,14 +3,16 @@ using System;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20210509171414_AddAuth")]
+    partial class AddAuth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,98 +145,6 @@ namespace Backend.Migrations
                             Id = 3,
                             Name = "Fired"
                         });
-                });
-
-            modelBuilder.Entity("Backend.Models.Database.OrderProductBalance", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductBalanceId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("OrderId", "ProductBalanceId");
-
-                    b.HasIndex("ProductBalanceId");
-
-                    b.ToTable("OrderProductBalance");
-                });
-
-            modelBuilder.Entity("Backend.Models.Database.OrderState", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OrderStates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Created"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Approved"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "InPreparation"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Ready"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "InTransit"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Delivered"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Returning"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Returned"
-                        });
-                });
-
-            modelBuilder.Entity("Backend.Models.Database.OrderUser", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("OrderId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("OrderUsers");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.PaymentType", b =>
@@ -454,49 +364,6 @@ namespace Backend.Migrations
                     b.HasIndex("PharmaceuticalFormId");
 
                     b.ToTable("Medicaments");
-                });
-
-            modelBuilder.Entity("Backend.Models.OrderEntity.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("AddressFrom")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("AddressTo")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime>("DeliveryDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("OrderStateId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Total")
-                        .HasColumnType("double");
-
-                    b.Property<int>("WarehouseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderStateId");
-
-                    b.HasIndex("WarehouseId");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Backend.Models.PharmacyEntity.Pharmacy", b =>
@@ -747,44 +614,6 @@ namespace Backend.Migrations
                     b.ToTable("WorkingHours");
                 });
 
-            modelBuilder.Entity("Backend.Models.Database.OrderProductBalance", b =>
-                {
-                    b.HasOne("Backend.Models.OrderEntity.Order", "Order")
-                        .WithMany("OrderProductBalances")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Models.ProductBalanceEntity.ProductBalance", "ProductBalance")
-                        .WithMany("OrderProductBalances")
-                        .HasForeignKey("ProductBalanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("ProductBalance");
-                });
-
-            modelBuilder.Entity("Backend.Models.Database.OrderUser", b =>
-                {
-                    b.HasOne("Backend.Models.OrderEntity.Order", "Order")
-                        .WithMany("OrderUsers")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Models.UserEntity.User", "User")
-                        .WithMany("OrderUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Backend.Models.Database.PharmacyWorkingHours", b =>
                 {
                     b.HasOne("Backend.Models.PharmacyEntity.Pharmacy", "Pharmacy")
@@ -847,25 +676,6 @@ namespace Backend.Migrations
                     b.Navigation("Manufacturer");
 
                     b.Navigation("PharmaceuticalForm");
-                });
-
-            modelBuilder.Entity("Backend.Models.OrderEntity.Order", b =>
-                {
-                    b.HasOne("Backend.Models.Database.OrderState", "OrderState")
-                        .WithMany("Orders")
-                        .HasForeignKey("OrderStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Models.WarehouseEntity.Warehouse", "Warehouse")
-                        .WithMany("Orders")
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrderState");
-
-                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("Backend.Models.ProductBalanceEntity.ProductBalance", b =>
@@ -998,11 +808,6 @@ namespace Backend.Migrations
                     b.Navigation("Employees");
                 });
 
-            modelBuilder.Entity("Backend.Models.Database.OrderState", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("Backend.Models.Database.PaymentType", b =>
                 {
                     b.Navigation("Transactions");
@@ -1025,13 +830,6 @@ namespace Backend.Migrations
                     b.Navigation("RequiredMedicamentAmounts");
                 });
 
-            modelBuilder.Entity("Backend.Models.OrderEntity.Order", b =>
-                {
-                    b.Navigation("OrderProductBalances");
-
-                    b.Navigation("OrderUsers");
-                });
-
             modelBuilder.Entity("Backend.Models.PharmacyEntity.Pharmacy", b =>
                 {
                     b.Navigation("Pharmacists");
@@ -1045,11 +843,6 @@ namespace Backend.Migrations
                     b.Navigation("RequiredMedicamentAmounts");
 
                     b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("Backend.Models.ProductBalanceEntity.ProductBalance", b =>
-                {
-                    b.Navigation("OrderProductBalances");
                 });
 
             modelBuilder.Entity("Backend.Models.RegisterEntity.Register", b =>
@@ -1066,16 +859,12 @@ namespace Backend.Migrations
                 {
                     b.Navigation("Manufacturers");
 
-                    b.Navigation("OrderUsers");
-
                     b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("Backend.Models.WarehouseEntity.Warehouse", b =>
                 {
                     b.Navigation("Employees");
-
-                    b.Navigation("Orders");
 
                     b.Navigation("Products");
                 });

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
+using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Models.UserEntity;
 using Backend.Models.UserEntity.DTO;
@@ -84,10 +85,10 @@ namespace Backend.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO model)
         {
-            if (!IsValidApiRequest())
+            /*if (!IsValidApiRequest())
             {
                 return ApiBadRequest("Invalid Headers!");
-            }
+            }*/
 
             var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
@@ -106,6 +107,54 @@ namespace Backend.Controllers
             }
 
             return ApiBadRequest("Bad password");
+        }
+
+        [HttpPost("signup")]
+        [AllowAnonymous]
+        public async Task<ActionResult<GetObjectDTO<string>>> Signup(SignupDTO dto)
+        {
+            /*if (!IsValidApiRequest())
+            {
+                return ApiBadRequest("Invalid Headers!");
+            }*/
+
+            /*foreach (var validator in UserManager.PasswordValidators)
+            {
+                var res = await validator.ValidateAsync(UserManager, null, dto.Password);
+                if (!res.Succeeded)
+                    return ApiBadRequest(res.Errors.First().Description);
+            }*/
+
+            // var user = new User(model);
+
+            /*switch (model.RoleId)
+            {
+                case DepartmentId.Pharmacy:
+                    user.Pharmacy = Context.Pharmacy.FirstOrDefault(z => z.Id == model.PharmacyWarehouseOrTruck);
+                    break;
+                case DepartmentId.Warehouse:
+                    user.Warehouse = Context.Warehouse.FirstOrDefault(z => z.Id == model.PharmacyWarehouseOrTruck);
+                    break;
+                case DepartmentId.Transportation:
+                    Context.TruckEmployees.Add(new TruckEmployee()
+                    {
+                        Truck = Context.Truck.FirstOrDefault(z => z.Id == model.PharmacyWarehouseOrTruck),
+                        Employee = user
+                    });
+                    break;
+            }*/
+
+            /*var result = await UserManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+                return ApiBadRequest(result.Errors.First().Description);*/
+
+            string token = _jwt.GenerateSecurityToken(new JwtUser
+            {
+                Email = dto.Email,
+                RoleId = (DepartmentId)dto.RoleId
+            });
+
+            return Created(new GetObjectDTO<string> (token));
         }
 
         [AssertionMethod]

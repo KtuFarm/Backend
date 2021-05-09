@@ -27,6 +27,11 @@ namespace Backend.Controllers
             return StatusCode(201);
         }
 
+        protected ActionResult Created(object data)
+        {
+            return StatusCode(201, data);
+        }
+
         protected BadRequestObjectResult ApiBadRequest(string message, string details = null)
         {
             var error = new ErrorDTO

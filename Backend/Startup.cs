@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using API.Configuration;
 using API.Services;
 using Backend.Configuration;
 using Backend.Middleware;
@@ -19,10 +21,13 @@ using Backend.Services.Validators.PharmacyDTOValidator;
 using Backend.Services.WorkingHoursManager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
 
@@ -68,7 +73,54 @@ namespace Backend
                 });
             });
 
+            SetupAuthentication(services);
             RegisterCustomServices(services);
+        }
+
+        private void SetupAuthentication(IServiceCollection services)
+        {
+            services.AddIdentityCore<User>();
+            services.AddScoped<IUserStore<User>, AppUserStore>();
+            services.AddScoped<IUserRoleStore<User>, AppUserStore>();
+
+            string secret = Configuration.GetSection("Jwt").GetSection("SecretKey").Value;
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                }
+            ).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+                };
+            });
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 8;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+                options.User.RequireUniqueEmail = true;
+            });
         }
 
         private static void RegisterCustomServices(IServiceCollection services)
