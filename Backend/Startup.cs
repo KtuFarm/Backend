@@ -10,6 +10,8 @@ using Backend.Models.ProductBalanceEntity;
 using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 using Backend.Models.WorkingHoursEntity;
+using Backend.Services.HeadersValidator;
+using Backend.Services.RequestValidator;
 using Backend.Services.Validators.MedicamentDTOValidator;
 using Backend.Services.Validators.PharmacyDTOValidator;
 using Backend.Services.WorkingHoursManager;
@@ -69,6 +71,7 @@ namespace Backend
 
         private static void RegisterCustomServices(IServiceCollection services)
         {
+            services.AddScoped<IHeadersValidator, HeadersValidator>();
             services.AddScoped<IWorkingHoursManager, WorkingHoursManager>();
             services.AddScoped<IMedicamentDTOValidator, MedicamentDTOValidator>();
             services.AddScoped<IPharmacyDTOValidator, PharmacyDTOValidator>();
