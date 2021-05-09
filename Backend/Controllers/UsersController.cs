@@ -87,11 +87,6 @@ namespace Backend.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO model)
         {
-            /*if (!IsValidApiRequest())
-            {
-                return ApiBadRequest("Invalid Headers!");
-            }*/
-
             var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
                 return ApiBadRequest("User does not exist.");
@@ -118,17 +113,12 @@ namespace Backend.Controllers
             // TODO: Validation
             ValidateCreateUserDTO(dto);
 
-            /*if (!IsValidApiRequest())
-            {
-                return ApiBadRequest("Invalid Headers!");
-            }*/
-
-            /*foreach (var validator in UserManager.PasswordValidators)
+            foreach (var validator in UserManager.PasswordValidators)
             {
                 var res = await validator.ValidateAsync(UserManager, null, dto.Password);
                 if (!res.Succeeded)
                     return ApiBadRequest(res.Errors.First().Description);
-            }*/
+            }
 
             var user = new User(dto);
             var result = await UserManager.CreateAsync(user, dto.Password);
