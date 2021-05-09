@@ -47,13 +47,13 @@ namespace Backend.Controllers
                 .Select(u => new UserFullDTO(u))
                 .FirstOrDefaultAsync();
 
-            if (user == null) return ApiNotFound("User does not exist!");
+            if (user == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
             return Ok(new GetObjectDTO<UserFullDTO>(user));
         }
 
         [HttpPost]
-        [Obsolete]
+        [Obsolete("use `api/v1/users/signup` instead")]
         public async Task<ActionResult> AddUser([FromBody] CreateUserDTO dataFromBody)
         {
             ValidateCreateUserDTO(dataFromBody);
@@ -67,10 +67,9 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditUser(int id, [FromBody] EditUserDTO dto)
         {
-            var user = await Context.Users
-                .FirstOrDefaultAsync(u => u.Id == id);
+            var user = await Context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user == null) return ApiNotFound("User does not exist!");
+            if (user == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
             user.UpdateFromDTO(dto);
 
@@ -78,6 +77,7 @@ namespace Backend.Controllers
             {
                 var employeeState = await Context.EmployeeState
                     .FirstOrDefaultAsync(es => es.Name == dto.EmployeeState);
+
                 if (employeeState != null) user.EmployeeStateId = employeeState.Id;
             }
 
@@ -87,7 +87,7 @@ namespace Backend.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> Login(LoginDTO model)
+        public async Task<ActionResult<string>> Login([FromBody] LoginDTO model)
         {
             var user = await UserManager.FindByEmailAsync(model.Email);
 
