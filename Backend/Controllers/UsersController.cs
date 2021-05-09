@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
-using Backend.Models.Database;
+using Backend.Models.Common;
 using Backend.Models.DTO;
 using Backend.Models.UserEntity;
 using Backend.Models.UserEntity.DTO;
@@ -19,6 +19,8 @@ namespace Backend.Controllers
     [ApiController]
     public class UsersController : ApiControllerBase
     {
+        private const string ModelName = "user";
+
         private readonly IJwtService _jwt;
 
         public UsersController(ApiContext context, IJwtService jwt, UserManager<User> userManager) : base(context,
@@ -85,30 +87,20 @@ namespace Backend.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginDTO model)
+        public async Task<ActionResult<string>> Login(LoginDTO model)
         {
             var user = await UserManager.FindByEmailAsync(model.Email);
-            if (user == null)
-                return ApiBadRequest("User does not exist.");
 
-            if (await UserManager.CheckPasswordAsync(user, model.Password))
-            {
-                return Ok(new
-                {
-                    token = _jwt.GenerateSecurityToken(new JwtUser()
-                    {
-                        Email = user.Email,
-                        RoleId = user.DepartmentId
-                    })
-                });
-            }
+            if (user == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
-            return ApiBadRequest("Bad password");
+            return await UserManager.CheckPasswordAsync(user, model.Password)
+                ? Ok(GenerateToken(user))
+                : ApiBadRequest(ApiErrorSlug.InvalidPassword);
         }
 
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<ActionResult<GetObjectDTO<string>>> Signup([FromBody] CreateUserDTO dto)
+        public async Task<IActionResult> Signup([FromBody] CreateUserDTO dto)
         {
             // TODO: Validation
             ValidateCreateUserDTO(dto);
@@ -122,17 +114,8 @@ namespace Backend.Controllers
 
             var user = new User(dto);
             var result = await UserManager.CreateAsync(user, dto.Password);
-            
-            if (!result.Succeeded)
-                return ApiBadRequest(result.Errors.First().Description);
 
-            string token = _jwt.GenerateSecurityToken(new JwtUser
-            {
-                Email = dto.Email,
-                RoleId = (DepartmentId) dto.DepartmentId
-            });
-
-            return Created(new GetObjectDTO<string>(token));
+            return result.Succeeded ? Created() : ApiBadRequest(result.Errors.First().Description);
         }
 
         [AssertionMethod]
@@ -141,6 +124,11 @@ namespace Backend.Controllers
             if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException("Name is empty!");
             if (string.IsNullOrEmpty(dto.Surname)) throw new ArgumentException("Surname is empty!");
             if (string.IsNullOrEmpty(dto.Position)) throw new ArgumentException("Position is empty!");
+        }
+
+        private string GenerateToken(User user)
+        {
+            return _jwt.GenerateSecurityToken(new JwtUser(user.Email, user.DepartmentId));
         }
     }
 }

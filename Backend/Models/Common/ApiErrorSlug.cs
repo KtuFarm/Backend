@@ -9,6 +9,7 @@ namespace Backend.Models.Common
         public const string InvalidPharmaceuticalForm = "invalid_pharmaceutical_form";
         public const string InvalidPercentage = "invalid_percentage";
         public const string InvalidBarcode = "invalid_barcode";
+        public const string InvalidPassword = "invalid_password";
         public const string ResourceNotFound = "object_not_found";
     }
 }
