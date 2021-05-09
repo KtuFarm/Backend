@@ -57,12 +57,7 @@ namespace Backend
             services.AddDbContext<ApiContext>(opt => opt.UseMySQL(builder.ConnectionString));
             services.AddControllers().AddNewtonsoftJson();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "KTU Farm", Version = "v1" });
-                c.OperationFilter<SwaggerConfig>();
-            });
-            services.AddSwaggerGenNewtonsoftSupport();
+            SetupSwagger(services);
 
             services.AddCors(options =>
             {
@@ -76,6 +71,42 @@ namespace Backend
 
             SetupAuthentication(services);
             RegisterCustomServices(services);
+        }
+
+        private static void SetupSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "KTU Farm", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "",
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+
+                c.OperationFilter<SwaggerConfig>();
+            });
+            services.AddSwaggerGenNewtonsoftSupport();
         }
 
         private void SetupAuthentication(IServiceCollection services)
@@ -96,7 +127,7 @@ namespace Backend
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
@@ -156,6 +187,8 @@ namespace Backend
             app.UseRequestMiddleware();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
