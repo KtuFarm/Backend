@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Exceptions;
 using Backend.Models;
 using Backend.Models.Common;
 using Backend.Models.DTO;
 using Backend.Models.UserEntity;
 using Backend.Models.UserEntity.DTO;
 using Backend.Services.Jwt;
-using JetBrains.Annotations;
+using Backend.Services.Validators.UserDTOValidator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +23,17 @@ namespace Backend.Controllers
         private const string ModelName = "user";
 
         private readonly IJwtService _jwt;
+        private readonly IUserDTOValidator _validator;
 
-        public UsersController(ApiContext context, IJwtService jwt, UserManager<User> userManager) : base(context,
-            userManager)
+        public UsersController(
+            ApiContext context,
+            UserManager<User> userManager,
+            IJwtService jwt,
+            IUserDTOValidator validator
+        ) : base(context, userManager)
         {
             _jwt = jwt;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -56,7 +63,7 @@ namespace Backend.Controllers
         [Obsolete("use `api/v1/users/signup` instead")]
         public async Task<ActionResult> AddUser([FromBody] CreateUserDTO dataFromBody)
         {
-            ValidateCreateUserDTO(dataFromBody);
+            // ValidateCreateUserDTO(dataFromBody);
 
             await Context.Users.AddAsync(new User(dataFromBody));
             await Context.SaveChangesAsync();
@@ -71,63 +78,75 @@ namespace Backend.Controllers
 
             if (user == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
-            user.UpdateFromDTO(dto);
-
-            if (!string.IsNullOrEmpty(dto.EmployeeState))
+            try
             {
-                var employeeState = await Context.EmployeeState
-                    .FirstOrDefaultAsync(es => es.Name == dto.EmployeeState);
+                _validator.ValidateEditUserDTO(dto);
+                user.UpdateFromDTO(dto);
 
-                if (employeeState != null) user.EmployeeStateId = employeeState.Id;
+                await Context.SaveChangesAsync();
+                return Ok();
             }
-
-            await Context.SaveChangesAsync();
-            return Ok();
+            catch (DtoValidationException ex)
+            {
+                return ApiBadRequest(ex.Message, ex.Parameter);
+            }
         }
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<object>> Login([FromBody] LoginDTO model)
+        public async Task<ActionResult<object>> Login([FromBody] LoginDTO dto)
         {
-            var user = await UserManager.FindByEmailAsync(model.Email);
-
-            if (user == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
-
-            if (!await UserManager.CheckPasswordAsync(user, model.Password))
+            try
             {
-                return ApiBadRequest(ApiErrorSlug.InvalidPassword);
-            }
+                _validator.ValidateLoginDTO(dto);
+                var user = await UserManager.FindByEmailAsync(dto.Email);
 
-            string token = GenerateToken(user);
-            return Ok(new { jwt = token });
+                if (user == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+
+                if (!await UserManager.CheckPasswordAsync(user, dto.Password))
+                {
+                    return ApiBadRequest(ApiErrorSlug.InvalidPassword);
+                }
+
+                string token = GenerateToken(user);
+                return Ok(new { jwt = token });
+            }
+            catch (DtoValidationException ex)
+            {
+                return ApiBadRequest(ex.Message, ex.Parameter);
+            }
         }
 
         [HttpPost("signup")]
         [AllowAnonymous]
         public async Task<IActionResult> Signup([FromBody] CreateUserDTO dto)
         {
-            // TODO: Validation
-            ValidateCreateUserDTO(dto);
-
-            foreach (var validator in UserManager.PasswordValidators)
+            try
             {
-                var res = await validator.ValidateAsync(UserManager, null, dto.Password);
-                if (!res.Succeeded)
-                    return ApiBadRequest(res.Errors.First().Description);
+                _validator.ValidateCreateUserDTO(dto);
+                await ValidatePassword(dto.Password);
+
+                var user = new User(dto);
+                var result = await UserManager.CreateAsync(user, dto.Password);
+
+                return result.Succeeded ? Created() : ApiBadRequest(result.Errors.First().Description);
             }
-
-            var user = new User(dto);
-            var result = await UserManager.CreateAsync(user, dto.Password);
-
-            return result.Succeeded ? Created() : ApiBadRequest(result.Errors.First().Description);
+            catch (DtoValidationException ex)
+            {
+                return ApiBadRequest(ex.Message, ex.Parameter);
+            }
         }
 
-        [AssertionMethod]
-        private static void ValidateCreateUserDTO(CreateUserDTO dto)
+        private async Task ValidatePassword(string password)
         {
-            if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException("Name is empty!");
-            if (string.IsNullOrEmpty(dto.Surname)) throw new ArgumentException("Surname is empty!");
-            if (string.IsNullOrEmpty(dto.Position)) throw new ArgumentException("Position is empty!");
+            foreach (var validator in UserManager.PasswordValidators)
+            {
+                var res = await validator.ValidateAsync(UserManager, null, password);
+                if (!res.Succeeded)
+                {
+                    throw new DtoValidationException(res.Errors.First().Description);
+                }
+            }
         }
 
         private string GenerateToken(User user)

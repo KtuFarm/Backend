@@ -116,6 +116,11 @@ namespace Backend.Models.UserEntity
             Position = dto.Position ?? Position;
             PharmacyId = dto.PharmacyId ?? PharmacyId;
             DismissalDate = dto.DismissalDate ?? DismissalDate;
+
+            if (dto.EmployeeStateId != null)
+            {
+                EmployeeStateId = (EmployeeStateId) dto.EmployeeStateId;
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ using Backend.Services.RequestValidator;
 using Backend.Services.Jwt;
 using Backend.Services.Validators.MedicamentDTOValidator;
 using Backend.Services.Validators.PharmacyDTOValidator;
+using Backend.Services.Validators.UserDTOValidator;
 using Backend.Services.WorkingHoursManager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -129,6 +130,7 @@ namespace Backend
             services.AddScoped<IWorkingHoursManager, WorkingHoursManager>();
             services.AddScoped<IMedicamentDTOValidator, MedicamentDTOValidator>();
             services.AddScoped<IPharmacyDTOValidator, PharmacyDTOValidator>();
+            services.AddScoped<IUserDTOValidator, UserDTOValidator>();
             services.AddScoped<IJwtService, JwtService>();
         }
 
