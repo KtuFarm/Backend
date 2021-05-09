@@ -87,15 +87,19 @@ namespace Backend.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> Login([FromBody] LoginDTO model)
+        public async Task<ActionResult<object>> Login([FromBody] LoginDTO model)
         {
             var user = await UserManager.FindByEmailAsync(model.Email);
 
             if (user == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
 
-            return await UserManager.CheckPasswordAsync(user, model.Password)
-                ? Ok(GenerateToken(user))
-                : ApiBadRequest(ApiErrorSlug.InvalidPassword);
+            if (!await UserManager.CheckPasswordAsync(user, model.Password))
+            {
+                return ApiBadRequest(ApiErrorSlug.InvalidPassword);
+            }
+
+            string token = GenerateToken(user);
+            return Ok(new { jwt = token });
         }
 
         [HttpPost("signup")]
