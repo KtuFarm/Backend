@@ -4,6 +4,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
 using Backend.Models.Database;
+using Backend.Models.PharmacyEntity;
+using Backend.Models.ProductBalanceEntity;
+using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 
 namespace Backend.Models.OrderEntity
@@ -45,6 +48,12 @@ namespace Backend.Models.OrderEntity
 
         [Required]
         public Warehouse Warehouse { get; set; }
+
+        [Required]
+        public int PharmacyId { get; set; }
+
+        [Required]
+        public Pharmacy Pharmacy { get; set; }
 
         [Required]
         public ICollection<OrderUser> OrderUsers { get; set; }

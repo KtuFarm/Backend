@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Backend.Models.Common;
 using Backend.Models.Database;
+using Backend.Models.OrderEntity;
 using Backend.Models.PharmacyEntity.DTO;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.RegisterEntity;
@@ -43,6 +44,8 @@ namespace Backend.Models.PharmacyEntity
         public ICollection<ProductBalance> Products { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
 
         public Pharmacy() { }
 

@@ -10,6 +10,9 @@ namespace Backend.Models.OrderEntity.DTO
         [JsonProperty("warehouseId")]
         public int WarehouseId { get; set; }
 
+        [JsonProperty("pharmacyId")]
+        public int PharmacyId { get; set; }
+
         [JsonProperty("products")]
         public List<TransactionProductDTO> Products { get; set; }
 

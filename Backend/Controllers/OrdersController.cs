@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Backend.Models;
 using Backend.Models.DTO;
 using Backend.Models.OrderEntity.DTO;
@@ -21,7 +22,7 @@ namespace Backend.Controllers
         [HttpPost]
         public ActionResult<GetObjectDTO<CreateOrderDTO>> CreateOrder([FromBody] CreateOrderDTO dto)
         {
-
+            var order = Context.Orders.FirstOrDefault(o => o.WarehouseId == dto.WarehouseId && o.PharmacyId == dto.PharmacyId);
             return Ok(new GetObjectDTO<CreateOrderDTO>(dto));
         }
     }
