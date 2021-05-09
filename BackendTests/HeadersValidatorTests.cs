@@ -5,7 +5,6 @@ using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
-
 namespace BackendTests
 {
     public class HeadersValidatorTests
