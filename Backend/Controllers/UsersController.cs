@@ -37,6 +37,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<GetListDTO<UserDTO>>> GetUsers()
         {
             var users = await Context.Users
@@ -47,6 +48,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<GetObjectDTO<UserFullDTO>>> GetUser(int id)
         {
             var user = await Context.Users
@@ -84,6 +86,7 @@ namespace Backend.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = AllRoles)]
         public async Task<ActionResult> EditUser(int id, [FromBody] EditUserDTO dto)
         {
             var user = await Context.Users.FirstOrDefaultAsync(u => u.Id == id);
