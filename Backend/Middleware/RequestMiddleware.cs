@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Models.Common;
 using Newtonsoft.Json;
 
 namespace Backend.Middleware
@@ -13,6 +14,21 @@ namespace Backend.Middleware
 
         private readonly RequestDelegate _next;
 
+        private string SerializedError
+        {
+            get
+            {
+                var error = new ErrorDTO
+                {
+                    Type = 400,
+                    Title = ApiErrorSlug.InvalidHeaders,
+                    Details = null
+                };
+
+                return JsonConvert.SerializeObject(error, Formatting.Indented);
+            }
+        }
+
         public RequestMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -20,29 +36,25 @@ namespace Backend.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
-            if(httpContext.Request.Path.StartsWithSegments("/api"))
+            if (httpContext.Request.Path.StartsWithSegments("/api"))
             {
                 httpContext.Request.Headers.TryGetValue(ApiHeader, out var headers);
-                if (!IsHeaderLegit(headers) || headers != "true")
+
+                if (!IsValidRequest(headers))
                 {
-                    string json = GetErrorJson(httpContext);
-                    await httpContext.Response.WriteAsync(json);
+                    httpContext.Response.StatusCode = 400;
+
+                    await httpContext.Response.WriteAsync(SerializedError);
                     return;
                 }
             }
+
             await _next(httpContext);
         }
 
-        private static string GetErrorJson(HttpContext httpContext)
+        private static bool IsValidRequest(StringValues headers)
         {
-            var error = new ErrorDTO
-            {
-                Type = 400,
-                Title = "Invalid Headers!",
-                Details = null
-            };
-            httpContext.Response.StatusCode = 400;
-            return JsonConvert.SerializeObject(error, Formatting.Indented);
+            return IsHeaderLegit(headers) && headers == "true";
         }
 
         private static bool IsHeaderLegit(StringValues headers)
