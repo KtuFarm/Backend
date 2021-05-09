@@ -2,6 +2,7 @@ namespace Backend.Models.Common
 {
     public static class ApiErrorSlug
     {
+        public const string InvalidHeaders = "invalid_headers";
         public const string InvalidDto = "invalid_body";
         public const string EmptyParameter = "parameter_empty";
         public const string InvalidNumber = "invalid_numeric_value";
