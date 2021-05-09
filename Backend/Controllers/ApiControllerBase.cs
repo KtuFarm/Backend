@@ -1,4 +1,6 @@
-﻿using Backend.Models;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using Backend.Models;
 using Backend.Models.DTO;
 using Backend.Models.UserEntity;
 using Microsoft.AspNetCore.Identity;
@@ -9,17 +11,23 @@ namespace Backend.Controllers
     public class ApiControllerBase : ControllerBase
     {
         protected const string ApiContentType = "application/json";
+        protected const string AllRoles = "Pharmacy, Warehouse, Admin, Transportation, Manufacturer";
 
         protected readonly UserManager<User> UserManager;
 
         protected ApiContext Context { get; }
 
-        private const string ApiHeader = "X-Api-Request";
-
         public ApiControllerBase(ApiContext context, UserManager<User> userManager)
         {
             Context = context;
             UserManager = userManager;
+        }
+
+        protected async Task<User> GetCurrentUser()
+        {
+            string email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            return await UserManager.FindByEmailAsync(email);
         }
 
         protected ActionResult Created()
@@ -52,11 +60,6 @@ namespace Backend.Controllers
                 Details = details
             };
             return NotFound(error);
-        }
-
-        protected ActionResult InvalidHeaders()
-        {
-            return ApiBadRequest("Invalid Headers!");
         }
     }
 }

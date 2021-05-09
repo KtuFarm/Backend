@@ -6,7 +6,7 @@ namespace Backend.Models.UserEntity.DTO
     {
         [JsonProperty("id")]
         public int Id { get; set; }
-        
+
         [JsonProperty("name")]
         public string Name { get; set; }
 
@@ -15,13 +15,17 @@ namespace Backend.Models.UserEntity.DTO
 
         [JsonProperty("position")]
         public string Position { get; set; }
-        
+
+        [JsonProperty("department")]
+        public string Department { get; set; }
+
         public UserDTO(User user)
         {
             Id = user.Id;
             Name = user.Name;
             Surname = user.Surname;
             Position = user.Position;
+            Department = user.DepartmentId.ToString();
         }
     }
 }

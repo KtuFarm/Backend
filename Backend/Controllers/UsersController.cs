@@ -59,6 +59,18 @@ namespace Backend.Controllers
             return Ok(new GetObjectDTO<UserFullDTO>(user));
         }
 
+        [HttpGet("me")]
+        [Authorize(Roles = AllRoles)]
+        public async Task<ActionResult<GetObjectDTO<UserFullDTO>>> GetUser()
+        {
+            var user = await GetCurrentUser();
+
+            if (user == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+
+            var dto = new UserFullDTO(user);
+            return Ok(new GetObjectDTO<UserFullDTO>(dto));
+        }
+
         [HttpPost]
         [Obsolete("use `api/v1/users/signup` instead")]
         public async Task<ActionResult> AddUser([FromBody] CreateUserDTO dataFromBody)
