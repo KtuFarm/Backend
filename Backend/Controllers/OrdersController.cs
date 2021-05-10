@@ -8,7 +8,9 @@ using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
+using Backend.Models.UserEntity;
 using Backend.Services.Validators.OrderDTOValidator;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -19,7 +21,10 @@ namespace Backend.Controllers
     {
         private readonly IOrderDTOValidator _orderDtoValidator;
 
-        public OrdersController(ApiContext context, IOrderDTOValidator orderDtoValidator) : base(context)
+        public OrdersController(ApiContext context,
+            IOrderDTOValidator orderDtoValidator,
+            UserManager<User> userManager)
+            : base(context, userManager)
         {
             _orderDtoValidator = orderDtoValidator;
         }
@@ -31,7 +36,7 @@ namespace Backend.Controllers
             {
                 _orderDtoValidator.ValidateCreateOrderDto(dto);
 
-                var orderFromDatabase = Context.Orders.FirstOrDefault(o => IsOrderCreatedToday(o, dto));
+                var orderFromDatabase = Context.Orders.AsEnumerable().FirstOrDefault(o => IsOrderCreatedToday(o, dto));
 
                 if (orderFromDatabase == null)
                 {
