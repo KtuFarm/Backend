@@ -26,6 +26,7 @@ namespace Backend.Models
         public DbSet<WorkingHours> WorkingHours { get; set; }
         public DbSet<PharmacyWorkingHours> PharmacyWorkingHours { get; set; }
         public DbSet<EmployeeState> EmployeeState { get; set; }
+        public DbSet<Department> Departments { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ProductBalance> ProductBalances { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }
@@ -51,6 +52,7 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new WorkingHoursConfiguration());
             modelBuilder.ApplyConfiguration(new PharmacyWorkingHoursConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeStateConfiguration());
+            modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProductBalanceConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentTypeConfiguration());
@@ -63,10 +65,12 @@ namespace Backend.Models
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
+
             modelBuilder.Entity<OrderProductBalance>()
                 .HasKey(opb => new { opb.OrderId, opb.ProductBalanceId });
+
             modelBuilder.Entity<OrderUser>()
-                .HasKey(ou => new {ou.OrderId, ou.UserId});
+                .HasKey(ou => new { ou.OrderId, ou.UserId });
         }
     }
 }

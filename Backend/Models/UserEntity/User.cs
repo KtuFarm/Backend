@@ -36,6 +36,25 @@ namespace Backend.Models.UserEntity
         [Required]
         public EmployeeState EmployeeState { get; set; }
 
+        [Required]
+        [DefaultValue("")]
+        [StringLength(255)]
+        public string Email { get; set; } = "";
+
+        [Required]
+        [StringLength(255)]
+        public string Username { get; set; }
+
+        [Required]
+        [StringLength(255)]
+        public string Password { get; set; }
+
+        [Required]
+        [DefaultValue(DepartmentId.None)]
+        public DepartmentId DepartmentId { get; set; } = DepartmentId.None;
+
+        public Department Department { get; set; }
+
         public DateTime? DismissalDate { get; set; } = null;
 
         [Required]
@@ -64,11 +83,30 @@ namespace Backend.Models.UserEntity
 
         public User(CreateUserDTO dto)
         {
+            Email = dto.Email;
+            Username = $"{dto.Name}_{dto.Surname}";
+
             Name = dto.Name;
             Surname = dto.Surname;
             Position = dto.Position;
             RegistrationDate = DateTime.Now;
-            PharmacyId = dto.PharmacyId ?? 1;
+            DepartmentId = (DepartmentId) dto.DepartmentId;
+
+            SetWorkplace(dto);
+        }
+
+        private void SetWorkplace(CreateUserDTO dto)
+        {
+            var departmentId = (DepartmentId) dto.DepartmentId;
+            switch (departmentId)
+            {
+                case DepartmentId.Pharmacy:
+                    PharmacyId = dto.PharmacyId;
+                    break;
+                case DepartmentId.Warehouse:
+                    WarehouseId = dto.WarehouseId;
+                    break;
+            }
         }
 
         public void UpdateFromDTO(EditUserDTO dto)
@@ -78,6 +116,11 @@ namespace Backend.Models.UserEntity
             Position = dto.Position ?? Position;
             PharmacyId = dto.PharmacyId ?? PharmacyId;
             DismissalDate = dto.DismissalDate ?? DismissalDate;
+
+            if (dto.EmployeeStateId != null)
+            {
+                EmployeeStateId = (EmployeeStateId) dto.EmployeeStateId;
+            }
         }
     }
 }

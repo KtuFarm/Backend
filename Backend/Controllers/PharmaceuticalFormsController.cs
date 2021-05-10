@@ -4,6 +4,8 @@ using Backend.Models;
 using Backend.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Backend.Models.UserEntity;
 
 namespace Backend.Controllers
 {
@@ -11,7 +13,7 @@ namespace Backend.Controllers
     [ApiController]
     public class PharmaceuticalFormsController: ApiControllerBase
     {
-        public PharmaceuticalFormsController(ApiContext context) : base(context) { }
+        public PharmaceuticalFormsController(ApiContext context, UserManager<User> userManager) : base(context, userManager) { }
 
         [HttpGet]
         public async Task<ActionResult<GetListDTO<EnumDTO>>> GetPharmaceuticalForm()

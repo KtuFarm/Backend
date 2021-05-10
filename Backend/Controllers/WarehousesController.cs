@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models.ProductBalanceEntity.DTO;
+using Backend.Models.UserEntity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Controllers
 {
@@ -16,7 +18,7 @@ namespace Backend.Controllers
     {
         private const string ModelName = "warehouse";
 
-        public WarehousesController(ApiContext context) : base(context) { }
+        public WarehousesController(ApiContext context, UserManager<User> userManager) : base(context, userManager) { }
 
         [HttpGet]
         public async Task<ActionResult<GetListDTO<WarehouseDTO>>> GetWarehouses()

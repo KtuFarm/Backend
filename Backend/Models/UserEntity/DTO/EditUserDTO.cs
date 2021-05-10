@@ -20,7 +20,7 @@ namespace Backend.Models.UserEntity.DTO
         [JsonProperty("dismissalDate")]
         public DateTime? DismissalDate { get; set; } = null;
 
-        [JsonProperty("employeeState")]
-        public string EmployeeState { get; set; }
+        [JsonProperty("employeeStateId")]
+        public int? EmployeeStateId { get; set; }
     }
 }

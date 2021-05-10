@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using Backend.Models.Common;
 using Backend.Models.Database;
-using Backend.Models.ProductBalanceEntity;
-using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 
 namespace Backend.Models.OrderEntity
@@ -37,7 +33,7 @@ namespace Backend.Models.OrderEntity
 
         [Required]
         public OrderState OrderState { get; set; }
-        
+
         [Required]
         public double Total { get; set; }
 

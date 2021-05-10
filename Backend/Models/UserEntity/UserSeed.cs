@@ -2,6 +2,7 @@
 using System.Linq;
 using Backend.Models.Common;
 using Microsoft.EntityFrameworkCore;
+using Backend.Models.Database;
 
 namespace Backend.Models.UserEntity
 {
@@ -27,7 +28,9 @@ namespace Backend.Models.UserEntity
                     Surname = "Balciunas",
                     RegistrationDate = new DateTime(2020, 12, 21),
                     Position = "Jr. Pharmacist",
-                    PharmacyId = 1
+                    PharmacyId = 1,
+                    DepartmentId = DepartmentId.Admin,
+                    Email = "test@test.com"
                 }
             );
 

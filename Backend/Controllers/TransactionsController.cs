@@ -5,6 +5,8 @@ using Backend.Models.Common;
 using Backend.Models.Database;
 using Backend.Models.TransactionEntity;
 using Backend.Models.TransactionEntity.DTO;
+using Backend.Models.UserEntity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +16,7 @@ namespace Backend.Controllers
     [ApiController]
     public class TransactionsController : ApiControllerBase
     {
-        public TransactionsController(ApiContext context) : base(context) { }
+        public TransactionsController(ApiContext context, UserManager<User> userManager) : base(context, userManager) { }
 
         [HttpPost]
         public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionDTO dto)
