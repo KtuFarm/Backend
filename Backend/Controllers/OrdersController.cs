@@ -5,7 +5,6 @@ using Backend.Models;
 using Backend.Models.DTO;
 using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
-using Backend.Services.OrderManager;
 using Backend.Services.Validators.OrderDTOValidator;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,12 +14,10 @@ namespace Backend.Controllers
     [ApiController]
     public class OrdersController : ApiControllerBase
     {
-        private readonly IOrderManager _orderManager;
         private readonly IOrderDTOValidator _orderDtoValidator;
 
-        public OrdersController(ApiContext context, IOrderManager orderManager, IOrderDTOValidator orderDtoValidator) : base(context)
+        public OrdersController(ApiContext context, IOrderDTOValidator orderDtoValidator) : base(context)
         {
-            _orderManager = orderManager;
             _orderDtoValidator = orderDtoValidator;
         }
 

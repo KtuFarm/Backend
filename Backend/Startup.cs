@@ -168,7 +168,6 @@ namespace Backend
             services.AddScoped<IUserDTOValidator, UserDTOValidator>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IOrderDTOValidator, OrderDTOValidator>();
-            services.AddScoped<IOrderManager, OrderManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
