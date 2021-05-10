@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Backend.Exceptions;
 using Backend.Models.Common;
@@ -26,6 +27,13 @@ namespace Backend.Services.Validators
         {
             if (list.Count == 0)
                 throw new DtoValidationException(ApiErrorSlug.EmptyParameter, name);
+        }
+
+        [AssertionMethod]
+        protected void ValidateDateSpan(DateTime creationDate, DateTime deliveryDate)
+        {
+            if (creationDate > deliveryDate)
+                throw new DtoValidationException(ApiErrorSlug.InvalidDateSpan);
         }
     }
 }

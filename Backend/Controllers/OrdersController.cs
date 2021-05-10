@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
 using Backend.Models;
+using Backend.Models.Common;
+using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
@@ -27,29 +30,46 @@ namespace Backend.Controllers
             try
             {
                 _orderDtoValidator.ValidateCreateOrderDto(dto);
+
+                var orderFromDatabase = Context.Orders.FirstOrDefault(o => IsOrderCreatedToday(o, dto));
+
+                if (orderFromDatabase == null)
+                {
+                    var order = CreateNewOrder(dto);
+                    await Context.Orders.AddAsync(order);
+                }
+                else orderFromDatabase.UpdateFromDTO(dto);
+
+                await Context.SaveChangesAsync();
+                return Ok(new GetObjectDTO<CreateOrderDTO>(dto));
             }
             catch(DtoValidationException ex)
             {
                 return ApiBadRequest(ex.Message, ex.Parameter);
             }
-
-            var orderFromDatabase = Context.Orders.FirstOrDefault(o => o.WarehouseId == dto.WarehouseId && o.PharmacyId == dto.PharmacyId);
-
-            if (orderFromDatabase == null)
+            catch(ResourceNotFoundException ex)
             {
-                var pharmacy = Context.Pharmacies.FirstOrDefault(p => p.Id == dto.PharmacyId);
-                if (pharmacy == null) return BadRequest("Specified pharmacy does not exist.");
-
-                var warehouse = Context.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId);
-                if (warehouse == null) return BadRequest("Specified warehouse does not exist.");
-
-                var order = new Order(dto, pharmacy.Address, warehouse.Address);
-                await Context.Orders.AddAsync(order);
+                return ApiNotFound(ex.Message, ex.Parameter);
             }
-            else orderFromDatabase.UpdateFromDTO(dto);
+        }
 
-            await Context.SaveChangesAsync();
-            return Ok(new GetObjectDTO<CreateOrderDTO>(dto));
+        private bool IsOrderCreatedToday(Order order, CreateOrderDTO dto)
+        {
+            return order.WarehouseId == dto.WarehouseId
+                && order.PharmacyId == dto.PharmacyId
+                && order.OrderStateId == OrderStateId.Created
+                && order.CreationDate.Date == DateTime.Now.Date;
+        }
+
+        private Order CreateNewOrder(CreateOrderDTO dto)
+        {
+            var pharmacy = Context.Pharmacies.FirstOrDefault(p => p.Id == dto.PharmacyId);
+            if (pharmacy == null) throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "pharmacyId");
+
+            var warehouse = Context.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId);
+            if (warehouse == null) throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "warehouseId");
+
+            return new Order(dto, pharmacy.Address, warehouse.Address);
         }
     }
 }

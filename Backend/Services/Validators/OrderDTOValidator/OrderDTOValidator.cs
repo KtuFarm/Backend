@@ -1,8 +1,6 @@
-﻿using Backend.Exceptions;
-using Backend.Models.Common;
-using Backend.Models.DTO;
+﻿using Backend.Models.DTO;
 using Backend.Models.OrderEntity.DTO;
-using System;
+using JetBrains.Annotations;
 using System.Collections.Generic;
 
 namespace Backend.Services.Validators.OrderDTOValidator
@@ -17,13 +15,8 @@ namespace Backend.Services.Validators.OrderDTOValidator
             ValidateProducts(dto.Products);
         }
 
-        public void ValidateDateSpan(DateTime creationDate, DateTime deliveryDate)
-        {
-            if (creationDate > deliveryDate)
-                throw new DtoValidationException(ApiErrorSlug.InvalidDateSpan);
-        }
-
-        public void ValidateProducts(List<TransactionProductDTO> products)
+        [AssertionMethod]
+        private void ValidateProducts(List<TransactionProductDTO> products)
         {
             foreach (var product in products)
             {
