@@ -36,7 +36,13 @@ namespace Backend
 {
     public class Startup
     {
+        private const string CorsPolicyName = "AllowAll";
+        private const string AllowedUsernameCharacters =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+
         private IConfiguration Configuration { get; }
+
+        private string JwtSecret => Configuration.GetSection("Jwt").GetSection("SecretKey").Value;
 
         public Startup(IConfiguration configuration)
         {
@@ -61,7 +67,7 @@ namespace Backend
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", p =>
+                options.AddPolicy(CorsPolicyName, p =>
                 {
                     p.AllowAnyOrigin()
                         .AllowAnyHeader()
@@ -115,8 +121,6 @@ namespace Backend
             services.AddScoped<IUserStore<User>, AppUserStore>();
             services.AddScoped<IUserRoleStore<User>, AppUserStore>();
 
-            string secret = Configuration.GetSection("Jwt").GetSection("SecretKey").Value;
-
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -131,7 +135,7 @@ namespace Backend
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSecret))
                 };
             });
 
@@ -149,8 +153,7 @@ namespace Backend
                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings.
-                options.User.AllowedUserNameCharacters =
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+                options.User.AllowedUserNameCharacters = AllowedUsernameCharacters;
                 options.User.RequireUniqueEmail = true;
             });
         }
@@ -182,7 +185,7 @@ namespace Backend
 
             SeedDatabase(context);
 
-            app.UseCors("AllowAll");
+            app.UseCors(CorsPolicyName);
 
             app.UseRequestMiddleware();
 
