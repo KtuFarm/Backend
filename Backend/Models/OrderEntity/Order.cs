@@ -80,7 +80,7 @@ namespace Backend.Models.OrderEntity
         {
             CreationDate = dto.CreationDate;
             DeliveryDate = dto.DeliveryDate;
-            Total = CalculateTotalAmount(dto);
+            Total += CalculateTotalAmount(dto);
             WarehouseId = dto.WarehouseId;
             PharmacyId = dto.PharmacyId;
         }
