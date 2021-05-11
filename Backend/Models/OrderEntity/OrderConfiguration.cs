@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backend.Models.OrderEntity
@@ -28,6 +24,10 @@ namespace Backend.Models.OrderEntity
             builder
                 .HasMany(o => o.OrderProductBalances)
                 .WithOne(opb => opb.Order);
+
+            builder
+                .HasOne(o => o.Pharmacy)
+                .WithMany(p => p.Orders);
 
             builder.HasQueryFilter(o => !o.IsSoftDeleted);
         }

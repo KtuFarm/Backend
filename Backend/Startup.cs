@@ -31,6 +31,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
+using Backend.Services.Validators.OrderDTOValidator;
 
 namespace Backend
 {
@@ -166,6 +167,7 @@ namespace Backend
             services.AddScoped<IPharmacyDTOValidator, PharmacyDTOValidator>();
             services.AddScoped<IUserDTOValidator, UserDTOValidator>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IOrderDTOValidator, OrderDTOValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
