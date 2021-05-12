@@ -1,4 +1,5 @@
-﻿using Backend.Models;
+﻿using System;
+using Backend.Models;
 using Backend.Models.Common;
 using Backend.Models.DTO;
 using Backend.Models.WarehouseEntity.DTO;
@@ -44,6 +45,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}/products")]
+        [Obsolete("use `api/v1/Products` instead")]
         public async Task<ActionResult<GetListDTO<ProductBalanceDTO>>> GetProductBalances(int id)
         {
             var products = await Context.ProductBalances
