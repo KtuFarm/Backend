@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
@@ -138,6 +139,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}/products")]
+        [Obsolete("use `api/v1/Products` instead")]
         public async Task<ActionResult<GetListDTO<ProductBalanceDTO>>> GetProductBalances(int id)
         {
             var products = await Context.ProductBalances
