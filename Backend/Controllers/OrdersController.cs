@@ -33,7 +33,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Pharmacy, Warehouse")]
-        public async Task<IActionResult> GetOrders()
+        public async Task<ActionResult<GetObjectDTO<OrderDTO>>> GetOrders()
         {
             var user = await GetCurrentUser();
 
@@ -42,6 +42,26 @@ namespace Backend.Controllers
                 .ToListAsync();
 
             return Ok(new GetListDTO<OrderDTO>(orders));
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Pharmacy, Warehouse")]
+        public async Task<ActionResult<GetObjectDTO<OrderFullDTO>>> GetOrder(int id)
+        {
+            var user = await GetCurrentUser();
+
+            var order = await Context.Orders
+                .Where(o => o.Id == id)
+                .Include(o => o.OrderProductBalances)
+                .ThenInclude(opb => opb.ProductBalance)
+                .ThenInclude(pb => pb.Medicament)
+                .FirstOrDefaultAsync();
+
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "order");
+            if (!order.IsAuthorized(user)) return ApiUnauthorized();
+
+            var dto = new OrderFullDTO(order);
+            return Ok(new GetObjectDTO<OrderFullDTO>(dto));
         }
 
         [HttpPost]

@@ -7,6 +7,7 @@ using Backend.Models.Common;
 using Backend.Models.Database;
 using Backend.Models.OrderEntity.DTO;
 using Backend.Models.PharmacyEntity;
+using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 
 namespace Backend.Models.OrderEntity
@@ -85,10 +86,15 @@ namespace Backend.Models.OrderEntity
             PharmacyId = dto.PharmacyId;
         }
 
-        private double CalculateTotalAmount(CreateOrderDTO dto)
+        private static double CalculateTotalAmount(CreateOrderDTO dto)
         {
             var products = dto.Products;
-            return products != null ? products.Aggregate(0.0, (total, next) => total + next.Amount) : 0.0;
+            return products?.Aggregate(0.0, (total, next) => total + next.Amount) ?? 0.0;
+        }
+
+        public bool IsAuthorized(User user)
+        {
+            return PharmacyId == user.PharmacyId || WarehouseId == user.WarehouseId;
         }
     }
 }
