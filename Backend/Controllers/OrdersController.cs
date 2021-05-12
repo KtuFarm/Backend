@@ -10,8 +10,10 @@ using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
 using Backend.Models.UserEntity;
 using Backend.Services.Validators.OrderDTOValidator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -27,6 +29,19 @@ namespace Backend.Controllers
             : base(context, userManager)
         {
             _orderDtoValidator = orderDtoValidator;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Pharmacy, Warehouse")]
+        public async Task<IActionResult> GetOrders()
+        {
+            var user = await GetCurrentUser();
+
+            var orders = await GetUserOrdersQuery(user)
+                .Select(o => new OrderDTO(o))
+                .ToListAsync();
+
+            return Ok(new GetListDTO<OrderDTO>(orders));
         }
 
         [HttpPost]
@@ -48,22 +63,22 @@ namespace Backend.Controllers
                 await Context.SaveChangesAsync();
                 return Ok(new GetObjectDTO<CreateOrderDTO>(dto));
             }
-            catch(DtoValidationException ex)
+            catch (DtoValidationException ex)
             {
                 return ApiBadRequest(ex.Message, ex.Parameter);
             }
-            catch(ResourceNotFoundException ex)
+            catch (ResourceNotFoundException ex)
             {
                 return ApiNotFound(ex.Message, ex.Parameter);
             }
         }
 
-        private bool IsOrderCreatedToday(Order order, CreateOrderDTO dto)
+        private static bool IsOrderCreatedToday(Order order, CreateOrderDTO dto)
         {
             return order.WarehouseId == dto.WarehouseId
-                && order.PharmacyId == dto.PharmacyId
-                && order.OrderStateId == OrderStateId.Created
-                && order.CreationDate.Date == DateTime.Now.Date;
+                   && order.PharmacyId == dto.PharmacyId
+                   && order.OrderStateId == OrderStateId.Created
+                   && order.CreationDate.Date == DateTime.Now.Date;
         }
 
         private Order CreateNewOrder(CreateOrderDTO dto)
@@ -75,6 +90,16 @@ namespace Backend.Controllers
             if (warehouse == null) throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "warehouseId");
 
             return new Order(dto, pharmacy.Address, warehouse.Address);
+        }
+
+        private IQueryable<Order> GetUserOrdersQuery(User user)
+        {
+            return user.DepartmentId switch
+            {
+                DepartmentId.Pharmacy => Context.Orders.Where(o => o.PharmacyId == user.PharmacyId),
+                DepartmentId.Warehouse => Context.Orders.Where(o => o.WarehouseId == user.WarehouseId),
+                _ => null
+            };
         }
     }
 }

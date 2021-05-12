@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Models;
+using Backend.Models.Common;
 using Backend.Models.DTO;
 using Backend.Models.UserEntity;
 using Microsoft.AspNetCore.Identity;
@@ -49,6 +50,17 @@ namespace Backend.Controllers
                 Details = details
             };
             return BadRequest(error);
+        }
+
+        protected UnauthorizedObjectResult ApiUnauthorized()
+        {
+            var error = new ErrorDTO
+            {
+                Type = 401,
+                Title = ApiErrorSlug.Unauthorized,
+                Details = ""
+            };
+            return Unauthorized(error);
         }
 
         protected NotFoundObjectResult ApiNotFound(string message, string details = null)
