@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models.ProductBalanceEntity.DTO;
 using Backend.Models.UserEntity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Controllers
@@ -45,7 +46,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}/products")]
-        [Obsolete("use `api/v1/Products` instead")]
+        [Authorize(Roles = "Pharmacy, Warehouse")]
         public async Task<ActionResult<GetListDTO<ProductBalanceDTO>>> GetProductBalances(int id)
         {
             var products = await Context.ProductBalances

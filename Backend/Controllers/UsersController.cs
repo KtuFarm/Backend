@@ -73,18 +73,6 @@ namespace Backend.Controllers
             return Ok(new GetObjectDTO<UserFullDTO>(dto));
         }
 
-        [HttpPost]
-        [Obsolete("use `api/v1/users/signup` instead")]
-        public async Task<ActionResult> AddUser([FromBody] CreateUserDTO dataFromBody)
-        {
-            // ValidateCreateUserDTO(dataFromBody);
-
-            await Context.Users.AddAsync(new User(dataFromBody));
-            await Context.SaveChangesAsync();
-
-            return Created();
-        }
-
         [HttpPut("{id}")]
         [Authorize(Roles = AllRoles)]
         public async Task<ActionResult> EditUser(int id, [FromBody] EditUserDTO dto)
