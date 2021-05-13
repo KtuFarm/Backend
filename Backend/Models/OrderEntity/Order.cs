@@ -71,23 +71,27 @@ namespace Backend.Models.OrderEntity
             AddressFrom = addressFrom;
             AddressTo = addressTo;
             CreationDate = DateTime.Now;
-            DeliveryDate = dto.DeliveryDate;
+            DeliveryDate = DetermineDeliveryDate(CreationDate);
             OrderStateId = OrderStateId.Created;
             Total = CalculateTotalAmount(dto);
             WarehouseId = dto.WarehouseId;
             PharmacyId = dto.PharmacyId;
-
-            //OrderProductBalances = dto.Products.Select(pb => new OrderProductBalance(this, pb)).ToList();
             OrderProductBalances = productBalances.Select(pb => new OrderProductBalance(this, pb)).ToList();
         }
 
         public void UpdateFromDTO(CreateOrderDTO dto)
         {
             CreationDate = DateTime.Now;
-            DeliveryDate = dto.DeliveryDate;
             Total += CalculateTotalAmount(dto);
             WarehouseId = dto.WarehouseId;
             PharmacyId = dto.PharmacyId;
+        }
+
+        private DateTime DetermineDeliveryDate(DateTime creationDate)
+        {
+            return creationDate.Hour < 13
+                ? new DateTime(CreationDate.Year, CreationDate.Month, CreationDate.Day + 2, 13, 0, 0)
+                : new DateTime(CreationDate.Year, CreationDate.Month, CreationDate.Day + 3, 13, 0, 0);
         }
 
         private static double CalculateTotalAmount(CreateOrderDTO dto)
