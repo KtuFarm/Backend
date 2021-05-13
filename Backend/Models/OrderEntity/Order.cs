@@ -7,6 +7,7 @@ using Backend.Models.Common;
 using Backend.Models.Database;
 using Backend.Models.OrderEntity.DTO;
 using Backend.Models.PharmacyEntity;
+using Backend.Models.ProductBalanceEntity;
 using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 
@@ -65,21 +66,24 @@ namespace Backend.Models.OrderEntity
 
         public Order() { }
 
-        public Order(CreateOrderDTO dto, string addressFrom, string addressTo)
+        public Order(CreateOrderDTO dto, string addressFrom, string addressTo, List<ProductBalance> productBalances)
         {
             AddressFrom = addressFrom;
             AddressTo = addressTo;
-            CreationDate = dto.CreationDate;
+            CreationDate = DateTime.Now;
             DeliveryDate = dto.DeliveryDate;
             OrderStateId = OrderStateId.Created;
             Total = CalculateTotalAmount(dto);
             WarehouseId = dto.WarehouseId;
             PharmacyId = dto.PharmacyId;
+
+            //OrderProductBalances = dto.Products.Select(pb => new OrderProductBalance(this, pb)).ToList();
+            OrderProductBalances = productBalances.Select(pb => new OrderProductBalance(this, pb)).ToList();
         }
 
         public void UpdateFromDTO(CreateOrderDTO dto)
         {
-            CreationDate = dto.CreationDate;
+            CreationDate = DateTime.Now;
             DeliveryDate = dto.DeliveryDate;
             Total += CalculateTotalAmount(dto);
             WarehouseId = dto.WarehouseId;

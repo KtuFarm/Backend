@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
@@ -8,6 +9,7 @@ using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
+using Backend.Models.ProductBalanceEntity;
 using Backend.Models.UserEntity;
 using Backend.Services.Validators.OrderDTOValidator;
 using Microsoft.AspNetCore.Authorization;
@@ -71,14 +73,20 @@ namespace Backend.Controllers
             {
                 _orderDtoValidator.ValidateCreateOrderDto(dto);
 
-                var orderFromDatabase = Context.Orders.AsEnumerable().FirstOrDefault(o => IsOrderCreatedToday(o, dto));
+                //var orderFromDatabase = Context.Orders.AsEnumerable().FirstOrDefault(o => IsOrderCreatedToday(o, dto));
 
-                if (orderFromDatabase == null)
+                //if (orderFromDatabase == null)
+                //{
+                var productBalances = new List<ProductBalance>();
+                foreach(var product in dto.Products)
                 {
-                    var order = CreateNewOrder(dto);
-                    await Context.Orders.AddAsync(order);
+                    var productBalance = Context.ProductBalances.FirstOrDefault(pb => pb.Id == product.ProductBalanceId);
+                    if (productBalance != null) productBalances.Add(new ProductBalance(productBalance, product.Amount));
                 }
-                else orderFromDatabase.UpdateFromDTO(dto);
+                    var order = CreateNewOrder(dto, productBalances);
+                    await Context.Orders.AddAsync(order);
+                //}
+                //else orderFromDatabase.UpdateFromDTO(dto);
 
                 await Context.SaveChangesAsync();
                 return Ok(new GetObjectDTO<CreateOrderDTO>(dto));
@@ -101,7 +109,7 @@ namespace Backend.Controllers
                    && order.CreationDate.Date == DateTime.Now.Date;
         }
 
-        private Order CreateNewOrder(CreateOrderDTO dto)
+        private Order CreateNewOrder(CreateOrderDTO dto, List<ProductBalance> productBalances)
         {
             var pharmacy = Context.Pharmacies.FirstOrDefault(p => p.Id == dto.PharmacyId);
             if (pharmacy == null) throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "pharmacyId");
@@ -109,7 +117,7 @@ namespace Backend.Controllers
             var warehouse = Context.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId);
             if (warehouse == null) throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "warehouseId");
 
-            return new Order(dto, pharmacy.Address, warehouse.Address);
+            return new Order(dto, pharmacy.Address, warehouse.Address, productBalances);
         }
 
         private IQueryable<Order> GetUserOrdersQuery(User user)

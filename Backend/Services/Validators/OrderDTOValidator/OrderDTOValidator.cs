@@ -11,7 +11,7 @@ namespace Backend.Services.Validators.OrderDTOValidator
         {
             ValidateNumberIsPositive(dto.PharmacyId, "pharmacyId");
             ValidateNumberIsPositive(dto.WarehouseId, "warehouseId");
-            ValidateDateSpan(dto.CreationDate, dto.DeliveryDate);
+            //ValidateDateSpan(dto.CreationDate, dto.DeliveryDate);
             ValidateProducts(dto.Products);
         }
 

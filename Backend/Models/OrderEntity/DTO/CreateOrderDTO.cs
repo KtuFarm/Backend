@@ -13,13 +13,10 @@ namespace Backend.Models.OrderEntity.DTO
         [JsonProperty("pharmacyId")]
         public int PharmacyId { get; set; }
 
-        [JsonProperty("products")]
-        public List<TransactionProductDTO> Products { get; set; }
-
-        [JsonProperty("creationDate")]
-        public DateTime CreationDate { get; set; }
-
         [JsonProperty("deliveryDate")]
         public DateTime DeliveryDate { get; set; }
+
+        [JsonProperty("products")]
+        public List<TransactionProductDTO> Products { get; set; }
     }
 }
