@@ -33,7 +33,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Pharmacy, Warehouse")]
-        public async Task<ActionResult<GetObjectDTO<OrderDTO>>> GetOrders()
+        public async Task<ActionResult<GetListDTO<OrderDTO>>> GetOrders()
         {
             var user = await GetCurrentUser();
 
