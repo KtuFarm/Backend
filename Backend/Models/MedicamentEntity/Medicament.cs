@@ -101,8 +101,9 @@ namespace Backend.Models.MedicamentEntity
         {
             decimal price = CalculateFullPrice();
             price *= (100M - (decimal) ReimbursePercentage) / 100M;
+            price = Math.Round(price, 2);
 
-            return Math.Round(price, 2);
+            return price == 0 ? 0.01M : price;
         }
 
         public bool Equals(Medicament other)

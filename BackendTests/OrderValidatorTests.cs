@@ -9,7 +9,7 @@ using Backend.Exceptions;
 
 namespace BackendTests
 {
-    class OrderValidatorTests
+    public class OrderValidatorTests
     {
         private IOrderDTOValidator _validator;
 
