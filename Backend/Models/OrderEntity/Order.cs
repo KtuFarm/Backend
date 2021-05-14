@@ -66,7 +66,13 @@ namespace Backend.Models.OrderEntity
 
         public Order() { }
 
-        public Order(CreateOrderDTO dto, string addressFrom, string addressTo, List<ProductBalance> productBalances)
+        public Order(
+            CreateOrderDTO dto,
+            string addressFrom,
+            string addressTo,
+            int pharmacyId,
+            IEnumerable<ProductBalance> productBalances
+        )
         {
             AddressFrom = addressFrom;
             AddressTo = addressTo;
@@ -75,7 +81,7 @@ namespace Backend.Models.OrderEntity
             OrderStateId = OrderStateId.Created;
             Total = CalculateTotalAmount(dto);
             WarehouseId = dto.WarehouseId;
-            PharmacyId = dto.PharmacyId;
+            PharmacyId = pharmacyId;
             OrderProductBalances = productBalances.Select(pb => new OrderProductBalance(this, pb)).ToList();
         }
 
@@ -84,7 +90,6 @@ namespace Backend.Models.OrderEntity
             CreationDate = DateTime.Now;
             Total += CalculateTotalAmount(dto);
             WarehouseId = dto.WarehouseId;
-            PharmacyId = dto.PharmacyId;
         }
 
         private DateTime DetermineDeliveryDate(DateTime creationDate)

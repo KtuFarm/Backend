@@ -1,15 +1,14 @@
-﻿using Backend.Models.OrderEntity.DTO;
-using Backend.Services.Validators.OrderDTOValidator;
-using System;
-using System.Collections.Generic;
+﻿using Backend.Exceptions;
 using Backend.Models.DTO;
+using Backend.Models.OrderEntity.DTO;
+using Backend.Services.Validators.OrderDTOValidator;
 using NUnit.Framework;
+using System.Collections.Generic;
 using static NUnit.Framework.Assert;
-using Backend.Exceptions;
 
 namespace BackendTests
 {
-    class OrderValidatorTests
+    public class OrderValidatorTests
     {
         private IOrderDTOValidator _validator;
 
@@ -17,7 +16,6 @@ namespace BackendTests
             new()
             {
                 WarehouseId = 1,
-                PharmacyId = 1,
                 Products = new List<TransactionProductDTO>
                 {
                     new()
@@ -25,9 +23,7 @@ namespace BackendTests
                         ProductBalanceId = 1,
                         Amount = 5.5
                     }
-                },
-                CreationDate = new DateTime(2021, 5, 10),
-                DeliveryDate = new DateTime(2021, 5, 11)
+                }
             };
 
         [SetUp]
@@ -56,15 +52,6 @@ namespace BackendTests
         }
 
         [Test]
-        public void TestInvalidPharmacyId()
-        {
-            var dto = ValidCreateDto;
-            dto.PharmacyId = -1;
-
-            Throws<DtoValidationException>(() => _validator.ValidateCreateOrderDto(dto));
-        }
-
-        [Test]
         public void TestInvalidProductAmount()
         {
             var dto = ValidCreateDto;
@@ -78,16 +65,6 @@ namespace BackendTests
         {
             var dto = ValidCreateDto;
             dto.Products[0].ProductBalanceId = -1;
-
-            Throws<DtoValidationException>(() => _validator.ValidateCreateOrderDto(dto));
-        }
-
-        [Test]
-        public void TestInvalidDateSpan()
-        {
-            var dto = ValidCreateDto;
-            var creationDate = dto.CreationDate;
-            dto.CreationDate = new DateTime(creationDate.Year + 1, creationDate.Month, creationDate.Day);
 
             Throws<DtoValidationException>(() => _validator.ValidateCreateOrderDto(dto));
         }
