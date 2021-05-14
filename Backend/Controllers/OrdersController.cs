@@ -78,20 +78,18 @@ namespace Backend.Controllers
 
                 var user = await GetCurrentUser();
                 if (user.PharmacyId == null) return ApiUnauthorized();
+                int pharmacyId = (int) user.PharmacyId;
 
-                var orderFromDatabase = Context.Orders.AsEnumerable()
-                    .FirstOrDefault(o => IsOrderCreatedToday(o, dto, user.PharmacyId));
+                bool orderExists = IsOrderCreated(dto, pharmacyId);
+
+                if (orderExists) return ApiBadRequest(ApiErrorSlug.ObjectAlreadyExists, ModelName);
+
                 var productBalances = await GetOrderProductBalances(dto.Products);
+                var order = await CreateNewOrder(dto, productBalances, pharmacyId);
 
-                if (orderFromDatabase == null)
-                {
-                    var order = await CreateNewOrder(dto, productBalances, (int) user.PharmacyId);
-
-                    await Context.Orders.AddAsync(order);
-                }
-                else orderFromDatabase.UpdateFromDTO(dto, productBalances);
-
+                await Context.Orders.AddAsync(order);
                 await Context.SaveChangesAsync();
+
                 return Created();
             }
             catch (DtoValidationException ex)
@@ -102,6 +100,13 @@ namespace Backend.Controllers
             {
                 return ApiNotFound(ex.Message, ex.Parameter);
             }
+        }
+
+        private bool IsOrderCreated(CreateOrderDTO dto, int pharmacyId)
+        {
+            return Context.Orders
+                .AsEnumerable()
+                .Any(o => IsOrderCreatedToday(o, dto, pharmacyId));
         }
 
         [HttpPut("{id}")]

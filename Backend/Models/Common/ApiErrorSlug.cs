@@ -14,5 +14,6 @@ namespace Backend.Models.Common
         public const string ResourceNotFound = "object_not_found";
         public const string InvalidDateSpan = "invalid_date_span";
         public const string Unauthorized = "user_not_authorized";
+        public const string ObjectAlreadyExists = "object_already_exists";
     }
 }

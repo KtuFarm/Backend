@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Backend.Models.Common;
 using Backend.Models.Database;
-using Backend.Models.DTO;
 using Backend.Models.MedicamentEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.TransactionEntity;
@@ -50,19 +49,14 @@ namespace Backend.Models.ProductBalanceEntity
 
         public ProductBalance() { }
 
-        public ProductBalance(TransactionProductDTO pb)
-        {
-            Amount = pb.Amount;
-        }
-
         public ProductBalance(ProductBalance pb, double amount)
         {
             Amount = amount;
             ExpirationDate = pb.ExpirationDate;
             MedicamentId = pb.MedicamentId;
-            PharmacyId = pb.PharmacyId;
-            TransactionId = pb.TransactionId;
-            WarehouseId = pb.WarehouseId;
+            PharmacyId = null;
+            TransactionId = null;
+            WarehouseId = null;
         }
     }
 }
