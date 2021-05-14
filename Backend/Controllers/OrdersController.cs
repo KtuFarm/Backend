@@ -24,6 +24,7 @@ namespace Backend.Controllers
     public class OrdersController : ApiControllerBase
     {
         private readonly IOrderDTOValidator _orderDtoValidator;
+        private const string ModelName = "order";
 
         public OrdersController(ApiContext context,
             IOrderDTOValidator orderDtoValidator,
@@ -59,7 +60,7 @@ namespace Backend.Controllers
                 .ThenInclude(pb => pb.Medicament)
                 .FirstOrDefaultAsync();
 
-            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "order");
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
             if (!order.IsAuthorized(user)) return ApiUnauthorized();
 
             var dto = new OrderFullDTO(order);
@@ -101,6 +102,22 @@ namespace Backend.Controllers
             {
                 return ApiNotFound(ex.Message, ex.Parameter);
             }
+        }
+
+        [HttpPost("{id}/approve")]
+        [Authorize(Roles = "Pharmacy")]
+        public async Task<IActionResult> ApproveOrder(int id)
+        {
+            var user = await GetCurrentUser();
+            var order = Context.Orders.FirstOrDefault(o => o.Id == id);
+
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+            if (order.PharmacyId != user.PharmacyId) return ApiUnauthorized();
+
+            order.OrderStateId = OrderStateId.Approved;
+
+            await Context.SaveChangesAsync();
+            return Ok();
         }
 
         private async Task<List<ProductBalance>> GetOrderProductBalances(CreateOrderDTO dto)
