@@ -10,6 +10,7 @@ using Backend.Models.DTO;
 using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
 using Backend.Models.ProductBalanceEntity;
+using Backend.Models.ProductBalanceEntity.DTO;
 using Backend.Models.UserEntity;
 using Backend.Services.Validators.OrderDTOValidator;
 using Microsoft.AspNetCore.Authorization;
@@ -75,21 +76,20 @@ namespace Backend.Controllers
             {
                 _orderDtoValidator.ValidateCreateOrderDto(dto);
 
-                //var orderFromDatabase = Context.Orders.AsEnumerable().FirstOrDefault(o => IsOrderCreatedToday(o, dto));
-
-                //if (orderFromDatabase == null)
-                //{
                 var user = await GetCurrentUser();
                 if (user.PharmacyId == null) return ApiUnauthorized();
 
-                var productBalances = await GetOrderProductBalances(dto);
-                var order = await CreateNewOrder(dto, productBalances, (int) user.PharmacyId);
+                var orderFromDatabase = Context.Orders.AsEnumerable()
+                    .FirstOrDefault(o => IsOrderCreatedToday(o, dto, user.PharmacyId));
+                var productBalances = await GetOrderProductBalances(dto.Products);
 
-                await Context.Orders.AddAsync(order);
+                if (orderFromDatabase == null)
+                {
+                    var order = await CreateNewOrder(dto, productBalances, (int) user.PharmacyId);
 
-
-                //}
-                //else orderFromDatabase.UpdateFromDTO(dto);
+                    await Context.Orders.AddAsync(order);
+                }
+                else orderFromDatabase.UpdateFromDTO(dto, productBalances);
 
                 await Context.SaveChangesAsync();
                 return Created();
@@ -102,6 +102,31 @@ namespace Backend.Controllers
             {
                 return ApiNotFound(ex.Message, ex.Parameter);
             }
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Pharmacy")]
+        public async Task<IActionResult> EditOrder(int id, [FromBody] TransactionProductDTO[] dto)
+        {
+            var order = await Context.Orders
+                .Where(o => o.Id == id)
+                .Include(o => o.OrderProductBalances)
+                .FirstOrDefaultAsync();
+
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+
+            var user = await GetCurrentUser();
+
+            if (!user.IsAuthorizedToEdit(order)) return ApiUnauthorized();
+
+            var productBalances = await GetOrderProductBalances(dto);
+
+            order.OrderProductBalances = productBalances
+                .Select(pb => new OrderProductBalance(order, pb))
+                .ToList();
+
+            await Context.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpPost("{id}/approve")]
@@ -120,11 +145,11 @@ namespace Backend.Controllers
             return Ok();
         }
 
-        private async Task<List<ProductBalance>> GetOrderProductBalances(CreateOrderDTO dto)
+        private async Task<List<ProductBalance>> GetOrderProductBalances(IEnumerable<TransactionProductDTO> products)
         {
             var productBalances = new List<ProductBalance>();
 
-            foreach (var product in dto.Products)
+            foreach (var product in products)
             {
                 var productBalance = await Context.ProductBalances
                     .FirstOrDefaultAsync(pb => pb.Id == product.ProductBalanceId);
@@ -138,10 +163,10 @@ namespace Backend.Controllers
             return productBalances;
         }
 
-        private static bool IsOrderCreatedToday(Order order, CreateOrderDTO dto)
+        private static bool IsOrderCreatedToday(Order order, CreateOrderDTO dto, int? pharmacyId)
         {
             return order.WarehouseId == dto.WarehouseId
-                   //  && order.PharmacyId == dto.PharmacyId
+                   && order.PharmacyId == pharmacyId
                    && order.OrderStateId == OrderStateId.Created
                    && order.CreationDate.Date == DateTime.Now.Date;
         }

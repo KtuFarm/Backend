@@ -85,11 +85,14 @@ namespace Backend.Models.OrderEntity
             OrderProductBalances = productBalances.Select(pb => new OrderProductBalance(this, pb)).ToList();
         }
 
-        public void UpdateFromDTO(CreateOrderDTO dto)
+        public void UpdateFromDTO(CreateOrderDTO dto, List<ProductBalance> productBalances)
         {
-            CreationDate = DateTime.Now;
+            foreach (var product in productBalances)
+            {
+                OrderProductBalances.Add(new OrderProductBalance(this, product));
+            }
+
             Total += CalculateTotalAmount(dto);
-            WarehouseId = dto.WarehouseId;
         }
 
         private DateTime DetermineDeliveryDate(DateTime creationDate)
