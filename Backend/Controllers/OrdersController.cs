@@ -103,6 +103,22 @@ namespace Backend.Controllers
             }
         }
 
+        [HttpPost("{id}/approve")]
+        [Authorize(Roles = "Pharmacy")]
+        public async Task<IActionResult> ApproveOrder(int id)
+        {
+            var user = await GetCurrentUser();
+            var order = Context.Orders.FirstOrDefault(o => o.Id == id);
+
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "order");
+            if (order.PharmacyId != user.PharmacyId) return ApiUnauthorized();
+
+            order.OrderStateId = OrderStateId.Approved;
+
+            await Context.SaveChangesAsync();
+            return Ok();
+        }
+
         private async Task<List<ProductBalance>> GetOrderProductBalances(CreateOrderDTO dto)
         {
             var productBalances = new List<ProductBalance>();
