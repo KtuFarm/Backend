@@ -10,7 +10,6 @@ using Backend.Models.DTO;
 using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
 using Backend.Models.ProductBalanceEntity;
-using Backend.Models.ProductBalanceEntity.DTO;
 using Backend.Models.UserEntity;
 using Backend.Services.Validators.OrderDTOValidator;
 using Microsoft.AspNetCore.Authorization;
