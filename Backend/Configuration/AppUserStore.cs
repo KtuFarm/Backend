@@ -7,6 +7,7 @@ using Backend.Models;
 using Backend.Models.Database;
 using Backend.Models.UserEntity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Configuration
 {
@@ -47,14 +48,13 @@ namespace API.Configuration
 
         public Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            var User = _context.Users.FirstOrDefault(a => a.Email == normalizedEmail);
-            if (User != null)
-            {
-                _context.Entry(User).Reference(x => x.Warehouse).Load();
-                _context.Entry(User).Reference(x => x.Pharmacy).Load();
-            }
+            var user = _context.Users
+                .Where(u => u.Email == normalizedEmail)
+                .Include(u => u.Warehouse)
+                .Include(u => u.Pharmacy)
+                .FirstOrDefault();
 
-            return Task.FromResult(User);
+            return Task.FromResult(user);
         }
 
         public Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)

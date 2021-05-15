@@ -149,6 +149,47 @@ namespace Backend.Controllers
             return Ok();
         }
 
+        [HttpPost("{id}/prepare")]
+        [Authorize(Roles = "Warehouse")]
+        public async Task<IActionResult> PrepareOrder(int id)
+        {
+            var user = await GetCurrentUser();
+            var order = await Context.Orders
+                .Where(o => o.Id == id)
+                .Include(o => o.OrderProductBalances)
+                .ThenInclude(opb => opb.ProductBalance)
+                .FirstOrDefaultAsync();
+
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+            if (order.WarehouseId != user.WarehouseId) return ApiUnauthorized();
+            if (order.OrderStateId != OrderStateId.Approved)
+            {
+                return ApiBadRequest(ApiErrorSlug.InvalidStatus, ModelName);
+            }
+
+            var warehouseProducts = Context.ProductBalances.Where(pb => pb.WarehouseId == user.WarehouseId);
+
+            foreach (var opb in order.OrderProductBalances)
+            {
+                var orderProduct = opb.ProductBalance;
+                var productBalance = await warehouseProducts.FirstOrDefaultAsync(pb =>
+                    pb.MedicamentId == orderProduct.MedicamentId && pb.ExpirationDate == orderProduct.ExpirationDate);
+
+                if (productBalance == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "productBalance");
+                if (productBalance.Amount < orderProduct.Amount)
+                {
+                    return ApiBadRequest(ApiErrorSlug.InsufficientBalance, "productBalance");
+                }
+
+                productBalance.Amount -= orderProduct.Amount;
+            }
+
+            order.OrderStateId = OrderStateId.Ready;
+            await Context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         private async Task<List<ProductBalance>> GetOrderProductBalances(IEnumerable<TransactionProductDTO> products)
         {
             var productBalances = new List<ProductBalance>();
