@@ -112,5 +112,13 @@ namespace Backend.Models.OrderEntity
         {
             return PharmacyId == user.PharmacyId || WarehouseId == user.WarehouseId;
         }
+
+        public bool IsCreatedToday(CreateOrderDTO dto, int pharmacyId)
+        {
+            return WarehouseId == dto.WarehouseId
+                   && PharmacyId == pharmacyId
+                   && OrderStateId == OrderStateId.Created
+                   && CreationDate.Date == DateTime.Now.Date;
+        }
     }
 }
