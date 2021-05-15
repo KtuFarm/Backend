@@ -1,11 +1,17 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Exceptions;
 using Backend.Models;
 using Backend.Models.Common;
 using Backend.Models.Database;
+using Backend.Models.DTO;
+using Backend.Models.PharmacyEntity;
+using Backend.Models.RegisterEntity;
 using Backend.Models.TransactionEntity;
 using Backend.Models.TransactionEntity.DTO;
 using Backend.Models.UserEntity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,44 +22,84 @@ namespace Backend.Controllers
     [ApiController]
     public class TransactionsController : ApiControllerBase
     {
-        public TransactionsController(ApiContext context, UserManager<User> userManager) : base(context, userManager) { }
+        public TransactionsController(ApiContext context, UserManager<User> userManager) :
+            base(context, userManager) { }
 
         [HttpPost]
+        [Authorize(Roles = "Pharmacy")]
         public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionDTO dto)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+
+                var pharmacy = await RetrievePharmacy(user.PharmacyId);
+                var register = RetrieveRegister(pharmacy, dto.RegisterId);
+
+                var transaction = new Transaction(pharmacy.Id, dto);
+
+                foreach (var product in dto.Products)
+                {
+                    TryAddProduct(pharmacy, product, transaction);
+                }
+
+                if (transaction.PaymentTypeId == PaymentTypeId.Cash)
+                {
+                    register.Cash += transaction.TotalPrice;
+                }
+
+                Context.Add(transaction);
+                await Context.SaveChangesAsync();
+
+                return Created();
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return ApiNotFound(ApiErrorSlug.ResourceNotFound, ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return ApiBadRequest(ApiErrorSlug.InsufficientBalance, ex.Message);
+            }
+        }
+
+        private static void TryAddProduct(Pharmacy pharmacy, TransactionProductDTO dto, Transaction transaction)
+        {
+            var productInPharmacy = pharmacy.Products.FirstOrDefault(pb => pb.Id == dto.ProductBalanceId);
+
+            if (productInPharmacy == null) throw new ResourceNotFoundException("productBalance");
+            if (productInPharmacy.Amount < dto.Amount)
+            {
+                throw new ArgumentException("amount");
+            }
+
+            productInPharmacy.Amount -= dto.Amount;
+            // TODO: Check amount and append to the order of required
+
+            transaction.AddProduct(productInPharmacy, dto.Amount);
+        }
+
+        private async Task<Pharmacy> RetrievePharmacy(int? pharmacyId)
         {
             var pharmacy = await Context
                 .Pharmacies
                 .Include(p => p.Registers)
                 .Include(p => p.Products)
                 .ThenInclude(pb => pb.Medicament)
-                .FirstOrDefaultAsync(p => p.Id == dto.PharmacyId);
-            if (pharmacy == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "pharmacy");
+                .FirstOrDefaultAsync(p => p.Id == pharmacyId);
 
-            var register = pharmacy.Registers.FirstOrDefault(r => r.Id == dto.RegisterId);
-            if (register == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "register");
+            if (pharmacy == null) throw new ResourceNotFoundException("pharmacy");
 
-            var transaction = new Transaction
-            {
-                PharmacyId = pharmacy.Id,
-                RegisterId = register.Id,
-                PaymentTypeId = (PaymentTypeId) dto.PaymentTypeId
-            };
-            
-            foreach (var product in dto.Products)
-            {
-                var productInPharmacy = pharmacy.Products.FirstOrDefault(pb => pb.Id == product.ProductBalanceId);
-                if (productInPharmacy == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "productBalance");
-                if (productInPharmacy.Amount < product.Amount) 
-                    return ApiBadRequest($"Invalid {productInPharmacy.Medicament.Name} amount!");
+            return pharmacy;
+        }
 
-                productInPharmacy.Amount -= product.Amount;
-                transaction.AddProduct(productInPharmacy, product.Amount);
-            }
+        private static Register RetrieveRegister(Pharmacy pharmacy, int registerId)
+        {
+            var register = pharmacy.Registers.FirstOrDefault(r => r.Id == registerId);
 
-            Context.Add(transaction);
-            await Context.SaveChangesAsync();
-           
-            return Created();
+            if (register == null) throw new ResourceNotFoundException("register");
+
+            return register;
         }
     }
 }

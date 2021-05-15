@@ -6,16 +6,13 @@ namespace Backend.Models.TransactionEntity.DTO
 {
     public class CreateTransactionDTO
     {
-        [JsonProperty("pharmacyId")]
-        public int PharmacyId { get; set; }
-        
         [JsonProperty("registerId")]
         public int RegisterId { get; set; }
-        
+
         [JsonProperty("paymentTypeId")]
         public int PaymentTypeId { get; set; }
 
-        [JsonProperty("products")] 
+        [JsonProperty("products")]
         public IEnumerable<TransactionProductDTO> Products;
     }
 }
