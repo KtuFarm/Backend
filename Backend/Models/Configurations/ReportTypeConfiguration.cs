@@ -21,7 +21,6 @@ namespace Backend.Models.Configurations
                     })
             );
 
-
             builder
                 .HasMany(rt => rt.Reports)
                 .WithOne(r => r.ReportType);

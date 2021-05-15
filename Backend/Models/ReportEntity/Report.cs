@@ -53,10 +53,12 @@ namespace Backend.Models.ReportEntity
 
         public int UserId { get; set; }
 
+        [Required]
         public User User { get; set; }
 
         public int PharmacyId { get; set; }
 
+        [Required]
         public Pharmacy Pharmacy { get; set; }
 
         [Required]
