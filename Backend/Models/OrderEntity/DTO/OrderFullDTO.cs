@@ -14,6 +14,12 @@ namespace Backend.Models.OrderEntity.DTO
         [JsonProperty("total")]
         public decimal Total { get; set; }
 
+        [JsonProperty("warehouseId")]
+        public int WarehouseId { get; set; }
+
+        [JsonProperty("pharmacyId")]
+        public int PharmacyId { get; set; }
+
         public OrderFullDTO(Order o) : base(o)
         {
             Products = o.OrderProductBalances
@@ -21,6 +27,8 @@ namespace Backend.Models.OrderEntity.DTO
                 .ToList();
 
             Total = (decimal) Math.Round(o.Total, 2);
+            WarehouseId = o.WarehouseId;
+            PharmacyId = o.PharmacyId;
         }
     }
 }
