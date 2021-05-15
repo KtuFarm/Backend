@@ -35,6 +35,7 @@ namespace Backend.Models
         public DbSet<OrderState> OrderStates { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderUser> OrderUsers { get; set; }
+        public DbSet<OrderProductBalance> OrderProductBalances { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
