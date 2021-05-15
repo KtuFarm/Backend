@@ -133,6 +133,23 @@ namespace Backend.Controllers
             return Ok();
         }
 
+        [HttpPost("{id}/cancel")]
+        [Authorize(Roles = "Pharmacy")]
+        public async Task<IActionResult> CancelOrder(int id)
+        {
+            var order = await Context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+
+            var user = await GetCurrentUser();
+            if (order.PharmacyId != user.PharmacyId) return ApiUnauthorized();
+            if (order.OrderStateId > OrderStateId.Approved) return ApiBadRequest(ApiErrorSlug.InvalidStatus, ModelName);
+
+            order.OrderStateId = OrderStateId.Canceled;
+
+            await Context.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpPost("{id}/approve")]
         [Authorize(Roles = "Pharmacy")]
         public async Task<IActionResult> ApproveOrder(int id)
