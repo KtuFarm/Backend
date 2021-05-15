@@ -7,6 +7,7 @@ using Backend.Models.Database;
 using Backend.Models.ManufacturerEntity;
 using Backend.Models.OrderEntity;
 using Backend.Models.PharmacyEntity;
+using Backend.Models.ReportEntity;
 using Backend.Models.TransactionEntity;
 using Backend.Models.UserEntity.DTO;
 using Backend.Models.WarehouseEntity;
@@ -78,6 +79,8 @@ namespace Backend.Models.UserEntity
         public ICollection<Transaction> Transactions { get; set; }
 
         public ICollection<OrderUser> OrderUsers { get; set; }
+
+        public ICollection<Report> Reports { get; set; }
 
         public User() { }
 

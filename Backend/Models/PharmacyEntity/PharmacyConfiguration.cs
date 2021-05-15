@@ -35,6 +35,10 @@ namespace Backend.Models.PharmacyEntity
                 .HasMany(p => p.Orders)
                 .WithOne(o => o.Pharmacy);
 
+            builder
+                .HasMany(p => p.Reports)
+                .WithOne(r => r.Pharmacy);
+
             builder.HasQueryFilter(p => !p.IsSoftDeleted);
         }
     }

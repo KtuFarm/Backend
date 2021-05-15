@@ -6,6 +6,7 @@ using Backend.Models.OrderEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.RegisterEntity;
+using Backend.Models.ReportEntity;
 using Backend.Models.TransactionEntity;
 using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
@@ -36,6 +37,8 @@ namespace Backend.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderUser> OrderUsers { get; set; }
         public DbSet<OrderProductBalance> OrderProductBalances { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<ReportType> ReportTypes { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
@@ -63,6 +66,8 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new OrderProductBalanceConfiguration());
             modelBuilder.ApplyConfiguration(new OrderUserConfiguration());
             modelBuilder.ApplyConfiguration(new OrderStateConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportTypeConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });

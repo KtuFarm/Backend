@@ -38,6 +38,10 @@ namespace Backend.Models.UserEntity
                 .HasMany(u => u.OrderUsers)
                 .WithOne(ou => ou.User);
 
+            builder
+                .HasMany(u => u.Reports)
+                .WithOne(r => r.User);
+
             builder.HasQueryFilter(u => !u.IsSoftDeleted);
         }
     }
