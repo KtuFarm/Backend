@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using API.Configuration;
 using API.Services;
 using Backend.Configuration;
@@ -10,6 +11,7 @@ using Backend.Models.ManufacturerEntity;
 using Backend.Models.MedicamentEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.ProductBalanceEntity;
+using Backend.Models.RegisterEntity;
 using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 using Backend.Models.WorkingHoursEntity;
@@ -38,6 +40,7 @@ namespace Backend
     public class Startup
     {
         private const string CorsPolicyName = "AllowAll";
+
         private const string AllowedUsernameCharacters =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 
@@ -171,7 +174,12 @@ namespace Backend
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApiContext context)
+        public void Configure(
+            IApplicationBuilder app,
+            UserManager<User> userManager,
+            IWebHostEnvironment env,
+            ApiContext context
+        )
         {
             if (env.IsDevelopment())
             {
@@ -185,7 +193,7 @@ namespace Backend
                 context.Database.Migrate();
             }
 
-            SeedDatabase(context);
+            _ = SeedDatabase(context, userManager);
 
             app.UseCors(CorsPolicyName);
 
@@ -200,17 +208,18 @@ namespace Backend
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
-        private static void SeedDatabase(ApiContext context)
+        private static async Task SeedDatabase(ApiContext context, UserManager<User> userManager)
         {
-            new Seeder(context, new ISeeder[]
+            await new Seeder(context, new ISeeder[]
             {
                 new ManufacturerSeed(context),
-                new WorkingHoursSeed(context),
                 new MedicamentSeed(context),
+                new WorkingHoursSeed(context),
                 new PharmacySeed(context),
+                new RegisterSeed(context),
+                new WarehouseSeed(context),
                 new ProductBalanceSeed(context),
-                new UserSeed(context),
-                new WarehouseSeed(context)
+                new UserSeed(context, userManager)
             }).Seed();
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Backend.Models.Common;
-using Backend.Models.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models.ManufacturerEntity
@@ -14,11 +14,11 @@ namespace Backend.Models.ManufacturerEntity
             _context = context;
         }
 
-        public void EnsureCreated()
+        public async Task EnsureCreated()
         {
             if (!ShouldSeed()) return;
 
-            _context.Manufacturers.AddRange(
+            await _context.Manufacturers.AddRangeAsync(
                 new Manufacturer
                 {
                     Id = 1,
@@ -39,7 +39,7 @@ namespace Backend.Models.ManufacturerEntity
                 }
             );
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private bool ShouldSeed()

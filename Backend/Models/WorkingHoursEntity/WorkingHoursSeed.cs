@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Backend.Models.Common;
 using Backend.Models.Database;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace Backend.Models.WorkingHoursEntity
             _context = context;
         }
 
-        public void EnsureCreated()
+        public async Task EnsureCreated()
         {
             if (!ShouldSeed()) return;
 
@@ -31,7 +32,7 @@ namespace Backend.Models.WorkingHoursEntity
                 );
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private bool ShouldSeed()
