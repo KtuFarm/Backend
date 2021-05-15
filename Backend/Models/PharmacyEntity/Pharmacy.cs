@@ -8,6 +8,7 @@ using Backend.Models.OrderEntity;
 using Backend.Models.PharmacyEntity.DTO;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.RegisterEntity;
+using Backend.Models.ReportEntity;
 using Backend.Models.TransactionEntity;
 using Backend.Models.UserEntity;
 using Backend.Models.WorkingHoursEntity;
@@ -46,6 +47,8 @@ namespace Backend.Models.PharmacyEntity
         public ICollection<Transaction> Transactions { get; set; }
 
         public ICollection<Order> Orders { get; set; }
+
+        public ICollection<Report> Reports { get; set; }
 
         public Pharmacy() { }
 

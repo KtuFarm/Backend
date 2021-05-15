@@ -3,11 +3,8 @@ using Backend.Models.Database;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.UserEntity;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Backend.Models.ReportEntity
 {
