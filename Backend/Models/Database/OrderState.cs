@@ -13,7 +13,8 @@ namespace Backend.Models.Database
         InTransit,
         Delivered,
         Returning,
-        Returned
+        Returned,
+        Canceled
     }
 
     public class OrderState
