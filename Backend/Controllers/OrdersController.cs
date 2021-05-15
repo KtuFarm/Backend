@@ -11,6 +11,7 @@ using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.UserEntity;
+using Backend.Services.OrdersManager;
 using Backend.Services.Validators.OrderDTOValidator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,14 +25,17 @@ namespace Backend.Controllers
     public class OrdersController : ApiControllerBase
     {
         private readonly IOrderDTOValidator _orderDtoValidator;
+        private readonly IOrdersManager _ordersManager;
         private const string ModelName = "order";
 
         public OrdersController(ApiContext context,
             IOrderDTOValidator orderDtoValidator,
+            IOrdersManager ordersManager,
             UserManager<User> userManager)
             : base(context, userManager)
         {
             _orderDtoValidator = orderDtoValidator;
+            _ordersManager = ordersManager;
         }
 
         [HttpGet]
@@ -79,15 +83,7 @@ namespace Backend.Controllers
                 if (user.PharmacyId == null) return ApiUnauthorized();
                 int pharmacyId = (int) user.PharmacyId;
 
-                bool orderExists = IsOrderCreated(dto, pharmacyId);
-
-                if (orderExists) return ApiBadRequest(ApiErrorSlug.ObjectAlreadyExists, ModelName);
-
-                var productBalances = await GetOrderProductBalances(dto.Products);
-                var order = await CreateNewOrder(dto, productBalances, pharmacyId);
-
-                await Context.Orders.AddAsync(order);
-                await Context.SaveChangesAsync();
+                await TryCreateOrder(dto, pharmacyId);
 
                 return Created();
             }
@@ -99,6 +95,26 @@ namespace Backend.Controllers
             {
                 return ApiNotFound(ex.Message, ex.Parameter);
             }
+            catch (DuplicateObjectException ex)
+            {
+                return ApiBadRequest(ApiErrorSlug.ObjectAlreadyExists, ex.Message);
+            }
+        }
+
+        private async Task TryCreateOrder(CreateOrderDTO dto, int pharmacyId)
+        {
+            bool orderExists = _ordersManager.IsOrderCreated(dto, pharmacyId);
+
+            if (orderExists)
+            {
+                throw new DuplicateObjectException("order");
+            }
+
+            var productBalances = await GetOrderProductBalances(dto.Products);
+            var order = await CreateNewOrder(dto, productBalances, pharmacyId);
+
+            await Context.Orders.AddAsync(order);
+            await Context.SaveChangesAsync();
         }
 
         private bool IsOrderCreated(CreateOrderDTO dto, int pharmacyId)
