@@ -7,6 +7,7 @@ using Backend.Models.Common;
 using Backend.Models.Database;
 using Backend.Models.OrderEntity.DTO;
 using Backend.Models.PharmacyEntity;
+using Backend.Models.ProductBalanceEntity;
 using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 
@@ -65,25 +66,40 @@ namespace Backend.Models.OrderEntity
 
         public Order() { }
 
-        public Order(CreateOrderDTO dto, string addressFrom, string addressTo)
+        public Order(
+            CreateOrderDTO dto,
+            string addressFrom,
+            string addressTo,
+            int pharmacyId,
+            IEnumerable<ProductBalance> productBalances
+        )
         {
             AddressFrom = addressFrom;
             AddressTo = addressTo;
-            CreationDate = dto.CreationDate;
-            DeliveryDate = dto.DeliveryDate;
+            CreationDate = DateTime.Now;
+            DeliveryDate = DetermineDeliveryDate(CreationDate);
             OrderStateId = OrderStateId.Created;
             Total = CalculateTotalAmount(dto);
             WarehouseId = dto.WarehouseId;
-            PharmacyId = dto.PharmacyId;
+            PharmacyId = pharmacyId;
+            OrderProductBalances = productBalances.Select(pb => new OrderProductBalance(this, pb)).ToList();
         }
 
-        public void UpdateFromDTO(CreateOrderDTO dto)
+        public void UpdateFromDTO(CreateOrderDTO dto, List<ProductBalance> productBalances)
         {
-            CreationDate = dto.CreationDate;
-            DeliveryDate = dto.DeliveryDate;
+            foreach (var product in productBalances)
+            {
+                OrderProductBalances.Add(new OrderProductBalance(this, product));
+            }
+
             Total += CalculateTotalAmount(dto);
-            WarehouseId = dto.WarehouseId;
-            PharmacyId = dto.PharmacyId;
+        }
+
+        private DateTime DetermineDeliveryDate(DateTime creationDate)
+        {
+            return creationDate.Hour < 13
+                ? new DateTime(CreationDate.Year, CreationDate.Month, CreationDate.Day + 2, 13, 0, 0)
+                : new DateTime(CreationDate.Year, CreationDate.Month, CreationDate.Day + 3, 13, 0, 0);
         }
 
         private static double CalculateTotalAmount(CreateOrderDTO dto)

@@ -9,14 +9,12 @@ namespace Backend.Services.Validators.OrderDTOValidator
     {
         public void ValidateCreateOrderDto(CreateOrderDTO dto)
         {
-            ValidateNumberIsPositive(dto.PharmacyId, "pharmacyId");
             ValidateNumberIsPositive(dto.WarehouseId, "warehouseId");
-            ValidateDateSpan(dto.CreationDate, dto.DeliveryDate);
             ValidateProducts(dto.Products);
         }
 
         [AssertionMethod]
-        private void ValidateProducts(List<TransactionProductDTO> products)
+        private static void ValidateProducts(IEnumerable<TransactionProductDTO> products)
         {
             foreach (var product in products)
             {

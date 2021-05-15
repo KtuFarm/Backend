@@ -122,5 +122,10 @@ namespace Backend.Models.UserEntity
                 EmployeeStateId = (EmployeeStateId) dto.EmployeeStateId;
             }
         }
+
+        public bool IsAuthorizedToEdit(Order order)
+        {
+            return PharmacyId != null && PharmacyId == order.PharmacyId;
+        }
     }
 }

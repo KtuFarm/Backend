@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Exceptions;
@@ -8,6 +9,7 @@ using Backend.Models.Database;
 using Backend.Models.DTO;
 using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
+using Backend.Models.ProductBalanceEntity;
 using Backend.Models.UserEntity;
 using Backend.Services.Validators.OrderDTOValidator;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +24,7 @@ namespace Backend.Controllers
     public class OrdersController : ApiControllerBase
     {
         private readonly IOrderDTOValidator _orderDtoValidator;
+        private const string ModelName = "order";
 
         public OrdersController(ApiContext context,
             IOrderDTOValidator orderDtoValidator,
@@ -57,7 +60,7 @@ namespace Backend.Controllers
                 .ThenInclude(pb => pb.Medicament)
                 .FirstOrDefaultAsync();
 
-            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, "order");
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
             if (!order.IsAuthorized(user)) return ApiUnauthorized();
 
             var dto = new OrderFullDTO(order);
@@ -65,23 +68,28 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<GetObjectDTO<CreateOrderDTO>>> CreateOrder([FromBody] CreateOrderDTO dto)
+        [Authorize(Roles = "Pharmacy")]
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDTO dto)
         {
             try
             {
                 _orderDtoValidator.ValidateCreateOrderDto(dto);
 
-                var orderFromDatabase = Context.Orders.AsEnumerable().FirstOrDefault(o => IsOrderCreatedToday(o, dto));
+                var user = await GetCurrentUser();
+                if (user.PharmacyId == null) return ApiUnauthorized();
+                int pharmacyId = (int) user.PharmacyId;
 
-                if (orderFromDatabase == null)
-                {
-                    var order = CreateNewOrder(dto);
-                    await Context.Orders.AddAsync(order);
-                }
-                else orderFromDatabase.UpdateFromDTO(dto);
+                bool orderExists = IsOrderCreated(dto, pharmacyId);
 
+                if (orderExists) return ApiBadRequest(ApiErrorSlug.ObjectAlreadyExists, ModelName);
+
+                var productBalances = await GetOrderProductBalances(dto.Products);
+                var order = await CreateNewOrder(dto, productBalances, pharmacyId);
+
+                await Context.Orders.AddAsync(order);
                 await Context.SaveChangesAsync();
-                return Ok(new GetObjectDTO<CreateOrderDTO>(dto));
+
+                return Created();
             }
             catch (DtoValidationException ex)
             {
@@ -93,23 +101,119 @@ namespace Backend.Controllers
             }
         }
 
-        private static bool IsOrderCreatedToday(Order order, CreateOrderDTO dto)
+        private bool IsOrderCreated(CreateOrderDTO dto, int pharmacyId)
+        {
+            return Context.Orders
+                .AsEnumerable()
+                .Any(o => IsOrderCreatedToday(o, dto, pharmacyId));
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Pharmacy")]
+        public async Task<IActionResult> EditOrder(int id, [FromBody] TransactionProductDTO[] dto)
+        {
+            var order = await Context.Orders
+                .Where(o => o.Id == id)
+                .Include(o => o.OrderProductBalances)
+                .FirstOrDefaultAsync();
+
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+
+            var user = await GetCurrentUser();
+
+            if (!user.IsAuthorizedToEdit(order)) return ApiUnauthorized();
+
+            var productBalances = await GetOrderProductBalances(dto);
+
+            order.OrderProductBalances = productBalances
+                .Select(pb => new OrderProductBalance(order, pb))
+                .ToList();
+
+            await Context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost("{id}/approve")]
+        [Authorize(Roles = "Pharmacy")]
+        public async Task<IActionResult> ApproveOrder(int id)
+        {
+            var user = await GetCurrentUser();
+            var order = Context.Orders.FirstOrDefault(o => o.Id == id);
+
+            if (order == null) return ApiNotFound(ApiErrorSlug.ResourceNotFound, ModelName);
+            if (order.PharmacyId != user.PharmacyId) return ApiUnauthorized();
+
+            order.OrderStateId = OrderStateId.Approved;
+
+            await Context.SaveChangesAsync();
+            return Ok();
+        }
+
+        private async Task<List<ProductBalance>> GetOrderProductBalances(IEnumerable<TransactionProductDTO> products)
+        {
+            var productBalances = new List<ProductBalance>();
+
+            foreach (var product in products)
+            {
+                var productBalance = await Context.ProductBalances
+                    .FirstOrDefaultAsync(pb => pb.Id == product.ProductBalanceId);
+
+                if (productBalance == null) continue;
+
+                var orderProductBalance = new ProductBalance(productBalance, product.Amount);
+                productBalances.Add(orderProductBalance);
+            }
+
+            return productBalances;
+        }
+
+        private static bool IsOrderCreatedToday(Order order, CreateOrderDTO dto, int? pharmacyId)
         {
             return order.WarehouseId == dto.WarehouseId
-                   && order.PharmacyId == dto.PharmacyId
+                   && order.PharmacyId == pharmacyId
                    && order.OrderStateId == OrderStateId.Created
                    && order.CreationDate.Date == DateTime.Now.Date;
         }
 
-        private Order CreateNewOrder(CreateOrderDTO dto)
+        private async Task<Order> CreateNewOrder(
+            CreateOrderDTO dto,
+            IEnumerable<ProductBalance> productBalances,
+            int pharmacyId)
         {
-            var pharmacy = Context.Pharmacies.FirstOrDefault(p => p.Id == dto.PharmacyId);
-            if (pharmacy == null) throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "pharmacyId");
+            string pharmacyAddress = await GetPharmacyAddress(pharmacyId);
+            string warehouseAddress = await GetWarehouseAddress(dto.WarehouseId);
 
-            var warehouse = Context.Warehouses.FirstOrDefault(w => w.Id == dto.WarehouseId);
-            if (warehouse == null) throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "warehouseId");
+            return new Order(dto, pharmacyAddress, warehouseAddress, pharmacyId, productBalances);
+        }
 
-            return new Order(dto, pharmacy.Address, warehouse.Address);
+        private async Task<string> GetWarehouseAddress(int id)
+        {
+            string warehouseAddress = await Context.Warehouses
+                .Where(w => w.Id == id)
+                .Select(w => w.Address)
+                .FirstOrDefaultAsync();
+
+            if (warehouseAddress == null)
+            {
+                throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "warehouseId");
+            }
+
+            return warehouseAddress;
+        }
+
+        private async Task<string> GetPharmacyAddress(int id)
+        {
+            string pharmacyAddress = await Context.Pharmacies
+                .Where(p => p.Id == id)
+                .Select(p => p.Address)
+                .FirstOrDefaultAsync();
+
+            if (pharmacyAddress == null)
+            {
+                throw new ResourceNotFoundException(ApiErrorSlug.ResourceNotFound, "pharmacyId");
+            }
+
+            return pharmacyAddress;
         }
 
         private IQueryable<Order> GetUserOrdersQuery(User user)

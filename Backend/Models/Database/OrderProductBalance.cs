@@ -17,5 +17,13 @@ namespace Backend.Models.Database
         [Required]
         [DefaultValue(false)]
         public bool IsSoftDeleted { get; set; } = false;
+
+        public OrderProductBalance() { }
+
+        public OrderProductBalance(Order order, ProductBalance pb)
+        {
+            Order = order;
+            ProductBalance = pb;
+        }
     }
 }
