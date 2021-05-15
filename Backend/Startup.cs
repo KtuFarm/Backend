@@ -40,6 +40,7 @@ namespace Backend
     public class Startup
     {
         private const string CorsPolicyName = "AllowAll";
+        private const string CorsPolicyNameProd = "AllowProd";
 
         private const string AllowedUsernameCharacters =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
@@ -74,6 +75,13 @@ namespace Backend
                 options.AddPolicy(CorsPolicyName, p =>
                 {
                     p.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+
+                options.AddPolicy(CorsPolicyNameProd, p => 
+                {
+                    p.WithOrigins(new string[] { Environment.GetEnvironmentVariable("FrontendHost") ?? "" })
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -195,7 +203,7 @@ namespace Backend
 
             _ = SeedDatabase(context, userManager);
 
-            app.UseCors(CorsPolicyName);
+            app.UseCors(env.IsProduction() ? CorsPolicyNameProd : CorsPolicyName);
 
             app.UseRequestMiddleware();
 
