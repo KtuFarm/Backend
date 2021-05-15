@@ -20,7 +20,7 @@ namespace Backend.Models.TransactionEntity
                 .WithMany(u => u.Transactions);
 
             builder
-                .HasMany(t => t.Medicaments)
+                .HasMany(t => t.Products)
                 .WithOne(m => m.Transaction);
 
             builder.Property(t => t.PaymentTypeId).HasConversion<int>();

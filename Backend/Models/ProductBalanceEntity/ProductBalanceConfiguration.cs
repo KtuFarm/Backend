@@ -17,7 +17,7 @@ namespace Backend.Models.ProductBalanceEntity
 
             builder
                 .HasOne(pb => pb.Transaction)
-                .WithMany(t => t.Medicaments);
+                .WithMany(t => t.Products);
 
             builder
                 .HasOne(pb => pb.Warehouse)
