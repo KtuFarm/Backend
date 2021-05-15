@@ -38,6 +38,7 @@ namespace Backend.Models
         public DbSet<OrderUser> OrderUsers { get; set; }
         public DbSet<OrderProductBalance> OrderProductBalances { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<ReportType> ReportTypes { get; set; }
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 
@@ -66,6 +67,7 @@ namespace Backend.Models
             modelBuilder.ApplyConfiguration(new OrderUserConfiguration());
             modelBuilder.ApplyConfiguration(new OrderStateConfiguration());
             modelBuilder.ApplyConfiguration(new ReportConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportTypeConfiguration());
 
             modelBuilder.Entity<PharmacyWorkingHours>()
                 .HasKey(pwh => new { pwh.PharmacyId, pwh.WorkingHoursId });
