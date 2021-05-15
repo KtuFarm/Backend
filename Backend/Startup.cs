@@ -12,6 +12,7 @@ using Backend.Models.MedicamentEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.RegisterEntity;
+using Backend.Models.RequiredMedicamentAmountEntity;
 using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 using Backend.Models.WorkingHoursEntity;
@@ -227,6 +228,7 @@ namespace Backend
                 new WorkingHoursSeed(context),
                 new PharmacySeed(context),
                 new RegisterSeed(context),
+                new RequiredMedicamentAmountSeed(context),
                 new WarehouseSeed(context),
                 new ProductBalanceSeed(context),
                 new UserSeed(context, userManager)

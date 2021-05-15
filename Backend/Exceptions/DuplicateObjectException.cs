@@ -4,8 +4,11 @@ namespace Backend.Exceptions
 {
     public class DuplicateObjectException : Exception
     {
-        public DuplicateObjectException(string message) : base(message)
+        public int Id { get; }
+
+        public DuplicateObjectException(string message, int id) : base(message)
         {
+            Id = id;
         }
     }
 }

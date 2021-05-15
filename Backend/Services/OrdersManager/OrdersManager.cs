@@ -25,28 +25,28 @@ namespace Backend.Services.OrdersManager
 
         public async Task TryCreateOrder(CreateOrderDTO dto, int pharmacyId)
         {
-            bool orderExists = IsOrderCreated(dto, pharmacyId);
+            var order = IsOrderCreated(dto, pharmacyId);
 
-            if (orderExists)
+            if (order != null)
             {
-                throw new DuplicateObjectException("order");
+                throw new DuplicateObjectException("order", order.Id);
             }
 
             var productBalances = await CreateProductBalanceList(dto.Products);
-            var order = await CreateNewOrder(dto, productBalances, pharmacyId);
+            var newOrder = await CreateNewOrder(dto, productBalances, pharmacyId);
 
-            await _context.Orders.AddAsync(order);
+            await _context.Orders.AddAsync(newOrder);
             await _context.SaveChangesAsync();
         }
 
-        private bool IsOrderCreated(CreateOrderDTO dto, int pharmacyId)
+        private Order IsOrderCreated(CreateOrderDTO dto, int pharmacyId)
         {
             return _context.Orders
                 .AsEnumerable()
-                .Any(o => o.IsCreatedToday(dto, pharmacyId));
+                .FirstOrDefault(o => o.IsCreatedToday(dto, pharmacyId));
         }
 
-        private async Task<List<ProductBalance>> CreateProductBalanceList(IEnumerable<TransactionProductDTO> products)
+        public async Task<List<ProductBalance>> CreateProductBalanceList(IEnumerable<TransactionProductDTO> products)
         {
             var productBalances = new List<ProductBalance>();
 
@@ -136,9 +136,9 @@ namespace Backend.Services.OrdersManager
             await _context.SaveChangesAsync();
         }
 
-        public void AggregateOrders()
+        public async Task UpdateOrder(IEnumerable<TransactionProductDTO> dto, int orderId)
         {
-            throw new NotImplementedException();
+            await UpdateOrder(dto, await GetOrder(orderId));
         }
     }
 }

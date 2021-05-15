@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Backend.Models.DTO;
 using Backend.Models.OrderEntity;
 using Backend.Models.OrderEntity.DTO;
+using Backend.Models.ProductBalanceEntity;
 
 namespace Backend.Services.OrdersManager
 {
@@ -12,8 +13,10 @@ namespace Backend.Services.OrdersManager
 
         public Task<Order> GetOrder(int id);
 
+        public Task<List<ProductBalance>> CreateProductBalanceList(IEnumerable<TransactionProductDTO> products);
+
         public Task UpdateOrder(IEnumerable<TransactionProductDTO> dto, Order order);
 
-        public void AggregateOrders();
+        public Task UpdateOrder(IEnumerable<TransactionProductDTO> dto, int orderId);
     }
 }

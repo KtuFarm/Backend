@@ -85,7 +85,7 @@ namespace Backend.Models.OrderEntity
             OrderProductBalances = productBalances.Select(pb => new OrderProductBalance(this, pb)).ToList();
         }
 
-        public void UpdateFromDTO(CreateOrderDTO dto, List<ProductBalance> productBalances)
+        public void UpdateFromDTO(CreateOrderDTO dto, IEnumerable<ProductBalance> productBalances)
         {
             foreach (var product in productBalances)
             {
