@@ -1,4 +1,6 @@
-﻿namespace Backend.Models.Common
+﻿using System.Threading.Tasks;
+
+namespace Backend.Models.Common
 {
     public class Seeder
     {
@@ -11,13 +13,13 @@
             _seeders = seeders;
         }
 
-        public void Seed()
+        public async Task Seed()
         {
-            _context.Database.EnsureCreated();
+            await _context.Database.EnsureCreatedAsync();
 
             foreach (var seeder in _seeders)
             {
-                seeder.EnsureCreated();
+                await seeder.EnsureCreated();
             }
         }
     }

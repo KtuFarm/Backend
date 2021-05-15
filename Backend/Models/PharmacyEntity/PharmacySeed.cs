@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Backend.Models.Common;
 using Backend.Models.Database;
 using Backend.Models.RegisterEntity;
@@ -16,7 +17,7 @@ namespace Backend.Models.PharmacyEntity
             _context = context;
         }
 
-        public void EnsureCreated()
+        public async Task EnsureCreated()
         {
             if (!ShouldSeed()) return;
 
@@ -28,17 +29,17 @@ namespace Backend.Models.PharmacyEntity
                 Registers = new List<Register>()
             };
 
-            _context.Pharmacies.Add(pharmacy);
+            await _context.Pharmacies.AddAsync(pharmacy);
 
             var workingHours = _context.WorkingHours.Where(wh => wh.Id >= 1 && wh.Id <= 5).ToList();
             foreach (var hours in workingHours)
             {
-                _context.PharmacyWorkingHours.Add(
+                await _context.PharmacyWorkingHours.AddAsync(
                     new PharmacyWorkingHours(pharmacy, hours)
                 );
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private bool ShouldSeed()

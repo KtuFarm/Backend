@@ -1,7 +1,9 @@
-﻿namespace Backend.Models.Common
+﻿using System.Threading.Tasks;
+
+namespace Backend.Models.Common
 {
     public interface ISeeder
     {
-        public void EnsureCreated();
+        public Task EnsureCreated();
     }
 }
