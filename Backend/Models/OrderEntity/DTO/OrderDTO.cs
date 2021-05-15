@@ -16,12 +16,16 @@ namespace Backend.Models.OrderEntity.DTO
         [JsonProperty("expectedDelivery")]
         public string DeliveryDate { get; set; }
 
+        [JsonProperty("orderState")]
+        public string OrderState { get; set; }
+
         public OrderDTO(Order o)
         {
             OrderId = o.Id;
             AddressFrom = o.AddressFrom;
             AddressTo = o.AddressTo;
             DeliveryDate = o.DeliveryDate.ToString("O");
+            OrderState = o.OrderStateId.ToString();
         }
     }
 }
