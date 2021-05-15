@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20210509190137_CreateRelationBetweenPharmacyAndOrders")]
-    partial class CreateRelationBetweenPharmacyAndOrders
+    [Migration("20210515142452_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,6 +70,52 @@ namespace Backend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Backend.Models.Database.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "None"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Pharmacy"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Warehouse"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Transportation"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Manufacturer"
+                        });
+                });
+
             modelBuilder.Entity("Backend.Models.Database.EmployeeState", b =>
                 {
                     b.Property<int>("Id")
@@ -116,7 +162,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("ProductBalanceId");
 
-                    b.ToTable("OrderProductBalance");
+                    b.ToTable("OrderProductBalances");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.OrderState", b =>
@@ -172,6 +218,11 @@ namespace Backend.Migrations
                         {
                             Id = 8,
                             Name = "Returned"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Canceled"
                         });
                 });
 
@@ -598,8 +649,16 @@ namespace Backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("DismissalDate")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("EmployeeStateId")
                         .HasColumnType("int");
@@ -608,6 +667,11 @@ namespace Backend.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
@@ -628,10 +692,17 @@ namespace Backend.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
                     b.Property<int?>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("EmployeeStateId");
 
@@ -883,15 +954,21 @@ namespace Backend.Migrations
 
                     b.Navigation("PaymentType");
 
-                    b.Navigation("Pharmacy");
-
                     b.Navigation("Pharmacist");
+
+                    b.Navigation("Pharmacy");
 
                     b.Navigation("Register");
                 });
 
             modelBuilder.Entity("Backend.Models.UserEntity.User", b =>
                 {
+                    b.HasOne("Backend.Models.Database.Department", "Department")
+                        .WithMany("Users")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Backend.Models.Database.EmployeeState", "EmployeeState")
                         .WithMany("Employees")
                         .HasForeignKey("EmployeeStateId")
@@ -905,6 +982,8 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Models.WarehouseEntity.Warehouse", "Warehouse")
                         .WithMany("Employees")
                         .HasForeignKey("WarehouseId");
+
+                    b.Navigation("Department");
 
                     b.Navigation("EmployeeState");
 
@@ -927,6 +1006,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Database.DayOfWeek", b =>
                 {
                     b.Navigation("WorkingHours");
+                });
+
+            modelBuilder.Entity("Backend.Models.Database.Department", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Backend.Models.Database.EmployeeState", b =>
