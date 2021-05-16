@@ -3,6 +3,7 @@ using Backend.Models.Common;
 using Backend.Models.DTO;
 using Backend.Models.ReportEntity.DTO;
 using Backend.Models.UserEntity;
+using Backend.Services.Validators.ReportDTOValidator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,13 @@ namespace Backend.Controllers
     public class ReportsController : ApiControllerBase
     {
         private const string ModelName = "report";
+        private readonly IReportDTOValidator _validator;
 
-        public ReportsController(ApiContext context, UserManager<User> userManager)
-            : base(context, userManager) { }
+        public ReportsController(ApiContext context, IReportDTOValidator validator, UserManager<User> userManager)
+            : base(context, userManager)
+        {
+            _validator = validator;
+        }
 
         [HttpGet]
         [AllowAnonymous]

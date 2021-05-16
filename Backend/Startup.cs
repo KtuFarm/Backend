@@ -36,6 +36,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
 using Backend.Services.Validators.OrderDTOValidator;
+using Backend.Services.Validators.ReportDTOValidator;
 
 namespace Backend
 {
@@ -182,6 +183,7 @@ namespace Backend
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IOrderDTOValidator, OrderDTOValidator>();
             services.AddScoped<IOrdersManager, OrdersManager>();
+            services.AddScoped<IReportDTOValidator, ReportDTOValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
