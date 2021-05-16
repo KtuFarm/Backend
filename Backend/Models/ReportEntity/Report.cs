@@ -43,7 +43,7 @@ namespace Backend.Models.ReportEntity
         public decimal TotalOrderAmount { get; set; } = 0.00M;
 
         [Required]
-        public decimal Profit { get; set; }
+        public decimal Profit { get; set; } = 0.00M;
 
         [Required]
         public ReportTypeId ReportTypeId { get; set; }
