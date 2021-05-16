@@ -66,7 +66,9 @@ namespace Backend.Services.OrdersManager
         private async Task<ProductBalance> CreateProductBalance(TransactionProductDTO product)
         {
             var productBalance = await _context.ProductBalances
-                .FirstOrDefaultAsync(pb => pb.Id == product.ProductBalanceId);
+                .Where(pb => pb.Id == product.ProductBalanceId)
+                .Include(pb => pb.Medicament)
+                .FirstOrDefaultAsync();
 
             if (productBalance == null) throw new NullReferenceException();
 
@@ -129,9 +131,7 @@ namespace Backend.Services.OrdersManager
             if (order.OrderStateId > OrderStateId.Approved) throw new InvalidOperationException();
             var productBalances = await CreateProductBalanceList(dto);
 
-            order.OrderProductBalances = productBalances
-                .Select(pb => new OrderProductBalance(order, pb))
-                .ToList();
+            order.UpdateFromDTO(productBalances);
 
             await _context.SaveChangesAsync();
         }

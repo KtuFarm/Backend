@@ -40,7 +40,7 @@ namespace Backend.Models.OrderEntity
         public OrderState OrderState { get; set; }
 
         [Required]
-        public double Total { get; set; }
+        public decimal TotalSum { get; set; } = 0.00M;
 
         [Required]
         public ICollection<OrderProductBalance> OrderProductBalances { get; set; }
@@ -66,33 +66,28 @@ namespace Backend.Models.OrderEntity
 
         public Order() { }
 
-        public Order(
-            CreateOrderDTO dto,
-            string addressFrom,
-            string addressTo,
-            int pharmacyId,
-            IEnumerable<ProductBalance> productBalances
-        )
+        public Order(CreateOrderDTO dto, string addressFrom, string addressTo, int pharmacyId,
+            IEnumerable<ProductBalance> productBalances)
         {
             AddressFrom = addressFrom;
             AddressTo = addressTo;
             CreationDate = DateTime.Now;
             DeliveryDate = DetermineDeliveryDate(CreationDate);
             OrderStateId = OrderStateId.Created;
-            Total = CalculateTotalAmount(dto);
+            TotalSum = CalculateTotalAmount(productBalances);
             WarehouseId = dto.WarehouseId;
             PharmacyId = pharmacyId;
             OrderProductBalances = productBalances.Select(pb => new OrderProductBalance(this, pb)).ToList();
         }
 
-        public void UpdateFromDTO(CreateOrderDTO dto, IEnumerable<ProductBalance> productBalances)
+        public void UpdateFromDTO(List<ProductBalance> productBalances)
         {
             foreach (var product in productBalances)
             {
                 OrderProductBalances.Add(new OrderProductBalance(this, product));
             }
 
-            Total += CalculateTotalAmount(dto);
+            TotalSum += CalculateTotalAmount(productBalances);
         }
 
         private DateTime DetermineDeliveryDate(DateTime creationDate)
@@ -102,10 +97,9 @@ namespace Backend.Models.OrderEntity
                 : new DateTime(CreationDate.Year, CreationDate.Month, CreationDate.Day + 3, 13, 0, 0);
         }
 
-        private static double CalculateTotalAmount(CreateOrderDTO dto)
+        private static decimal CalculateTotalAmount(IEnumerable<ProductBalance> products)
         {
-            var products = dto.Products;
-            return products?.Aggregate(0.0, (total, next) => total + next.Amount) ?? 0.0;
+            return products.Sum(product => product.Medicament.CalculatePriceReimbursed() * (decimal) product.Amount);
         }
 
         public bool IsAuthorized(User user)

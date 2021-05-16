@@ -53,7 +53,7 @@ namespace Backend.Models.ProductBalanceEntity
         {
             Amount = amount;
             ExpirationDate = pb.ExpirationDate;
-            MedicamentId = pb.MedicamentId;
+            Medicament = pb.Medicament;
             PharmacyId = null;
             TransactionId = null;
             WarehouseId = null;
