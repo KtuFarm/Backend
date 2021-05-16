@@ -42,7 +42,7 @@ namespace Backend.Models.ReportEntity.DTO
             TotalRevenue = report.TotalRevenue;
             RevenueInCash = report.RevenueInCash;
             GenerationDate = report.GenerationDate;
-            TotalOrderAmount = report.TotalOrderAmount;
+            TotalOrderAmount = report.TotalOrderSum;
             Profit = report.Profit;
             ReportType = report.ReportTypeId.ToString();
             User = $"{report.User.Name} {report.User.Surname}";
