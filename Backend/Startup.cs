@@ -81,7 +81,7 @@ namespace Backend
 
                 options.AddPolicy(CorsPolicyProd, p => 
                 {
-                    p.WithOrigins(new string[] { Environment.GetEnvironmentVariable("FrontendHost") ?? "" })
+                    p.WithOrigins(Environment.GetEnvironmentVariable("FrontendHost") ?? "")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -203,11 +203,11 @@ namespace Backend
 
             _ = SeedDatabase(context, userManager);
 
-            app.UseCors(env.IsProduction() ? CorsPolicyProd : CorsPolicyDev);
-
             app.UseRequestMiddleware();
 
             app.UseRouting();
+            
+            app.UseCors(env.IsProduction() ? CorsPolicyProd : CorsPolicyDev);
 
             app.UseAuthentication();
 
