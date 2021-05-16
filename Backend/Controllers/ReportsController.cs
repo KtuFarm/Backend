@@ -77,7 +77,7 @@ namespace Backend.Controllers
                 var totalRevenue = CalculateRevenue(transactions);
                 var revenueInCash = CalculateRevenue(cashTransactions);
                 var totalOrderSum = CalculateTotalOrderSum(orders);
-                await Context.Reports.AddAsync(new Report(dto, pharmacyId, orders.Count, transactions.Count, totalRevenue, revenueInCash, totalOrderSum));
+                await Context.Reports.AddAsync(new Report(dto, pharmacyId, user.Id, orders.Count, transactions.Count, totalRevenue, revenueInCash, totalOrderSum));
 
                 await Context.SaveChangesAsync();
                 return Created();

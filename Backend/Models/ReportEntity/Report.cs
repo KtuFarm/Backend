@@ -68,7 +68,7 @@ namespace Backend.Models.ReportEntity
 
         public Report() { }
 
-        public Report(CreateReportDTO dto, int pharmacyId, int orderCount, int transactionCount, decimal totalRevenue, decimal revenueInCash, decimal totalOrderSum)
+        public Report(CreateReportDTO dto, int pharmacyId, int userId, int orderCount, int transactionCount, decimal totalRevenue, decimal revenueInCash, decimal totalOrderSum)
         {
             DateFrom = dto.DateFrom;
             DateTo = dto.DateTo;
@@ -81,6 +81,8 @@ namespace Backend.Models.ReportEntity
             RevenueInCash = revenueInCash;
             TotalOrderSum = totalOrderSum;
             Profit = TotalRevenue - TotalOrderSum;
+            UserId = userId;
+            PharmacyId = pharmacyId;
         }
 
         private string GenerateCode(int pharmacyId)
