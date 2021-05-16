@@ -26,7 +26,7 @@ namespace Backend.Models.OrderEntity.DTO
                 .Select(opb => new ProductBalanceDTO(opb.ProductBalance))
                 .ToList();
 
-            Total = (decimal) Math.Round(o.Total, 2);
+            Total = Math.Round(o.TotalSum, 2);
             WarehouseId = o.WarehouseId;
             PharmacyId = o.PharmacyId;
         }

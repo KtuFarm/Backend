@@ -111,7 +111,7 @@ namespace Backend.Controllers
                     .ThenInclude(opb => opb.ProductBalance)
                     .FirstOrDefaultAsync();
 
-                order.UpdateFromDTO(orderDto, await _ordersManager.CreateProductBalanceList(orderDto.Products));
+                order.UpdateFromDTO(await _ordersManager.CreateProductBalanceList(orderDto.Products));
                 await Context.SaveChangesAsync();
             }
         }
