@@ -33,7 +33,14 @@ namespace Backend.Middleware
 
         public async Task Invoke(HttpContext httpContext, IHeadersValidator validator)
         {
-            if (httpContext.Request.Path.StartsWithSegments("/api"))
+            if (IsPreflightRequest(httpContext))
+            {
+                httpContext.Response.StatusCode = 200;
+                await _next(httpContext);
+                return;
+            }
+
+            if (IsApiRequest(httpContext))
             {
                 if (!validator.IsRequestHeaderValid(httpContext.Request.Headers))
                 {
@@ -45,6 +52,16 @@ namespace Backend.Middleware
             }
 
             await _next(httpContext);
+        }
+
+        private bool IsPreflightRequest(HttpContext httpContext) 
+        {
+            return httpContext.Request.Method == HttpMethods.Options;
+        }
+
+        private bool IsApiRequest(HttpContext httpContext) 
+        {
+            return httpContext.Request.Path.StartsWithSegments("/api");
         }
     }
 }
