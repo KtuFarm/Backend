@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Backend.Models.Common;
 using Backend.Models.OrderEntity;
 using Backend.Models.ProductBalanceEntity;
@@ -31,5 +32,13 @@ namespace Backend.Models.WarehouseEntity
         public ICollection<ProductBalance> Products { get; set; }
 
         public ICollection<Order> Orders { get; set; }
+
+        public int GetProductId(int medicamentId)
+        {
+            return Products
+                .Where(pb => pb.MedicamentId == medicamentId)
+                .Select(pb => pb.Id)
+                .FirstOrDefault();
+        }
     }
 }

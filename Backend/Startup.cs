@@ -12,12 +12,14 @@ using Backend.Models.MedicamentEntity;
 using Backend.Models.PharmacyEntity;
 using Backend.Models.ProductBalanceEntity;
 using Backend.Models.RegisterEntity;
+using Backend.Models.RequiredMedicamentAmountEntity;
 using Backend.Models.UserEntity;
 using Backend.Models.WarehouseEntity;
 using Backend.Models.WorkingHoursEntity;
 using Backend.Services.HeadersValidator;
 using Backend.Services.RequestValidator;
 using Backend.Services.Jwt;
+using Backend.Services.OrdersManager;
 using Backend.Services.Validators.MedicamentDTOValidator;
 using Backend.Services.Validators.PharmacyDTOValidator;
 using Backend.Services.Validators.UserDTOValidator;
@@ -179,6 +181,7 @@ namespace Backend
             services.AddScoped<IUserDTOValidator, UserDTOValidator>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IOrderDTOValidator, OrderDTOValidator>();
+            services.AddScoped<IOrdersManager, OrdersManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -225,6 +228,7 @@ namespace Backend
                 new WorkingHoursSeed(context),
                 new PharmacySeed(context),
                 new RegisterSeed(context),
+                new RequiredMedicamentAmountSeed(context),
                 new WarehouseSeed(context),
                 new ProductBalanceSeed(context),
                 new UserSeed(context, userManager)
